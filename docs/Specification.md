@@ -1,5 +1,4 @@
-# Project Scope
-
+# Project Specification
 The project will be an internal inventory management system. This includes processing acquisitions, logging quantity on hand and generating invoices.
 
 ## Requirements:
