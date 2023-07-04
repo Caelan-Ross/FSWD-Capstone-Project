@@ -1,3 +1,5 @@
+Please note that I used this blog for an idea/reference: [Git Naming Conventions](https://medium.com/@abhay.pixolo/naming-conventions-for-git-branches-a-cheatsheet-8549feca2534)
+
 # 📝 Git Branch Naming Conventions
 This document is to help us standardize how we will be working with Github on this project as a team by creating some conventions for naming and workflow.
 
