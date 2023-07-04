@@ -1,16 +1,19 @@
 Please note that I used this blog for an idea/reference: [Git Naming Conventions](https://medium.com/@abhay.pixolo/naming-conventions-for-git-branches-a-cheatsheet-8549feca2534)
 
 # 📝 Git Branch Naming Conventions
+
 This document is to help us standardize how we will be working with Github on this project as a team by creating some conventions for naming and workflow.
 
 A high level summary of our workflow is as follow:
-- Please use `alpha` branch as a starting point to do any work. From here, you may create a `feature` or `bug` branch. Merge back into `alpha` when done and test.
+
+- Please use `alpha` branch as a starting point to do any work. From here, you may create a `feature/` or `bug/` branch. Merge back into `alpha` when done and test.
 - At each major stage of our development, please merge `alpha` back into `beta`.
 - After testing is done extensively and we are ready to submit, we can merge `beta` back into `main`
 
 
 
 # 🖥️ Code Flow Branches
+
 **Main (*main*)**
 
 This is the main branch that will be submitted as our final version release.
@@ -21,23 +24,27 @@ This branch will be used to do any final testing before merging into the `main` 
 
 **Alpha (*alpha*)**
 
-This is the development branch. From here, please make `feature` branches to work on and then merge back into `alpha` when complete.
+This is the development branch. From here, please make `feature/` branches to work on and then merge back into `alpha` when complete.
 
 # 🌿 Temporary Branches
+
 **Feature (*Feature/FeatureName*)**
 
-Please use `camel case` for naming branches.
+Please use `CamelCase` for naming branches.
 
 When working on a new feature, create a feature branch and later merge back into `alpha.`
 
 Examples:
+
 ```
    Feature/IntegrateMUI
    Feature/DbSetup
 ```
 
 **Bug Fix (*Bugfix/BugName*)**
+
 Similar to `feature` branch, create `bugfix` branches to work on any bugs you may find and then merge back into `alpha` when ready.
+
 ```
    Bugfix/ExportInventoryCrash
    Bugfix/DeleteVehicle
