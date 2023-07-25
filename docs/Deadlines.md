@@ -46,7 +46,7 @@
 4. Make note of any hiccups during implementation, and schedule a follow-up if deemed necessary.
 5. Keep your eyes open and respond promptly to any questions or concerns the client may have of the implementation.
 
-## Sunday, September 6 - Patching
+## Sunday, September 3 - Patching
 
 1. Work to implement fixes for any bugs discovered in the use of the newly implemented system.
 2. Schedule an in-person follow-up if necessary to update the system.
