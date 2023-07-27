@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battery Doctor", "Battery Doctor\Battery Doctor.csproj", "{B8555C26-DAA1-4E1C-A7B9-0BF759D594FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8555C26-DAA1-4E1C-A7B9-0BF759D594FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8555C26-DAA1-4E1C-A7B9-0BF759D594FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8555C26-DAA1-4E1C-A7B9-0BF759D594FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8555C26-DAA1-4E1C-A7B9-0BF759D594FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D978B611-E2A5-4344-8831-51B3CF211C66}
+	EndGlobalSection
+EndGlobal
