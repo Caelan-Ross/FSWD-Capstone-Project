@@ -50,7 +50,7 @@ export default function App({ Component, pageProps }) {
 				>
 					<IconButton
 						sx={{
-							marginBottom: '20px',
+							marginBottom: '40px',
 							marginTop: '10px',
 						}}
 					>
@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }) {
 							flexGrow: 1,
 							display: 'flex',
 							flexDirection: 'column',
-							justifyContent: 'center',
+							justifyContent: 'flex-start',
 						}}
 					>
 						<IconButton
