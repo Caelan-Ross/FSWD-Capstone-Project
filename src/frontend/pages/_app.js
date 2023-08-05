@@ -5,31 +5,25 @@ import {
 	Button,
 	Typography,
 	IconButton,
-	Menu,
-	MenuItem,
 	Avatar,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
+import HomeIcon from '@mui/icons-material/Home';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 
 export default function App({ Component, pageProps }) {
-	const [menuAnchor, setMenuAnchor] = useState(null);
 	const router = useRouter();
-	const user = 'John Doe'; // Replace with the actual user name
-
 	const handleNavigation = (path) => {
 		router.push(path);
 	};
 
-	const handleMenuOpen = (event) => {
-		setMenuAnchor(event.currentTarget);
-	};
-
-	const handleMenuClose = () => {
-		setMenuAnchor(null);
-	};
+	// Username greeted in banner
+	const user = 'John Doe';
 
 	return (
 		<CssBaseline>
@@ -47,19 +41,21 @@ export default function App({ Component, pageProps }) {
 				<Box
 					sx={{
 						flex: '0 0 auto',
-						backgroundColor: '#ffffff', // Light background color
-						width: '100px', // Adjust this to control the width of the sidebar
+						backgroundColor: '#f4f4f4',
+						width: '75px',
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						justifyContent: 'space-between', // Distributes items evenly along the vertical axis
+						justifyContent: 'space-between',
 					}}
 				>
 					<IconButton
-						onClick={handleMenuOpen}
-						sx={{ marginBottom: '20px', marginTop: '10px' }}
+						sx={{
+							marginBottom: '20px',
+							marginTop: '10px',
+						}}
 					>
-						<MenuIcon />
+						<MenuIcon sx={{ fontSize: '3.125rem', color: '#000000'}} />
 					</IconButton>
 					<Box
 						sx={{
@@ -69,55 +65,56 @@ export default function App({ Component, pageProps }) {
 							justifyContent: 'center',
 						}}
 					>
-						<Button
+						<IconButton
 							onClick={() => handleNavigation('/')}
 							sx={{ marginBottom: '10px' }}
 						>
-							Home
-						</Button>
-						<Button
-							onClick={() => handleNavigation('/')}
+							<HomeIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+						</IconButton>
+						<IconButton
+							onClick={() => handleNavigation('/inventory')}
 							sx={{ marginBottom: '10px' }}
 						>
-							Inventory
-						</Button>
-						<Button
-							onClick={() => handleNavigation('/')}
+							<InventoryIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+						</IconButton>
+						<IconButton
+							onClick={() => handleNavigation('/invoices')}
 							sx={{ marginBottom: '10px' }}
 						>
-							Invoices
-						</Button>
-						<Button
-							onClick={() => handleNavigation('/')}
+							<ReceiptIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+						</IconButton>
+
+						<IconButton
+							onClick={() => handleNavigation('/customer')}
 							sx={{ marginBottom: '10px' }}
 						>
-							Customer
-						</Button>
-						<Button
-							onClick={() => handleNavigation('/')}
-							sx={{ marginBottom: '10px' }}
-						>
-							Logout
-						</Button>
+							<AccountCircleIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+						</IconButton>
 					</Box>
+					<IconButton
+						onClick={() => handleNavigation('/settings')}
+						sx={{ marginBottom: '10px' }}
+					>
+						<SettingsIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+					</IconButton>
 				</Box>
 				{/* Content Column*/}
 				<Box
 					sx={{
 						display: 'flex',
 						flexDirection: 'column',
-						padding: '0px 50px',
+						padding: '0px 20px',
 					}}
 				>
-					{/* Header Row */}
+					{/* Header Row Container */}
 					<Box
 						sx={{
 							flex: '0 0 auto',
-							backgroundColor: '#ffffff', // Light background color
+							backgroundColor: '#ffffff',
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'space-between',
-							padding: '10px',
+							padding: '30px',
 						}}
 					>
 						{/* User greeting */}
@@ -129,7 +126,7 @@ export default function App({ Component, pageProps }) {
 							}}
 						>
 							<Avatar src='/path/to/avatar-image.jpg' alt='User Avatar' />
-							<Box sx={{ marginLeft: '10px' }}>
+							<Box sx={{ marginLeft: '0.625rem' }}>
 								<Typography variant='body1'>
 									The Battery Doctor - Welcome '{user}'!
 								</Typography>
@@ -141,11 +138,13 @@ export default function App({ Component, pageProps }) {
 						{/* New Invoice Button */}
 						<Box>
 							<Button
-								onClick={() => handleNavigation('/new-invoice')}
+								onClick={() => handleNavigation('/')}
 								startIcon={<AddIcon />}
 								sx={{
-									backgroundColor: '#3f51b5',
+									backgroundColor: 'red',
 									color: '#ffffff',
+									padding: '15px',
+									borderRadius: '8px',
 								}}
 							>
 								New Invoice
@@ -158,13 +157,12 @@ export default function App({ Component, pageProps }) {
 							backgroundColor: '#f4f4f4',
 							flex: '1',
 							overflow: 'auto',
-							margin: '50px 0px',
-							padding: '20px',
+							margin: '1.25rem, 0rem',
+							padding: '1.25rem',
 						}}
 					>
 						<Component {...pageProps} />
 					</Box>
-
 				</Box>
 			</Box>
 		</CssBaseline>
