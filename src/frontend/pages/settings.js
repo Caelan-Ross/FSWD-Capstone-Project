@@ -1,10 +1,10 @@
-import { Typography, Box, useTheme } from '@mui/material';
-import Link from '@mui/material/Link';
+import { Typography, Box, IconButton, TextField, Button } from '@mui/material';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 export default function Home() {
 	return (
 		<Box
-			display='flex'
+			display='block'
 			flexDirection='column'
 			alignItems='center'
 			sx={{
@@ -15,13 +15,78 @@ export default function Home() {
 				py: 4,
 			}}
 		>
-			<Typography variant='h1' align='center' component='h2'>
-				Settings
-			</Typography>
-			<Box textAlign='left' mt={2}>
-				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis neque consequuntur in tempora, placeat ullam nihil praesentium reprehenderit quaerat, numquam quibusdam repellendus quidem tempore temporibus quas est? Nesciunt, recusandae et.
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+				}}
+			>
+				<Typography variant='h3' align='center' component='h2'>
+					Settings
 				</Typography>
+
+				<Box display='flex'>
+					<IconButton>
+						<ArrowCircleLeftIcon
+							sx={{ fontSize: '2.5rem', color: '#000000' }}
+						/>
+					</IconButton>
+					<Typography variant='h3' align='center' component='h2'>
+						Back
+					</Typography>
+				</Box>
+			</Box>
+			<Box
+				mt={2}
+				sx={{
+					display: 'flex',
+					flexDirection: 'row',
+				}}
+			>
+				{/* Column 1: Edit Profile */}
+				<Box sx={{ flex: 1, marginRight: '20px' }}>
+					<Typography variant='h4' align='center' component='h3'>
+						Edit Profile
+					</Typography>
+					<TextField label='Name' fullWidth variant='outlined' sx={{ mt: 2 }} />
+					<TextField
+						label='Email'
+						fullWidth
+						variant='outlined'
+						sx={{ mt: 2 }}
+					/>
+				</Box>
+
+				{/* Column 2: Change Password */}
+				<Box sx={{ flex: 1 }}>
+					<Typography variant='h4' align='center' component='h3'>
+						Change Password
+					</Typography>
+					<TextField
+						label='Current Password'
+						fullWidth
+						variant='outlined'
+						type='password'
+						sx={{ mt: 2 }}
+					/>
+					<TextField
+						label='New Password'
+						fullWidth
+						variant='outlined'
+						type='password'
+						sx={{ mt: 2 }}
+					/>
+					<TextField
+						label='Confirm Password'
+						fullWidth
+						variant='outlined'
+						type='password'
+						sx={{ mt: 2 }}
+					/>
+					<Button variant='contained' color='primary' sx={{ mt: 3 }}>
+						Submit
+					</Button>
+				</Box>
 			</Box>
 		</Box>
 	);

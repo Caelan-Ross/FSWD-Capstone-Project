@@ -34,7 +34,6 @@ export default function App({ Component, pageProps }) {
 					display: 'flex',
 					flexDirection: 'row',
 					maxHeight: '100vh',
-					maxWidth: '100vw',
 				}}
 			>
 				{/* Sidebar Column */}
@@ -104,6 +103,7 @@ export default function App({ Component, pageProps }) {
 						display: 'flex',
 						flexDirection: 'column',
 						padding: '0px 20px',
+						minWidth: '95%'
 					}}
 				>
 					{/* Header Row Container */}
