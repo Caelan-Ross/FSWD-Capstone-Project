@@ -42,6 +42,7 @@ export default function App({ Component, pageProps }) {
 						flex: '0 0 auto',
 						backgroundColor: '#f4f4f4',
 						width: '75px',
+						minHeight: '100vh',
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',

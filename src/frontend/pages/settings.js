@@ -1,7 +1,13 @@
 import { Typography, Box, IconButton, TextField, Button } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+	const router = useRouter();
+	const handleNavigation = (path) => {
+		router.push(path);
+	};
+
 	return (
 		<Box
 			display='block'
@@ -11,21 +17,23 @@ export default function Home() {
 				backgroundColor: 'white',
 				margin: '30px',
 				padding: '30px',
-				minHeight: '100vh',
+				height: '100%',
 				py: 4,
 			}}
 		>
+			{/* Page Heading & Back Button */}
 			<Box
 				sx={{
 					display: 'flex',
 					justifyContent: 'space-between',
+					width: '100%'
 				}}
 			>
 				<Typography variant='h3' align='center' component='h2'>
 					Settings
 				</Typography>
 
-				<Box display='flex'>
+				<Box display='flex' onClick={() => handleNavigation('/')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
@@ -37,7 +45,7 @@ export default function Home() {
 				</Box>
 			</Box>
 			<Box
-				mt={2}
+				mt={12}
 				sx={{
 					display: 'flex',
 					flexDirection: 'row',
