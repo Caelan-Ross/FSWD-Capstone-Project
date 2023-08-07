@@ -1,7 +1,25 @@
+import React from 'react';
 import { Typography, Box, useTheme } from '@mui/material';
-import Link from '@mui/material/Link';
+import { DataGrid } from '@mui/x-data-grid';
 
 export default function Home() {
+	const theme = useTheme();
+
+	// Dummy customer data
+	const customerData = [
+		{ id: 1, firstName: 'John', lastName: 'Doe', phone: '123-456-7890', email: 'john@example.com' },
+		{ id: 2, firstName: 'Jane', lastName: 'Smith', phone: '987-654-3210', email: 'jane@example.com' },
+		// Add more dummy data rows here
+	];
+
+	const columns = [
+		{ field: 'id', headerName: 'Customer ID', width: 150 },
+		{ field: 'firstName', headerName: 'First Name', width: 150 },
+		{ field: 'lastName', headerName: 'Last Name', width: 150 },
+		{ field: 'phone', headerName: 'Phone No.', width: 150 },
+		{ field: 'email', headerName: 'Email', width: 250 },
+	];
+
 	return (
 		<Box
 			display='flex'
@@ -34,6 +52,11 @@ export default function Home() {
 					temporibus quas est? Nesciunt, recusandae et.
 				</Typography>
 			</Box>
+
+			{/* Customer DataGrid */}
+			<div style={{ height: 400, width: '100%', marginTop: theme.spacing(2) }}>
+				<DataGrid rows={customerData} columns={columns} pageSize={5} />
+			</div>
 		</Box>
 	);
 }
