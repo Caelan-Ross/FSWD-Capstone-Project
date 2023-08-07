@@ -4,7 +4,8 @@ import { DataGrid } from '@mui/x-data-grid';
 
 export default function Home() {
 	const theme = useTheme();
-	// Dummy customer data
+
+	// Dummy invoice data
 	const invoiceData = [
 		{
 			id: 100000,
