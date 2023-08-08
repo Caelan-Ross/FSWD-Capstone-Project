@@ -55,7 +55,7 @@ export default function App({ Component, pageProps }) {
 							marginTop: '10px',
 						}}
 					>
-						<MenuIcon sx={{ fontSize: '3.125rem', color: '#000000'}} />
+						<MenuIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
 					</IconButton>
 					<Box
 						sx={{
