@@ -100,6 +100,22 @@ a {
   text-decoration: none;
 }
 
+.btn-primary {
+  background-color: #f3dde0;
+  outline: 1px solid #B6787C;
+  color: black;
+}
+
+.btn-primary:hover {
+  background-color: #f1bfc6;
+}
+
+.btn-primary:active {
+  background-color: #f1bfc6;
+  outline: 1px solid #B6787C;
+  color: black;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

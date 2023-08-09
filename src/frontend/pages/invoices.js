@@ -52,10 +52,11 @@ export default function Home() {
 				sx={{
 					display: 'flex',
 					justifyContent: 'flex-start',
+					alignItems: 'center',
 					width: '100%',
 				}}
 			>
-				<Typography variant='h3' align='center' component='h2'>
+				<Typography variant='h3' align='center' component='h2' sx={{marginRight: '1rem'}}>
 					Invoices
 				</Typography>
 				<IconButton>

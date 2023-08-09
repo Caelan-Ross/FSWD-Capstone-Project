@@ -141,8 +141,8 @@ export default function App({ Component, pageProps }) {
 							alignItems: 'center',
 							justifyContent: 'space-between',
 							height: '6rem',
-							width: '98%',
-							margin: '0 0 0 auto',
+							width: '99%',
+							margin: '0 0 0 1.25rem',
 						}}
 					>
 						{/* User greeting */}
@@ -168,8 +168,8 @@ export default function App({ Component, pageProps }) {
 							<Button
 								onClick={() => handleNavigation('/')}
 								startIcon={<AddIcon />}
+								className='btn-primary'
 								sx={{
-									backgroundColor: 'red',
 									color: '#ffffff',
 									padding: '15px',
 									borderRadius: '8px',
@@ -187,9 +187,9 @@ export default function App({ Component, pageProps }) {
 							borderRadius: '8px',
 							flex: '1',
 							overflow: 'auto',
-							margin: '.25rem 0 1.25rem 3rem',
+							margin: '.25rem 0 1.25rem 1.25rem',
 							maxHeight: 'calc(100vh - 6rem - 2.5rem)',
-							width: '98%',
+							width: '99%',
 						}}
 					>
 						<Component {...pageProps} />
