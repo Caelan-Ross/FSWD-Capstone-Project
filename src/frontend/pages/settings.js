@@ -41,9 +41,6 @@ export default function Home() {
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
 						/>
 					</IconButton>
-					<Typography variant='h3' align='center' component='h2'>
-						Back
-					</Typography>
 				</Box>
 			</Box>
 			<Box

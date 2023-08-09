@@ -2,9 +2,14 @@ import React from 'react';
 import { Typography, Box, useTheme, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { useRouter } from 'next/router';
 
 export default function Home() {
 	const theme = useTheme();
+	const router = useRouter();
+	const handleNavigation = (path) => {
+		router.push(path)
+	};
 
 	// Dummy customer data
 	const customerData = [
@@ -66,7 +71,7 @@ export default function Home() {
 				<Typography variant='h3' align='center' component='h2'>
 					Customer
 				</Typography>
-				<IconButton>
+				<IconButton onClick={() => handleNavigation('/createCustomer')}>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>

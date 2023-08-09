@@ -28,11 +28,11 @@ export default function Home() {
 				sx={{
 					display: 'flex',
 					justifyContent: 'space-between',
-					width: '100%'
+					width: '100%',
 				}}
 			>
 				<Typography variant='h3' align='center' component='h2'>
-					Settings
+					Create Customer
 				</Typography>
 
 				<Box display='flex' onClick={() => handleNavigation('/')}>
@@ -41,9 +41,6 @@ export default function Home() {
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
 						/>
 					</IconButton>
-					<Typography variant='h3' align='center' component='h2'>
-						Back
-					</Typography>
 				</Box>
 			</Box>
 			<Box
@@ -53,44 +50,33 @@ export default function Home() {
 					flexDirection: 'row',
 				}}
 			>
-				{/* Column 1: Edit Profile */}
 				<Box sx={{ flex: 1, marginRight: '20px' }}>
-					<Typography variant='h4' align='center' component='h3'>
-						Edit Profile
-					</Typography>
-					<TextField label='Name' fullWidth variant='outlined' sx={{ mt: 2, backgroundColor: 'white' }} />
 					<TextField
-						label='Email'
+						label='First Name'
+						fullWidth
+						variant='outlined'
+						sx={{ mt: 2, backgroundColor: 'white' }}
+					/>
+					<TextField
+						label='Last Name'
 						fullWidth
 						variant='outlined'
 						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 				</Box>
-
-				{/* Column 2: Change Password */}
 				<Box sx={{ flex: 1 }}>
-					<Typography variant='h4' align='center' component='h3'>
-						Change Password
-					</Typography>
 					<TextField
-						label='Current Password'
+						label='Phone No.'
 						fullWidth
 						variant='outlined'
-						type='password'
+						type=''
 						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 					<TextField
-						label='New Password'
+						label='Email'
 						fullWidth
 						variant='outlined'
-						type='password'
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-					<TextField
-						label='Confirm Password'
-						fullWidth
-						variant='outlined'
-						type='password'
+						type='email'
 						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 					<Button variant='contained' color='primary' sx={{ mt: 3 }}>
