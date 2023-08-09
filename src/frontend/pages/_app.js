@@ -196,8 +196,8 @@ export default function App({ Component, pageProps }) {
 							borderRadius: '8px',
 							flex: '1',
 							overflow: 'auto',
-							margin: '.25rem 0 1.25rem 1.25rem',
-							maxHeight: 'calc(100vh - 6rem - 2.5rem)',
+							margin: '.25rem 0 .25rem 1.25rem',
+							maxHeight: 'calc(100vh - 8.25rem)',
 							width: '99%',
 						}}
 					>
