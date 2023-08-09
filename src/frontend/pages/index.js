@@ -10,11 +10,12 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: 'pink',
 				margin: '30px',
 				padding: '30px',
-				minHeight: '100vh',
+				height: '92.5%',
 				py: 4,
+				overflow: 'auto',
 			}}
 		>
 			<Box

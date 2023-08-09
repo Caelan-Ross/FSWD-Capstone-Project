@@ -116,6 +116,7 @@ export default function App({ Component, pageProps }) {
 							alignItems: 'center',
 							justifyContent: 'space-between',
 							padding: '30px',
+							height: '6rem'
 						}}
 					>
 						{/* User greeting */}
@@ -155,11 +156,11 @@ export default function App({ Component, pageProps }) {
 					{/* Page Swap in Section */}
 					<Box
 						sx={{
-							backgroundColor: '#f4f4f4',
+							backgroundColor: 'yellow',
 							flex: '1',
 							overflow: 'auto',
-							margin: '1.25rem, 0rem',
-							padding: '1.25rem',
+							margin: '1.25rem, auto',
+							maxHeight: 'calc(100vh - 6rem - 2.5rem)',
 						}}
 					>
 						<Component {...pageProps} />

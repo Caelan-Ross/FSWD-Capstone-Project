@@ -38,11 +38,12 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: 'pink',
 				margin: '30px',
 				padding: '30px',
-				minHeight: '100vh',
+				height: '92.5%',
 				py: 4,
+				overflow: 'auto',
 			}}
 		>
 			<Box
@@ -66,7 +67,7 @@ export default function Home() {
 			</Box>
 
 			{/* Invoice DataGrid */}
-			<div style={{ height: 400, width: '100%', marginTop: theme.spacing(2) }}>
+			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2) }}>
 				<DataGrid rows={invoiceData} columns={columns} pageSize={5} />
 			</div>
 		</Box>

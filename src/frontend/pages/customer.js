@@ -9,6 +9,7 @@ export default function Home() {
 	const customerData = [
 		{ id: 1, firstName: 'John', lastName: 'Doe', phone: '123-456-7890', email: 'john@example.com' },
 		{ id: 2, firstName: 'Jane', lastName: 'Smith', phone: '987-654-3210', email: 'jane@example.com' },
+		{ id: 3, firstName: 'Jane', lastName: 'Smith', phone: '987-654-3210', email: 'jane@example.com' },
 		// Add more dummy data rows here
 	];
 
@@ -26,11 +27,12 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: 'pink',
 				margin: '30px',
 				padding: '30px',
-				minHeight: '100vh',
+				height: '92.5%',
 				py: 4,
+				overflow: 'auto',
 			}}
 		>
 			<Box
@@ -54,7 +56,7 @@ export default function Home() {
 			</Box>
 
 			{/* Customer DataGrid */}
-			<div style={{ height: 400, width: '100%', marginTop: theme.spacing(2) }}>
+			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2) }}>
 				<DataGrid rows={customerData} columns={columns} pageSize={5} />
 			</div>
 		</Box>

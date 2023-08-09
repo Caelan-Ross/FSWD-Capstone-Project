@@ -21,6 +21,76 @@ export default function Home() {
 			batteryAmt: 2,
 			saleAmt: '$30.00',
 		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		},
+		{
+			id: 100001,
+			invoiceDate: '02/02/2000',
+			customerName: 'John Smith',
+			batteryAmt: 2,
+			saleAmt: '$30.00',
+		}
 		// Add more dummy data rows here
 	];
 
@@ -38,11 +108,12 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: 'pink',
 				margin: '30px',
 				padding: '30px',
-				minHeight: '100%',
+				height: '92.5%',
 				py: 4,
+				overflow: 'auto',
 			}}
 		>
 			<Box
@@ -66,7 +137,7 @@ export default function Home() {
 			</Box>
 
 			{/* Inventory DataGrid */}
-			<div style={{ height: 400, width: '100%', marginTop: theme.spacing(2) }}>
+			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2) }}>
 				<DataGrid rows={inventoryData} columns={columns} pageSize={5} />
 			</div>
 		</Box>
