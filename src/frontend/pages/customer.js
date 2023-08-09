@@ -54,10 +54,9 @@ export default function Home() {
 				backgroundColor: '#E6E8E7',
 				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '30px',
-				padding: '30px',
-				height: '92.5%',
-				py: 4,
+				margin: '2rem',
+				padding: '2rem',
+				height: '94%',
 				overflow: 'auto',
 			}}
 		>

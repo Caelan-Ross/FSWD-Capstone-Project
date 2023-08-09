@@ -10,17 +10,17 @@ export default function Home() {
 
 	return (
 		<Box
-			display='block'
+			display='flex'
 			flexDirection='column'
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
 				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '30px',
-				padding: '30px',
-				height: '90%',
-				py: 4,
+				margin: '2rem',
+				padding: '2rem',
+				height: '94%',
+				overflow: 'auto',
 			}}
 		>
 			{/* Page Heading & Back Button */}

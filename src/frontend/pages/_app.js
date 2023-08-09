@@ -182,12 +182,12 @@ export default function App({ Component, pageProps }) {
 					{/* Page Swap in Section */}
 					<Box
 						sx={{
-							backgroundColor: '#E6E8D9',
+							backgroundColor: '#959595',
 							outline: '1px solid #E6E8E7',
 							borderRadius: '8px',
 							flex: '1',
 							overflow: 'auto',
-							margin: '.25rem 0 1.25rem 2.25rem',
+							margin: '.25rem 0 1.25rem 3rem',
 							maxHeight: 'calc(100vh - 6rem - 2.5rem)',
 							width: '98%',
 						}}
