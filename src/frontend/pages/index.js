@@ -10,7 +10,9 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: 'pink',
+				backgroundColor: '#E6E8E7',
+				outline: '1px solid lightgrey',
+				borderRadius: '8px',
 				margin: '30px',
 				padding: '30px',
 				height: '92.5%',

@@ -38,7 +38,9 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: 'pink',
+				backgroundColor: '#E6E8E7',
+				outline: '1px solid lightgrey',
+				borderRadius: '8px',
 				margin: '30px',
 				padding: '30px',
 				height: '92.5%',
@@ -67,7 +69,7 @@ export default function Home() {
 			</Box>
 
 			{/* Invoice DataGrid */}
-			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2) }}>
+			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2), backgroundColor: 'white' }}>
 				<DataGrid rows={invoiceData} columns={columns} pageSize={5} />
 			</div>
 		</Box>

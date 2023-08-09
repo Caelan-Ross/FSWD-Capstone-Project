@@ -14,7 +14,9 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: 'white',
+				backgroundColor: '#E6E8E7',
+				outline: '1px solid lightgrey',
+				borderRadius: '8px',
 				margin: '30px',
 				padding: '30px',
 				height: '90%',
@@ -56,12 +58,12 @@ export default function Home() {
 					<Typography variant='h4' align='center' component='h3'>
 						Edit Profile
 					</Typography>
-					<TextField label='Name' fullWidth variant='outlined' sx={{ mt: 2 }} />
+					<TextField label='Name' fullWidth variant='outlined' sx={{ mt: 2, backgroundColor: 'white' }} />
 					<TextField
 						label='Email'
 						fullWidth
 						variant='outlined'
-						sx={{ mt: 2 }}
+						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 				</Box>
 
@@ -75,21 +77,21 @@ export default function Home() {
 						fullWidth
 						variant='outlined'
 						type='password'
-						sx={{ mt: 2 }}
+						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 					<TextField
 						label='New Password'
 						fullWidth
 						variant='outlined'
 						type='password'
-						sx={{ mt: 2 }}
+						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 					<TextField
 						label='Confirm Password'
 						fullWidth
 						variant='outlined'
 						type='password'
-						sx={{ mt: 2 }}
+						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 					<Button variant='contained' color='primary' sx={{ mt: 3 }}>
 						Submit

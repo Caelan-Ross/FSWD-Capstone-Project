@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }) {
 		router.push(path);
 	};
 
-	const [open, setOpen] = useState(true);
+	const [open, setOpen] = useState(false);
 
 	const handleToggle = () => {
 		setOpen(!open);
@@ -182,11 +182,12 @@ export default function App({ Component, pageProps }) {
 					{/* Page Swap in Section */}
 					<Box
 						sx={{
-							backgroundColor: 'yellow',
+							backgroundColor: '#E6E8D9',
+							outline: '1px solid #E6E8E7',
+							borderRadius: '8px',
 							flex: '1',
 							overflow: 'auto',
-							margin: '1.25rem, auto',
-							marginLeft: 'auto',
+							margin: '.25rem 0 1.25rem 2.25rem',
 							maxHeight: 'calc(100vh - 6rem - 2.5rem)',
 							width: '98%',
 						}}
