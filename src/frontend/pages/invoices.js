@@ -1,6 +1,7 @@
 import React from 'react';
-import { Typography, Box, useTheme } from '@mui/material';
+import { Typography, Box, useTheme, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function Home() {
 	const theme = useTheme();
@@ -51,13 +52,16 @@ export default function Home() {
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'space-between',
+					justifyContent: 'flex-start',
 					width: '100%',
 				}}
 			>
 				<Typography variant='h3' align='center' component='h2'>
 					Invoices
 				</Typography>
+				<IconButton>
+					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+				</IconButton>
 			</Box>
 			<Box textAlign='left' mt={2}>
 				<Typography variant='body1' component='p'>
@@ -69,7 +73,14 @@ export default function Home() {
 			</Box>
 
 			{/* Invoice DataGrid */}
-			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2), backgroundColor: 'white' }}>
+			<div
+				style={{
+					height: '80%',
+					width: '100%',
+					marginTop: theme.spacing(2),
+					backgroundColor: 'white',
+				}}
+			>
 				<DataGrid rows={invoiceData} columns={columns} pageSize={5} />
 			</div>
 		</Box>

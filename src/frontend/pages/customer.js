@@ -1,15 +1,34 @@
 import React from 'react';
-import { Typography, Box, useTheme } from '@mui/material';
+import { Typography, Box, useTheme, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function Home() {
 	const theme = useTheme();
 
 	// Dummy customer data
 	const customerData = [
-		{ id: 1, firstName: 'John', lastName: 'Doe', phone: '123-456-7890', email: 'john@example.com' },
-		{ id: 2, firstName: 'Jane', lastName: 'Smith', phone: '987-654-3210', email: 'jane@example.com' },
-		{ id: 3, firstName: 'Jane', lastName: 'Smith', phone: '987-654-3210', email: 'jane@example.com' },
+		{
+			id: 1,
+			firstName: 'John',
+			lastName: 'Doe',
+			phone: '123-456-7890',
+			email: 'john@example.com',
+		},
+		{
+			id: 2,
+			firstName: 'Jane',
+			lastName: 'Smith',
+			phone: '987-654-3210',
+			email: 'jane@example.com',
+		},
+		{
+			id: 3,
+			firstName: 'Jane',
+			lastName: 'Smith',
+			phone: '987-654-3210',
+			email: 'jane@example.com',
+		},
 		// Add more dummy data rows here
 	];
 
@@ -40,13 +59,16 @@ export default function Home() {
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'space-between',
+					justifyContent: 'flex-start',
 					width: '100%',
 				}}
 			>
 				<Typography variant='h3' align='center' component='h2'>
 					Customer
 				</Typography>
+				<IconButton>
+					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+				</IconButton>
 			</Box>
 			<Box textAlign='left' mt={2}>
 				<Typography variant='body1' component='p'>
@@ -58,7 +80,14 @@ export default function Home() {
 			</Box>
 
 			{/* Customer DataGrid */}
-			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2), backgroundColor: 'white' }}>
+			<div
+				style={{
+					height: '80%',
+					width: '100%',
+					marginTop: theme.spacing(2),
+					backgroundColor: 'white',
+				}}
+			>
 				<DataGrid rows={customerData} columns={columns} pageSize={5} />
 			</div>
 		</Box>
