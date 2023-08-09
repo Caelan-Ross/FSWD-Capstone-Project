@@ -17,7 +17,7 @@ export default function Home() {
 				backgroundColor: 'white',
 				margin: '30px',
 				padding: '30px',
-				height: '100%',
+				height: '90%',
 				py: 4,
 			}}
 		>

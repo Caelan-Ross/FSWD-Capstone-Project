@@ -6,6 +6,9 @@ import {
 	Typography,
 	IconButton,
 	Avatar,
+	Drawer,
+	List,
+	ListItem,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
@@ -15,12 +18,20 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 export default function App({ Component, pageProps }) {
 	const router = useRouter();
 	const handleNavigation = (path) => {
 		router.push(path);
 	};
+
+	const [open, setOpen] = useState(true);
+
+	const handleToggle = () => {
+		setOpen(!open);
+	};
+
 
 	// Username greeted in banner
 	const user = 'John Doe';
@@ -39,64 +50,77 @@ export default function App({ Component, pageProps }) {
 				{/* Sidebar Column */}
 				<Box
 					sx={{
-						flex: '0 0 auto',
+						width: open ? '12%' : '2%',
+						transition: 'width 0.3s',
 						backgroundColor: '#f4f4f4',
-						width: '75px',
-						minHeight: '100vh',
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						justifyContent: 'space-between',
 					}}
 				>
-					<IconButton
+					<Drawer
+						variant='persistent'
+						open={true}
 						sx={{
-							marginBottom: '40px',
-							marginTop: '10px',
-						}}
-					>
-						<MenuIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
-					</IconButton>
-					<Box
-						sx={{
-							flexGrow: 1,
+							flex: '0 0 auto',
+							backgroundColor: '#f4f4f4',
+							minHeight: '100vh',
 							display: 'flex',
 							flexDirection: 'column',
-							justifyContent: 'flex-start',
+							alignItems: 'center',
+							justifyContent: 'space-between',
+							zIndex: '999',
+							overflowX: 'hidden',
+							width: '100%',
 						}}
 					>
 						<IconButton
-							onClick={() => handleNavigation('/')}
-							sx={{ marginBottom: '10px' }}
+							onClick={handleToggle}
+							sx={{
+								marginBottom: '40px',
+								marginTop: '10px',
+							}}
 						>
-							<HomeIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+							<MenuIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
 						</IconButton>
-						<IconButton
-							onClick={() => handleNavigation('/inventory')}
-							sx={{ marginBottom: '10px' }}
+						<Box
+							sx={{
+								flexGrow: 1,
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'flex-start',
+							}}
 						>
-							<InventoryIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
-						</IconButton>
-						<IconButton
-							onClick={() => handleNavigation('/invoices')}
-							sx={{ marginBottom: '10px' }}
-						>
-							<ReceiptIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
-						</IconButton>
+							<IconButton
+								onClick={() => handleNavigation('/')}
+								sx={{ marginBottom: '10px' }}
+							>
+								<HomeIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+							</IconButton>
+							<IconButton
+								onClick={() => handleNavigation('/inventory')}
+								sx={{ marginBottom: '10px' }}
+							>
+								<InventoryIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+							</IconButton>
+							<IconButton
+								onClick={() => handleNavigation('/invoices')}
+								sx={{ marginBottom: '10px' }}
+							>
+								<ReceiptIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+							</IconButton>
 
+							<IconButton
+								onClick={() => handleNavigation('/customer')}
+								sx={{ marginBottom: '10px' }}
+							>
+								<AccountCircleIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+							</IconButton>
+						</Box>
 						<IconButton
-							onClick={() => handleNavigation('/customer')}
+							onClick={() => handleNavigation('/settings')}
 							sx={{ marginBottom: '10px' }}
 						>
-							<AccountCircleIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+							<SettingsIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
 						</IconButton>
-					</Box>
-					<IconButton
-						onClick={() => handleNavigation('/settings')}
-						sx={{ marginBottom: '10px' }}
-					>
-						<SettingsIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
-					</IconButton>
+					</Drawer>
 				</Box>
 				{/* Content Column*/}
 				<Box
@@ -104,7 +128,8 @@ export default function App({ Component, pageProps }) {
 						display: 'flex',
 						flexDirection: 'column',
 						padding: '0px 20px',
-						minWidth: '95%'
+						width: '100vw',
+						margin: '0 auto',
 					}}
 				>
 					{/* Header Row Container */}
@@ -115,8 +140,9 @@ export default function App({ Component, pageProps }) {
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'space-between',
-							padding: '30px',
-							height: '6rem'
+							height: '6rem',
+							width: '98%',
+							margin: '0 0 0 auto',
 						}}
 					>
 						{/* User greeting */}
@@ -160,7 +186,9 @@ export default function App({ Component, pageProps }) {
 							flex: '1',
 							overflow: 'auto',
 							margin: '1.25rem, auto',
+							marginLeft: 'auto',
 							maxHeight: 'calc(100vh - 6rem - 2.5rem)',
+							width: '98%',
 						}}
 					>
 						<Component {...pageProps} />
