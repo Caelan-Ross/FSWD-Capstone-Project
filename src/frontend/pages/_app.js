@@ -15,7 +15,9 @@ import AddIcon from '@mui/icons-material/Add';
 import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -65,6 +67,7 @@ export default function App({ Component, pageProps }) {
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'center',
+							textAlign: 'center',
 							justifyContent: 'space-between',
 							zIndex: '999',
 							overflowX: 'hidden',
@@ -111,9 +114,15 @@ export default function App({ Component, pageProps }) {
 								onClick={() => handleNavigation('/customer')}
 								sx={{ marginBottom: '10px' }}
 							>
-								<AccountCircleIcon sx={{ fontSize: '3.125rem', color: '#000000' }} />
+								<GroupAddIcon sx={{ fontSize: '3rem', color: '#000000' }} />
 							</IconButton>
 						</Box>
+						<IconButton
+							onClick={() => handleNavigation('/settings')}
+							sx={{ marginBottom: '10px' }}
+						>
+							<ErrorIcon sx={{ fontSize: '3.125rem', color: 'red' }} />
+						</IconButton>
 						<IconButton
 							onClick={() => handleNavigation('/settings')}
 							sx={{ marginBottom: '10px' }}
