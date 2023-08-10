@@ -67,6 +67,7 @@ export default function Home() {
 					width: '100%',
 				}}
 			>
+				{error && <Alert severity='error'>{error}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
 					Create Customer
 				</Typography>
