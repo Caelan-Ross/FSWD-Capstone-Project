@@ -43,29 +43,49 @@ const Navbar = () => {
                 <IconButton onClick={toggleDrawer} sx={{ margin: '10px auto' }}>
                     {open ? <CloseIcon /> : <MenuIcon sx={{ fontSize: '2rem' }} />}
                 </IconButton>
-                {icons.map((item, index) => (
-                    <IconButton key={index} onClick={() => router.push(item.path)} sx={{ margin: '0 auto 10px auto' }}>
-                        {item.icon}
-                    </IconButton>
-                ))}
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
+                    {icons.slice(0, 4).map((item, index) => (
+                        <IconButton key={index} onClick={() => router.push(item.path)} sx={{ margin: '0 auto 10px auto' }}>
+                            {item.icon}
+                        </IconButton>
+                    ))}
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
+                    {icons.slice(4).map((item, index) => (
+                        <IconButton key={index} onClick={() => router.push(item.path)} sx={{ margin: '0 auto 10px auto' }}>
+                            {item.icon}
+                        </IconButton>
+                    ))}
+                </Box>
             </Box>
 
             <Drawer anchor="left" open={open} onClose={toggleDrawer}>
-
-                <List>
-                    <Button onClick={closeDrawer} sx={{ width: '100%', textAlign: 'center', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', margin: '5px 0px', fontSize: '1rem', paddingRight: '2rem', color: 'red'}}>
-                        <CloseIcon sx={{fontSize: '2rem'}}/>
-                        Close
-                    </Button>
-                    {icons.map((item, index) => (
-                        <div key={index} onClick={() => { router.push(item.path); closeDrawer(); }}>
-                            <ListItem button>
-                                <ListItemIcon>{item.icon}</ListItemIcon>
-                                {open && <ListItemText primary={item.text} />}
-                            </ListItem>
-                        </div>
-                    ))}
-                </List>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', justifyContent: 'space-between' }}>
+                    <Box>
+                        <List><ListItem button onClick={closeDrawer}>
+                            <ListItemIcon><CloseIcon sx={{ fontSize: '2rem', color: 'red' }} /></ListItemIcon>
+                            <ListItemText sx={{ color: 'red' }}>Close</ListItemText>
+                        </ListItem>
+                            {icons.map((item, index) => (
+                                <Box key={index} onClick={() => { router.push(item.path); closeDrawer(); }}>
+                                    <ListItem button>
+                                        <ListItemIcon>{((index <= 3 && item.icon))}</ListItemIcon>
+                                        {open && ((index <= 3 && item.text)) && <ListItemText primary={item.text} />}
+                                    </ListItem>
+                                </Box>
+                            ))}</List>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <List>{icons.map((item, index) => (
+                            <Box key={index} onClick={() => { router.push(item.path); closeDrawer(); }}>
+                                <ListItem button>
+                                    <ListItemIcon>{((index >= 4 && item.icon))}</ListItemIcon>
+                                    {open && (index >= 4 && item.text) && <ListItemText primary={item.text} />}
+                                </ListItem>
+                            </Box>
+                        ))}</List>
+                    </Box>
+                </Box>
             </Drawer>
         </Box>
     );
