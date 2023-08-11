@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter from next/router
+import { useRouter } from 'next/router';
 import Drawer from '@mui/material/Drawer';
 import { Box, Button } from '@mui/material';
 import List from '@mui/material/List';
@@ -13,12 +13,12 @@ import HomeIcon from '@mui/icons-material/Home';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import ErrorIcon from '@mui/icons-material/Error';
+import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
-    const router = useRouter(); // Initialize the Next.js router
+    const router = useRouter();
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -33,7 +33,7 @@ const Navbar = () => {
         { icon: <ReceiptIcon sx={{ fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices' },
         { icon: <InventoryIcon sx={{ fontSize: '2rem' }} />, text: 'Inventory', path: '/inventory' },
         { icon: <GroupAddIcon sx={{ fontSize: '2rem' }} />, text: 'Customers', path: '/customer' },
-        { icon: <ErrorIcon sx={{ color: 'red', fontSize: '2rem' }} />, text: 'Logout', path: '/' },
+        { icon: <LogoutIcon sx={{ color: 'red', fontSize: '2rem' }} />, text: 'Logout', path: '/' },
         { icon: <SettingsIcon sx={{ fontSize: '2rem' }} />, text: 'Settings', path: '/settings' },
     ];
 
@@ -51,11 +51,12 @@ const Navbar = () => {
             </Box>
 
             <Drawer anchor="left" open={open} onClose={toggleDrawer}>
-                <Button onClick={closeDrawer} sx={{ width: '100%', textAlign: 'left', padding: '16px' }}>
-                    <CloseIcon sx={{ marginRight: '8px' }} />
-                    Close Menu
-                </Button>
+
                 <List>
+                    <Button onClick={closeDrawer} sx={{ width: '100%', textAlign: 'center', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', margin: '5px 0px', fontSize: '1rem', paddingRight: '2rem', color: 'red'}}>
+                        <CloseIcon sx={{fontSize: '2rem'}}/>
+                        Close
+                    </Button>
                     {icons.map((item, index) => (
                         <div key={index} onClick={() => { router.push(item.path); closeDrawer(); }}>
                             <ListItem button>
