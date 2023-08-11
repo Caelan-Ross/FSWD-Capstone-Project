@@ -24,12 +24,12 @@ namespace Battery_Doctor.Models
         public string Email { get; set; }
 
         [ForeignKey("Address")]
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public Address Address { get; set; }
+        public Address? Address { get; set; }
     }
 }
 

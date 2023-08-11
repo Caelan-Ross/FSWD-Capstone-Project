@@ -43,8 +43,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-start-rgb: 255, 255, 255;
+    --background-end-rgb: 255, 255, 255;
 
     --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
@@ -82,7 +82,7 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 body {
@@ -98,6 +98,22 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.btn-primary {
+  background-color: #f3dde0;
+  outline: 1px solid #B6787C;
+  color: black;
+}
+
+.btn-primary:hover {
+  background-color: #f1bfc6;
+}
+
+.btn-primary:active {
+  background-color: #f1bfc6;
+  outline: 1px solid #B6787C;
+  color: black;
 }
 
 @media (prefers-color-scheme: dark) {

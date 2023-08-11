@@ -19,7 +19,7 @@ namespace Battery_Doctor.Controllers
 
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetAllCustomers()
         {
             var customers = await _context.Customers.Include(c => c.Address).ToListAsync();
 
@@ -29,17 +29,7 @@ namespace Battery_Doctor.Controllers
                 PhoneNumber = c.PhoneNumber,
                 FirstName = c.FirstName,
                 LastName = c.LastName,
-                Email = c.Email,
-
-                Address = new AddressDto
-                {
-                    Id = c.Address.Id,
-                    Street = c.Address.Street,
-                    City = c.Address.City,
-                    Province = c.Address.Province,
-                    PostalCode = c.Address.PostalCode,
-                    Country = c.Address.Country
-                }
+                Email = c.Email
             }).ToList();
 
             return customerDtos;
@@ -63,16 +53,7 @@ namespace Battery_Doctor.Controllers
                 PhoneNumber = customer.PhoneNumber,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
-                Email = customer.Email,
-                Address = new AddressDto
-                {
-                    Id = customer.Address.Id,
-                    Street = customer.Address.Street,
-                    City = customer.Address.City,
-                    Province = customer.Address.Province,
-                    PostalCode = customer.Address.PostalCode,
-                    Country = customer.Address.Country
-                }
+                Email = customer.Email
             };
 
             return customerDto;
@@ -80,7 +61,7 @@ namespace Battery_Doctor.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public async Task<ActionResult<CustomerReadDto>> PostCustomer(CustomerCreateDto customerDto)
+        public async Task<ActionResult<CustomerReadDto>> CreateCustomer(CustomerCreateDto customerDto)
         {
             var customer = new Customer
             {
@@ -88,9 +69,9 @@ namespace Battery_Doctor.Controllers
                 FirstName = customerDto.FirstName,
                 LastName = customerDto.LastName,
                 Email = customerDto.Email,
-                Address = await _context.Addresses.FindAsync(customerDto.AddressId),
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                Address = null,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             _context.Customers.Add(customer);
@@ -102,7 +83,6 @@ namespace Battery_Doctor.Controllers
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
                 Email = customer.Email,
-                AddressId = customer.AddressId,
             };
 
             return CreatedAtAction(nameof(GetCustomer), new { phoneNumber = customer.PhoneNumber }, readDto);
@@ -110,10 +90,10 @@ namespace Battery_Doctor.Controllers
 
         // PUT: api/Customers/5
         [HttpPut("{phoneNumber}")]
-        public async Task<IActionResult> PutCustomer(string phoneNumber, CustomerCreateDto customerDto)
+        public async Task<IActionResult> UpdateCustomer(CustomerCreateDto customerDto)
         {
             var customer = await _context.Customers.Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(c => c.PhoneNumber == customerDto.PhoneNumber);
 
             if (customer == null)
             {
@@ -124,9 +104,9 @@ namespace Battery_Doctor.Controllers
             customer.LastName = customerDto.LastName;
             customer.Email = customerDto.Email;
 
-            customer.Address = await _context.Addresses.FindAsync(customerDto.AddressId);
+            customer.Address = null;
 
-            customer.UpdatedAt = DateTime.UtcNow;
+            customer.UpdatedAt = DateTime.Now;
             _context.Entry(customer).State = EntityState.Modified;
 
             try
@@ -135,7 +115,7 @@ namespace Battery_Doctor.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(phoneNumber))
+                if (!CustomerExists(customerDto.PhoneNumber))
                 {
                     return NotFound();
                 }
