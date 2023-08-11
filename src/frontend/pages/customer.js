@@ -19,7 +19,7 @@ export default function Home() {
 		{ field: 'id', headerName: 'Customer ID', width: 150 },
 		{ field: 'firstName', headerName: 'First Name', width: 150 },
 		{ field: 'lastName', headerName: 'Last Name', width: 150 },
-		{ field: 'phone', headerName: 'Phone No.', width: 150 },
+		{ field: 'phoneNumber', headerName: 'Phone No.', width: 150 },
 		{ field: 'email', headerName: 'Email', width: 250 },
 	];
 

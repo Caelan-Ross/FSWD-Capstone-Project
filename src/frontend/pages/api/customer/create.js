@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     if(req.method === "POST"){
         try {
             const response = await axios.post(
-                'https://localhost:7166/api/Customers', 
+                'http://localhost:7166/api/Customers', 
                 {
                   'phoneNumber': phoneNumber,
                   'firstName': firstName,
