@@ -40,7 +40,7 @@ export default function App({ Component, pageProps }) {
             display: 'flex',
             flexDirection: 'column',
             padding: '0px 20px',
-            width: '100vw',
+            width: '100%',
             margin: '0 auto',
           }}
         >
@@ -52,8 +52,8 @@ export default function App({ Component, pageProps }) {
               alignItems: 'center',
               justifyContent: 'space-between',
               height: '6rem',
-              width: '99%',
-              margin: '0 0 0 1.25rem',
+              width: '100%',
+              margin: '0 auto',
             }}
           >
             <Box
@@ -95,9 +95,9 @@ export default function App({ Component, pageProps }) {
               borderRadius: '8px',
               flex: '1',
               overflow: 'auto',
-              margin: '.25rem 0 .25rem 1.25rem',
+              margin: '.25rem auto',
               maxHeight: 'calc(100vh - 8.25rem)',
-              width: '99%',
+              width: '100%',
             }}
           >
             <Component {...pageProps} />
