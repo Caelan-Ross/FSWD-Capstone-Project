@@ -29,23 +29,22 @@ const Navbar = () => {
     };
 
     const icons = [
-        { icon: <HomeIcon sx={{fontSize: '2rem'}}/>, text: 'Home', path: '/' },
-        { icon: <ReceiptIcon sx={{fontSize: '2rem'}}/>, text: 'Invoices', path: '/invoices' },
-        { icon: <InventoryIcon sx={{fontSize: '2rem'}}/>, text: 'Inventory', path: '/inventory' },
-        { icon: <GroupAddIcon sx={{fontSize: '2rem'}}/>, text: 'Customers', path: '/customer' },
-        { icon: <ErrorIcon  sx={{color: 'red', fontSize: '2rem'}}/>, text: 'Logout', path: '/' },
-        { icon: <SettingsIcon sx={{fontSize: '2rem'}}/>, text: 'Settings', path: '/settings' },
+        { icon: <HomeIcon sx={{ fontSize: '2rem' }} />, text: 'Home', path: '/' },
+        { icon: <ReceiptIcon sx={{ fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices' },
+        { icon: <InventoryIcon sx={{ fontSize: '2rem' }} />, text: 'Inventory', path: '/inventory' },
+        { icon: <GroupAddIcon sx={{ fontSize: '2rem' }} />, text: 'Customers', path: '/customer' },
+        { icon: <ErrorIcon sx={{ color: 'red', fontSize: '2rem' }} />, text: 'Logout', path: '/' },
+        { icon: <SettingsIcon sx={{ fontSize: '2rem' }} />, text: 'Settings', path: '/settings' },
     ];
 
     return (
         <Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'center', alignItems: 'center', borderRight: '1px solid #c1c1c1', height: '100%' }}>
-                <IconButton onClick={toggleDrawer} sx={{margin: '10px auto'}}>
-                    {open ? <CloseIcon /> : <MenuIcon sx={{fontSize: '2rem'}}/>}
+                <IconButton onClick={toggleDrawer} sx={{ margin: '10px auto' }}>
+                    {open ? <CloseIcon /> : <MenuIcon sx={{ fontSize: '2rem' }} />}
                 </IconButton>
-                {/* Use router.push to navigate to the specified path */}
                 {icons.map((item, index) => (
-                    <IconButton key={index} onClick={() => router.push(item.path)} sx={{margin: '0 auto 10px auto'}}>
+                    <IconButton key={index} onClick={() => router.push(item.path)} sx={{ margin: '0 auto 10px auto' }}>
                         {item.icon}
                     </IconButton>
                 ))}
@@ -58,10 +57,12 @@ const Navbar = () => {
                 </Button>
                 <List>
                     {icons.map((item, index) => (
-                        <ListItem button key={index}>
-                            <ListItemIcon>{item.icon}</ListItemIcon>
-                            {open && <ListItemText primary={item.text} />}
-                        </ListItem>
+                        <div key={index} onClick={() => { router.push(item.path); closeDrawer(); }}>
+                            <ListItem button>
+                                <ListItemIcon>{item.icon}</ListItemIcon>
+                                {open && <ListItemText primary={item.text} />}
+                            </ListItem>
+                        </div>
                     ))}
                 </List>
             </Drawer>
