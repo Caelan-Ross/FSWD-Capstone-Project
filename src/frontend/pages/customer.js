@@ -1,41 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Box, useTheme, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 export default function Home() {
 	const theme = useTheme();
 	const router = useRouter();
 	const handleNavigation = (path) => {
-		router.push(path)
+		router.push(path);
 	};
 
-	// Dummy customer data
-	const customerData = [
-		{
-			id: 1,
-			firstName: 'John',
-			lastName: 'Doe',
-			phone: '123-456-7890',
-			email: 'john@example.com',
-		},
-		{
-			id: 2,
-			firstName: 'Jane',
-			lastName: 'Smith',
-			phone: '987-654-3210',
-			email: 'jane@example.com',
-		},
-		{
-			id: 3,
-			firstName: 'Jane',
-			lastName: 'Smith',
-			phone: '987-654-3210',
-			email: 'jane@example.com',
-		},
-		// Add more dummy data rows here
-	];
+	const [customerData, setCustomerData] = useState([]);
+	const API_BASE = 'https://localhost:7166/api/Customers';
 
 	const columns = [
 		{ field: 'id', headerName: 'Customer ID', width: 150 },
@@ -44,6 +22,19 @@ export default function Home() {
 		{ field: 'phone', headerName: 'Phone No.', width: 150 },
 		{ field: 'email', headerName: 'Email', width: 250 },
 	];
+
+	useEffect(() => {
+		// Fetch data from API using axios
+		axios
+			.get(API_BASE)
+			.then((response) => {
+				// Update customerData state with fetched data
+				setCustomerData(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customer data:', error);
+			});
+	}, []);
 
 	return (
 		<Box
@@ -68,7 +59,12 @@ export default function Home() {
 					width: '100%',
 				}}
 			>
-				<Typography variant='h3' align='center' component='h2'  sx={{marginRight: '1rem'}}>
+				<Typography
+					variant='h3'
+					align='center'
+					component='h2'
+					sx={{ marginRight: '1rem' }}
+				>
 					Customer
 				</Typography>
 				<IconButton onClick={() => handleNavigation('/createCustomer')}>
