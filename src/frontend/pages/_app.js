@@ -1,10 +1,9 @@
 import '@/styles/globals.css';
-import { CssBaseline, Box, Button, Typography, IconButton, Avatar } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { CssBaseline, Box, Button, Typography, Avatar } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import Navbar from '@/components/Navbar'; // Make sure the path is correct
+import Navbar from '@/components/Navbar';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
