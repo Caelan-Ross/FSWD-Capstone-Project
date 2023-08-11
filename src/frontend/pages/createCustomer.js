@@ -12,7 +12,7 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const API_BASE = 'https://localhost:3000/createCustomer'
+	const API_BASE = 'http://localhost:3000/api/customer/create'
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -22,11 +22,9 @@ export default function Home() {
 		const queryParams = new URLSearchParams();
 		queryParams.append('firstName', form.firstName.value);
 		queryParams.append('lastName', form.lastName.value);
-		queryParams.append('phoneNo', form.phoneNo.value);
+		queryParams.append('phoneNumber', form.phoneNo.value);
 		queryParams.append('email', form.email.value);
-
 		const url = `${API_BASE}?${queryParams.toString()}`;
-
 		try {
 			setLoading(true);
 			// Perform any additional validation or processing here if needed
