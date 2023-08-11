@@ -13,7 +13,7 @@ export default function Home() {
 	};
 
 	const [customerData, setCustomerData] = useState([]);
-	const API_BASE = 'https://localhost:7166/api/Customers';
+	const API_BASE = 'http://localhost:7166/api/Customers';
 
 	const columns = [
 		{ field: 'id', headerName: 'Customer ID', width: 150 },
@@ -26,8 +26,13 @@ export default function Home() {
 	useEffect(() => {
 		// Fetch data from API using axios
 		axios
-			.get(API_BASE)
+			.get(API_BASE, {
+				headers: {
+				'accept': 'text/plain'
+				}
+			})
 			.then((response) => {
+				console.log(response)
 				// Update customerData state with fetched data
 				setCustomerData(response.data);
 			})

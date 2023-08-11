@@ -10,6 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
 // Add ApplicationDbContext to DI.
 builder.Services.AddDbContext<ApplicationContext>(options =>
@@ -19,16 +26,28 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+
+// Always put these in the beginning.
+if(app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// This should be before other middlewares that depend on routing.
+app.UseRouting();
+
+app.UseCors("AllowAll");
+
+// If you're using authentication, it should go here:
+// app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+// This should always be one of the last ones after the middlewares like CORS, Authentication, Authorization.
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
