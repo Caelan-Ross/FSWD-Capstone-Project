@@ -30,7 +30,7 @@ export default function Home() {
 			// Perform any additional validation or processing here if needed
 			setError(null);
 
-         await axios.post(url);
+			await axios.post(url);
 			// Display success message
 			alert('Customer created successfully');
 			// Reset form fields
@@ -84,17 +84,22 @@ export default function Home() {
 				mt={12}
 				sx={{
 					display: 'flex',
-					flexDirection: 'row',
+					flexDirection: 'column',
+					width: '30%',
+					backgroundColor: '#ffffff80',
+					borderRadius: '8px',
+					outline: '1px solid black',
+					padding: '2rem',
 				}}
 			>
-				<Box sx={{ flex: 1, marginRight: '20px' }}>
+				<Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '10px' }}>
 					<TextField
 						id='firstName'
 						name='firstName'
 						label='First Name'
 						type='text'
-						fullWidth
 						variant='outlined'
+						fullWidth
 						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 					<TextField
@@ -102,34 +107,33 @@ export default function Home() {
 						name='lastName'
 						label='Last Name'
 						type='text'
-						fullWidth
 						variant='outlined'
+						fullWidth
 						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
 				</Box>
-				<Box sx={{ flex: 1 }}>
-					<TextField
-						id='phoneNumber'
-						name='phoneNumber'
-						label='Phone Number'
-						fullWidth
-						variant='outlined'
-						type=''
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-					<TextField
-						id='email'
-						name='email'
-						label='Email'
-						fullWidth
-						variant='outlined'
-						type='email'
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-					<Button variant='contained' type='submit' disabled={loading} color='primary' sx={{ mt: 3 }}>
-						{loading ? 'Creating...' : 'Create'}
-					</Button>
-				</Box>
+				<TextField
+					id='phoneNumber'
+					name='phoneNumber'
+					label='Phone Number'
+					fullWidth
+					variant='outlined'
+					type=''
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
+				<TextField
+					id='email'
+					name='email'
+					label='Email'
+					fullWidth
+					variant='outlined'
+					type='email'
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
+				<Button className='btn-primary' variant='contained' type='submit' disabled={loading} color='primary' sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}>
+					{loading ? 'Creating...' : 'Create'}
+				</Button>
+
 			</Box>
 		</Box>
 	);
