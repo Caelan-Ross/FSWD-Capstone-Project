@@ -22,7 +22,7 @@ export default function Home() {
 		const queryParams = new URLSearchParams();
 		queryParams.append('firstName', form.firstName.value);
 		queryParams.append('lastName', form.lastName.value);
-		queryParams.append('phoneNumber', form.phoneNo.value);
+		queryParams.append('phoneNumber', form.phoneNumber.value);
 		queryParams.append('email', form.email.value);
 		const url = `${API_BASE}?${queryParams.toString()}`;
 		try {
@@ -109,9 +109,9 @@ export default function Home() {
 				</Box>
 				<Box sx={{ flex: 1 }}>
 					<TextField
-						id='phoneNo'
-						name='phoneNo'
-						label='Phone No.'
+						id='phoneNumber'
+						name='phoneNumber'
+						label='Phone Number'
 						fullWidth
 						variant='outlined'
 						type=''

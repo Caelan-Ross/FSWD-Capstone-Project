@@ -28,11 +28,11 @@ export default function Home() {
 		axios
 			.get(API_BASE, {
 				headers: {
-				'accept': 'text/plain'
-				}
+					accept: 'text/plain',
+				},
 			})
 			.then((response) => {
-				console.log(response)
+				console.log(response);
 				// Update customerData state with fetched data
 				setCustomerData(response.data);
 			})
@@ -72,7 +72,9 @@ export default function Home() {
 				>
 					Customer
 				</Typography>
-				<IconButton onClick={() => handleNavigation('/createCustomer')}>
+				<IconButton
+					onClick={() => handleNavigation('/customer/createCustomer')}
+				>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>
