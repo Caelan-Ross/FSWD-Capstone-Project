@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Box, useTheme, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -21,6 +23,26 @@ export default function Home() {
 		{ field: 'lastName', headerName: 'Last Name', width: 150 },
 		{ field: 'phoneNumber', headerName: 'Phone No.', width: 150 },
 		{ field: 'email', headerName: 'Email', width: 250 },
+		{
+			field: 'edit', // Edit column
+			headerName: 'Edit',
+			width: 100,
+			renderCell: (params) => (
+				<IconButton onClick={() => handleEdit(params.row.id)}>
+					<EditIcon />
+				</IconButton>
+			),
+		},
+		{
+			field: 'delete',
+			headerName: 'Delete',
+			width: 100,
+			renderCell: (params) => (
+				<IconButton onClick={() => handleDelete(params.row.id)}>
+					<DeleteIcon />
+				</IconButton>
+			),
+		},
 	];
 
 	useEffect(() => {
