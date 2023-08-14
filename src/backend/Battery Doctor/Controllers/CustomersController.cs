@@ -36,7 +36,7 @@ namespace Battery_Doctor.Controllers
         }
 
         // GET: api/Customers/5
-        [HttpGet("{phoneNumber}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<CustomerReadDto>> GetCustomer(int id)
         {
             var customer = await _context.Customers.Include(c => c.Address)
@@ -90,7 +90,7 @@ namespace Battery_Doctor.Controllers
         }
 
         // PUT: api/Customers/5
-        [HttpPut("{phoneNumber}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomer(CustomerCreateDto customerDto)
         {
             var customer = await _context.Customers.Include(c => c.Address)
@@ -130,7 +130,7 @@ namespace Battery_Doctor.Controllers
         }
 
         // DELETE: api/Customers/5
-        [HttpDelete("{phoneNumber}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
             var customer = await _context.Customers.FindAsync(id);
