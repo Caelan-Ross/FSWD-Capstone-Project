@@ -37,10 +37,10 @@ namespace Battery_Doctor.Controllers
 
         // GET: api/Customers/5
         [HttpGet("{phoneNumber}")]
-        public async Task<ActionResult<CustomerReadDto>> GetCustomer(string phoneNumber)
+        public async Task<ActionResult<CustomerReadDto>> GetCustomer(int id)
         {
             var customer = await _context.Customers.Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (customer == null)
             {
@@ -79,6 +79,7 @@ namespace Battery_Doctor.Controllers
 
             var readDto = new CustomerCreateDto
             {
+                Id = customer.Id,
                 PhoneNumber = customer.PhoneNumber,
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
@@ -93,7 +94,7 @@ namespace Battery_Doctor.Controllers
         public async Task<IActionResult> UpdateCustomer(CustomerCreateDto customerDto)
         {
             var customer = await _context.Customers.Include(c => c.Address)
-                .FirstOrDefaultAsync(c => c.PhoneNumber == customerDto.PhoneNumber);
+                .FirstOrDefaultAsync(c => c.Id == customerDto.Id);
 
             if (customer == null)
             {
@@ -115,7 +116,7 @@ namespace Battery_Doctor.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(customerDto.PhoneNumber))
+                if (!CustomerExists(customerDto.Id))
                 {
                     return NotFound();
                 }
@@ -130,9 +131,9 @@ namespace Battery_Doctor.Controllers
 
         // DELETE: api/Customers/5
         [HttpDelete("{phoneNumber}")]
-        public async Task<IActionResult> DeleteCustomer(string phoneNumber)
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(phoneNumber);
+            var customer = await _context.Customers.FindAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -144,9 +145,9 @@ namespace Battery_Doctor.Controllers
             return NoContent();
         }
 
-        private bool CustomerExists(string phoneNumber)
+        private bool CustomerExists(int id)
         {
-            return _context.Customers.Any(e => e.PhoneNumber == phoneNumber);
+            return _context.Customers.Any(e => e.Id == id);
         }
     }
 }
