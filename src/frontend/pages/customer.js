@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, useTheme, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import {
+	Typography,
+	Box,
+	useTheme,
+	IconButton,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+	Button,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -42,7 +53,6 @@ export default function Customer() {
 			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
-				// <IconButton onClick={() => handleDelete(params.row.id)}>
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
 					<DeleteIcon />
 				</IconButton>
@@ -99,6 +109,12 @@ export default function Customer() {
 			.catch((error) => {
 				console.error('Error deleting customer:', error);
 			});
+	};
+
+
+	// Send user to editCustomer.js
+	const handleEdit = (customerId) => {
+		router.push(`/customer/editCustomer?id=${customerId}`);
 	};
 
 	return (
