@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-export default function Home() {
+export default function Invoices() {
 	const theme = useTheme();
 	const router = useRouter();
 	const handleNavigation = (path) => {

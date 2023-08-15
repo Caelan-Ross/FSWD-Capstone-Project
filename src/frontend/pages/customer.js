@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, useTheme, IconButton } from '@mui/material';
+import { Typography, Box, useTheme, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-export default function Home() {
+export default function Customer() {
 	const theme = useTheme();
 	const router = useRouter();
 	const handleNavigation = (path) => {
@@ -16,6 +16,10 @@ export default function Home() {
 
 	const [customerData, setCustomerData] = useState([]);
 	const API_BASE = 'http://localhost:7166/api/Customers';
+	const [deleteConfirmation, setDeleteConfirmation] = useState({
+		open: false,
+		customerId: null,
+	});
 
 	const columns = [
 		{ field: 'id', headerName: 'Customer ID', width: 150 },
@@ -24,7 +28,7 @@ export default function Home() {
 		{ field: 'phoneNumber', headerName: 'Phone No.', width: 150 },
 		{ field: 'email', headerName: 'Email', width: 250 },
 		{
-			field: 'edit', // Edit column
+			field: 'edit',
 			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
@@ -38,7 +42,8 @@ export default function Home() {
 			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => handleDelete(params.row.id)}>
+				// <IconButton onClick={() => handleDelete(params.row.id)}>
+				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
 					<DeleteIcon />
 				</IconButton>
 			),
@@ -63,7 +68,23 @@ export default function Home() {
 			});
 	}, []);
 
-	// Function to delete customer
+	// Function to open the delete confirmation dialog
+	const openDeleteConfirmation = (customerId) => {
+		setDeleteConfirmation({
+			open: true,
+			customerId: customerId,
+		});
+	};
+
+	// Function to close the delete confirmation dialog
+	const closeDeleteConfirmation = () => {
+		setDeleteConfirmation({
+			open: false,
+			customerId: null,
+		});
+	};
+
+	// Function to delete a customer
 	const handleDelete = (customerId) => {
 		axios
 			.delete(`${API_BASE}/${customerId}`)
@@ -73,6 +94,7 @@ export default function Home() {
 				setCustomerData((prevData) =>
 					prevData.filter((customer) => customer.id !== customerId)
 				);
+				closeDeleteConfirmation();
 			})
 			.catch((error) => {
 				console.error('Error deleting customer:', error);
@@ -136,6 +158,25 @@ export default function Home() {
 			>
 				<DataGrid rows={customerData} columns={columns} pageSize={5} />
 			</div>
+
+			{/* Delete Confirmation Dialog */}
+			<Dialog open={deleteConfirmation.open} onClose={closeDeleteConfirmation}>
+				<DialogTitle>Delete Customer</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Are you sure you want to delete this customer?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
+					<Button
+						onClick={() => handleDelete(deleteConfirmation.customerId)}
+						color='primary'
+					>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 }

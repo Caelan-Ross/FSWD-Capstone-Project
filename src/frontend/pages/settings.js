@@ -2,7 +2,7 @@ import { Typography, Box, IconButton, TextField, Button } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import { useRouter } from 'next/router';
 
-export default function Home() {
+export default function Setting() {
 	const router = useRouter();
 	const handleNavigation = (path) => {
 		router.push(path);
