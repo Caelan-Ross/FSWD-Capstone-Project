@@ -13,7 +13,9 @@ namespace Battery_Doctor.DTOs
 
         public float Height { get; set; }
 
-        public int UnitId { get; set; 
+        public int UnitId { get; set; }
+
+        public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
     }

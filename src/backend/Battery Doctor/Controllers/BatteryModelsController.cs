@@ -24,7 +24,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BatteryModelDto>>> GetBatteryModels()
         {
-            var batteryModels = await _context.BatteryModels.ToListAsync();
+            var batteryModels = await _context.Battery_Models.ToListAsync();
             var batteryModelDtos = batteryModels.Select(bm => new BatteryModelDto
             {
                 Id = bm.Id,
@@ -41,7 +41,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BatteryModelDto>> GetBatteryModel(int id)
         {
-            var batteryModel = await _context.BatteryModels.FindAsync(id);
+            var batteryModel = await _context.Battery_Models.FindAsync(id);
 
             if (batteryModel == null)
             {
@@ -64,7 +64,7 @@ namespace Battery_Doctor.Controllers
         [HttpPost]
         public async Task<ActionResult<BatteryModelDto>> PostBatteryModel(BatteryModelDto batteryModelDto)
         {
-            if (!_context.BatteryMakes.Any(b => b.Id == batteryModelDto.BatteryMakeId))
+            if (!_context.Battery_Makes.Any(b => b.Id == batteryModelDto.BatteryMakeId))
             {
                 return BadRequest("The provided BatteryMakeId is invalid.");
             }
@@ -77,7 +77,7 @@ namespace Battery_Doctor.Controllers
                 UpdatedAt = DateTime.UtcNow,
             };
 
-            _context.BatteryModels.Add(batteryModel);
+            _context.Battery_Models.Add(batteryModel);
             await _context.SaveChangesAsync();
 
             // Update DTO with ID assigned by database
@@ -95,7 +95,7 @@ namespace Battery_Doctor.Controllers
                 return BadRequest();
             }
 
-            if (!_context.BatteryMakes.Any(b => b.Id == batteryModelDto.BatteryMakeId))
+            if (!_context.Battery_Makes.Any(b => b.Id == batteryModelDto.BatteryMakeId))
             {
                 return BadRequest("The provided BatteryMakeId is invalid.");
             }
@@ -134,13 +134,13 @@ namespace Battery_Doctor.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBatteryModel(int id)
         {
-            var batteryModel = await _context.BatteryModels.FindAsync(id);
+            var batteryModel = await _context.Battery_Models.FindAsync(id);
             if (batteryModel == null)
             {
                 return NotFound();
             }
 
-            _context.BatteryModels.Remove(batteryModel);
+            _context.Battery_Models.Remove(batteryModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -148,7 +148,7 @@ namespace Battery_Doctor.Controllers
 
         private bool BatteryModelExists(int id)
         {
-            return _context.BatteryModels.Any(e => e.Id == id);
+            return _context.Battery_Models.Any(e => e.Id == id);
         }
     }
 }

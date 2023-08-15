@@ -48,7 +48,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BatteryGroupDto>>> GetBatteryGroups()
         {
-            var batteryGroups = await _context.BatteryGroups.ToListAsync();
+            var batteryGroups = await _context.Battery_Groups.ToListAsync();
             return batteryGroups.Select(bg => ToDto(bg)).ToList();
         }
 
@@ -56,7 +56,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BatteryGroupDto>> GetBatteryGroup(int id)
         {
-            var batteryGroup = await _context.BatteryGroups.FindAsync(id);
+            var batteryGroup = await _context.Battery_Groups.FindAsync(id);
 
             if (batteryGroup == null)
             {
@@ -80,7 +80,7 @@ namespace Battery_Doctor.Controllers
 
             batteryGroup.CreatedAt = DateTime.UtcNow;
             batteryGroup.UpdatedAt = DateTime.UtcNow;
-            _context.BatteryGroups.Add(batteryGroup);
+            _context.Battery_Groups.Add(batteryGroup);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetBatteryGroup), new { id = batteryGroup.Id }, ToDto(batteryGroup));
@@ -100,7 +100,7 @@ namespace Battery_Doctor.Controllers
                 return BadRequest("The provided UnitId is invalid.");
             }
 
-            var batteryGroup = await _context.BatteryGroups.FindAsync(id);
+            var batteryGroup = await _context.Battery_Groups.FindAsync(id);
             if (batteryGroup == null)
             {
                 return NotFound();
@@ -133,13 +133,13 @@ namespace Battery_Doctor.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBatteryGroup(int id)
         {
-            var batteryGroup = await _context.BatteryGroups.FindAsync(id);
+            var batteryGroup = await _context.Battery_Groups.FindAsync(id);
             if (batteryGroup == null)
             {
                 return NotFound();
             }
 
-            _context.BatteryGroups.Remove(batteryGroup);
+            _context.Battery_Groups.Remove(batteryGroup);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -147,7 +147,7 @@ namespace Battery_Doctor.Controllers
 
         private bool BatteryGroupExists(int id)
         {
-            return _context.BatteryGroups.Any(e => e.Id == id);
+            return _context.Battery_Groups.Any(e => e.Id == id);
         }
     }
 }

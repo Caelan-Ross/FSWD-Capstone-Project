@@ -40,7 +40,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BatteryMakeDto>>> GetBatteryMakes()
         {
-            var batteryMakes = await _context.BatteryMakes.ToListAsync();
+            var batteryMakes = await _context.Battery_Makes.ToListAsync();
             return batteryMakes.Select(bm => ToDto(bm)).ToList();
         }
 
@@ -48,7 +48,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BatteryMakeDto>> GetBatteryMake(int id)
         {
-            var batteryMake = await _context.BatteryMakes.FindAsync(id);
+            var batteryMake = await _context.Battery_Makes.FindAsync(id);
 
             if (batteryMake == null)
             {
@@ -67,7 +67,7 @@ namespace Battery_Doctor.Controllers
 
             batteryMake.CreatedAt = DateTime.UtcNow;
             batteryMake.UpdatedAt = DateTime.UtcNow;
-            _context.BatteryMakes.Add(batteryMake);
+            _context.Battery_Makes.Add(batteryMake);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetBatteryMake), new { id = batteryMake.Id }, ToDto(batteryMake));
@@ -82,7 +82,7 @@ namespace Battery_Doctor.Controllers
                 return BadRequest();
             }
 
-            var batteryMake = await _context.BatteryMakes.FindAsync(id);
+            var batteryMake = await _context.Battery_Makes.FindAsync(id);
             if (batteryMake == null)
             {
                 return NotFound();
@@ -114,13 +114,13 @@ namespace Battery_Doctor.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBatteryMake(int id)
         {
-            var batteryMake = await _context.BatteryMakes.FindAsync(id);
+            var batteryMake = await _context.Battery_Makes.FindAsync(id);
             if (batteryMake == null)
             {
                 return NotFound();
             }
 
-            _context.BatteryMakes.Remove(batteryMake);
+            _context.Battery_Makes.Remove(batteryMake);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -128,7 +128,7 @@ namespace Battery_Doctor.Controllers
 
         private bool BatteryMakeExists(int id)
         {
-            return _context.BatteryMakes.Any(e => e.Id == id);
+            return _context.Battery_Makes.Any(e => e.Id == id);
         }
     }
 }

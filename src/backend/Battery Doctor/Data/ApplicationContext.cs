@@ -21,27 +21,27 @@ namespace Battery_Doctor.Data
 
         public DbSet<Battery> Batteries { get; set; }
 
-        public DbSet<BatteryCondition> BatteryConditions { get; set; }
+        public DbSet<BatteryCondition> Battery_Conditions { get; set; }
 
-        public DbSet<BatteryGroup> BatteryGroups { get; set; }
+        public DbSet<BatteryGroup> Battery_Groups { get; set; }
 
-        public DbSet<BatteryMake> BatteryMakes { get; set; }
+        public DbSet<BatteryMake> Battery_Makes { get; set; }
 
-        public DbSet<BatteryModel> BatteryModels { get; set; }
+        public DbSet<BatteryModel> Battery_Models { get; set; }
 
-        public DbSet<BatteryType> BatteryTypes { get; set; }
+        public DbSet<BatteryType> Battery_Types { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
 
         public DbSet<Invoice> Invoices { get; set; }
 
-        public DbSet<InvoiceDetails> InvoiceDetails { get; set; }
+        public DbSet<InvoiceDetails> Invoice_Details { get; set; }
 
-        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<PaymentMethod> Payment_Methods { get; set; }
 
-        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<PurchaseOrder> Purchase_Orders { get; set; }
 
-        public DbSet<PurchaseOrderDetails> PurchaseOrderDetails { get; set; }
+        public DbSet<PurchaseOrderDetails> Purchase_Order_Details { get; set; }
 
         public DbSet<Supplier> Suppliers { get; set; }
 
@@ -53,7 +53,7 @@ namespace Battery_Doctor.Data
             if(!optionsBuilder.IsConfigured)
             {
                 // Specify the connection to the database
-                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;database=fullstackcapstone ", new MySqlServerVersion(new Version(10, 10, 3)));
+                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;database=fullstack_capstone ", new MySqlServerVersion(new Version(10, 10, 3)));
             }
         }
 
