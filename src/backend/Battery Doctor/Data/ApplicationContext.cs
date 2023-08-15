@@ -5,29 +5,63 @@ namespace Battery_Doctor.Data
 {
     public class ApplicationContext : DbContext
     {
+        public ApplicationContext()
+        {
+
+        }
+
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
+
         }
 
         public DbSet<Address> Addresses { get; set; }
+
         public DbSet<Asset> Assets { get; set; }
+
         public DbSet<Battery> Batteries { get; set; }
+
         public DbSet<BatteryCondition> BatteryConditions { get; set; }
+
         public DbSet<BatteryGroup> BatteryGroups { get; set; }
+
         public DbSet<BatteryMake> BatteryMakes { get; set; }
+
         public DbSet<BatteryModel> BatteryModels { get; set; }
+
         public DbSet<BatteryType> BatteryTypes { get; set; }
+
         public DbSet<Customer> Customers { get; set; }
+
         public DbSet<Invoice> Invoices { get; set; }
+
         public DbSet<InvoiceDetails> InvoiceDetails { get; set; }
+
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
+
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
         public DbSet<PurchaseOrderDetails> PurchaseOrderDetails { get; set; }
+
         public DbSet<Supplier> Suppliers { get; set; }
+
         public DbSet<Unit> Units { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // If context is not already configured;
+            if(!optionsBuilder.IsConfigured)
+            {
+                // Specify the connection to the database
+                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;database=fullstackcapstone ", new MySqlServerVersion(new Version(10, 10, 3)));
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            /*
             modelBuilder.Entity<Battery>()
                 .HasOne(b => b.BatteryType)
                 .WithMany()
@@ -57,11 +91,6 @@ namespace Battery_Doctor.Data
                 .HasOne(a => a.Customer)
                 .WithMany()
                 .HasForeignKey(a => a.CustomerId);
-
-            modelBuilder.Entity<Customer>()
-                .HasOne(c => c.Address)
-                .WithMany()
-                .HasForeignKey(c => c.AddressId);
 
             modelBuilder.Entity<Invoice>()
                 .HasOne(i => i.Customer)
@@ -112,6 +141,7 @@ namespace Battery_Doctor.Data
                 .HasOne(s => s.Address)
                 .WithMany()
                 .HasForeignKey(s => s.AddressId);
+            */
         }
     }
 }
