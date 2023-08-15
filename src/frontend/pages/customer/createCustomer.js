@@ -77,7 +77,7 @@ export default function Home() {
 					Create Customer
 				</Typography>
 
-				<Box display='flex' onClick={() => handleNavigation('/')}>
+				<Box display='flex' onClick={() => handleNavigation('/customer')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
