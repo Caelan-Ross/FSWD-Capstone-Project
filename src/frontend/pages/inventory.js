@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, Box, useTheme, IconButton } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 export default function Home() {
 	const theme = useTheme();
+	const router = useRouter();
+	const handleNavigation = (path) => {
+		router.push(path);
+	};
+
+	const [batteryData, setBatteryData] = useState([]);
+	const API_BASE = 'http://localhost.7166/api/Batteries';
 
 	// Dummy inventory data
 	const inventoryData = [
@@ -91,7 +102,7 @@ export default function Home() {
 			customerName: 'John Smith',
 			batteryAmt: 2,
 			saleAmt: '$30.00',
-		}
+		},
 		// Add more dummy data rows here
 	];
 
@@ -101,6 +112,26 @@ export default function Home() {
 		{ field: 'customerName', headerName: 'Name', width: 150 },
 		{ field: 'batteryAmt', headerName: '# Of Batteries', width: 150 },
 		{ field: 'saleAmount', headerName: 'Sale Amount', width: 250 },
+		{
+			field: 'edit', // Edit column
+			headerName: 'Edit',
+			width: 100,
+			renderCell: (params) => (
+				<IconButton onClick={() => handleEdit(params.row.id)}>
+					<EditIcon />
+				</IconButton>
+			),
+		},
+		{
+			field: 'delete',
+			headerName: 'Delete',
+			width: 100,
+			renderCell: (params) => (
+				<IconButton onClick={() => handleDelete(params.row.id)}>
+					<DeleteIcon />
+				</IconButton>
+			),
+		},
 	];
 
 	return (
@@ -126,10 +157,15 @@ export default function Home() {
 					width: '100%',
 				}}
 			>
-				<Typography variant='h3' align='center' component='h2'  sx={{marginRight: '1rem'}}>
+				<Typography
+					variant='h3'
+					align='center'
+					component='h2'
+					sx={{ marginRight: '1rem' }}
+				>
 					Inventory
 				</Typography>
-								<IconButton>
+				<IconButton>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>
@@ -143,7 +179,14 @@ export default function Home() {
 			</Box>
 
 			{/* Inventory DataGrid */}
-			<div style={{ height: '80%', width: '100%', marginTop: theme.spacing(2), backgroundColor: 'white' }}>
+			<div
+				style={{
+					height: '80%',
+					width: '100%',
+					marginTop: theme.spacing(2),
+					backgroundColor: 'white',
+				}}
+			>
 				<DataGrid rows={inventoryData} columns={columns} pageSize={5} />
 			</div>
 		</Box>

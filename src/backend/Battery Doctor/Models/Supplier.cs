@@ -7,36 +7,42 @@ namespace Battery_Doctor.Models
     public class Supplier
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("supplier_id", TypeName = "int(10)")]
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [Column("name", TypeName = "varchar(255)")]
         public string Name { get; set; }
 
-        [MaxLength(100)]
+        [Column("first_name", TypeName = "varchar(255)")]
         public string ContactFirstName { get; set; }
 
-        [MaxLength(100)]
+        [Column("last_name", TypeName = "varchar(255)")]
         public string ContactLastName { get; set; }
 
         [Required]
         [Phone]
+        [Column("phone_number", TypeName = "varchar(20)")]
         public string ContactPhone { get; set; }
 
         [EmailAddress]
+        [Column("email", TypeName = "varchar(255)")]
         public string ContactEmail { get; set; }
 
         [Required]
         [ForeignKey("Address")]
+        [Column("address_id", TypeName = "int(10)")]
         public int AddressId { get; set; }
 
         [Required]
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
         [Required]
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
-        // Navigation property
-        public Address Address { get; set; }
+        public virtual Address Address { get; set; }
     }
 }

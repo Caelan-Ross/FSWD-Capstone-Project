@@ -7,6 +7,8 @@ namespace Battery_Doctor.Models
     public class InvoiceDetails
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("invoice_details_id", TypeName = "int(10)")]
         public int Id { get; set; }
 
         [Required]
@@ -15,16 +17,19 @@ namespace Battery_Doctor.Models
 
         [Required]
         [ForeignKey("Asset")]
+        [Column("asset_id", TypeName = "int(10)")]
         public int AssetId { get; set; }
 
         [Required]
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
         [Required]
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
-        // Navigation properties
-        public Invoice Invoice { get; set; }
-        public Asset Asset { get; set; }
+        public virtual Invoice Invoice { get; set; }
+
+        public virtual Asset Asset { get; set; }
     }
 }

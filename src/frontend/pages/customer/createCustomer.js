@@ -1,4 +1,11 @@
-import { Typography, Box, IconButton, TextField, Button, Alert } from '@mui/material';
+import {
+	Typography,
+	Box,
+	IconButton,
+	TextField,
+	Button,
+	Alert,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
@@ -12,7 +19,7 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const API_BASE = 'http://localhost:3000/api/customer/create'
+	const API_BASE = 'http://localhost:3000/api/customer/create';
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -22,7 +29,7 @@ export default function Home() {
 		const queryParams = new URLSearchParams();
 		queryParams.append('firstName', form.firstName.value);
 		queryParams.append('lastName', form.lastName.value);
-		queryParams.append('phoneNumber', form.phoneNo.value);
+		queryParams.append('phoneNumber', form.phoneNumber.value);
 		queryParams.append('email', form.email.value);
 		const url = `${API_BASE}?${queryParams.toString()}`;
 		try {
@@ -30,7 +37,7 @@ export default function Home() {
 			// Perform any additional validation or processing here if needed
 			setError(null);
 
-         await axios.post(url);
+			await axios.post(url);
 			// Display success message
 			alert('Customer created successfully');
 			// Reset form fields
@@ -40,7 +47,7 @@ export default function Home() {
 		} finally {
 			setLoading(false);
 		}
-	}
+	};
 
 	return (
 		<Box
@@ -70,7 +77,7 @@ export default function Home() {
 					Create Customer
 				</Typography>
 
-				<Box display='flex' onClick={() => handleNavigation('/')}>
+				<Box display='flex' onClick={() => handleNavigation('/customer')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
@@ -84,52 +91,60 @@ export default function Home() {
 				mt={12}
 				sx={{
 					display: 'flex',
-					flexDirection: 'row',
+					flexDirection: 'column',
+					width: '30%',
+					backgroundColor: '#ffffff80',
+					borderRadius: '8px',
+					outline: '1px solid black',
+					padding: '2rem',
 				}}
 			>
-				<Box sx={{ flex: 1, marginRight: '20px' }}>
-					<TextField
-						id='firstName'
-						name='firstName'
-						label='First Name'
-						type='text'
-						fullWidth
-						variant='outlined'
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-					<TextField
-						id='lastName'
-						name='lastName'
-						label='Last Name'
-						type='text'
-						fullWidth
-						variant='outlined'
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-				</Box>
-				<Box sx={{ flex: 1 }}>
-					<TextField
-						id='phoneNo'
-						name='phoneNo'
-						label='Phone No.'
-						fullWidth
-						variant='outlined'
-						type=''
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-					<TextField
-						id='email'
-						name='email'
-						label='Email'
-						fullWidth
-						variant='outlined'
-						type='email'
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-					<Button variant='contained' type='submit' disabled={loading} color='primary' sx={{ mt: 3 }}>
-						{loading ? 'Creating...' : 'Create'}
-					</Button>
-				</Box>
+				<TextField
+					id='firstName'
+					name='firstName'
+					label='First Name'
+					type='text'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
+				<TextField
+					id='lastName'
+					name='lastName'
+					label='Last Name'
+					type='text'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
+				<TextField
+					id='phoneNumber'
+					name='phoneNumber'
+					label='Phone Number'
+					fullWidth
+					variant='outlined'
+					type=''
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
+				<TextField
+					id='email'
+					name='email'
+					label='Email'
+					fullWidth
+					variant='outlined'
+					type='email'
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
+				<Button
+					className='btn-primary'
+					variant='contained'
+					type='submit'
+					disabled={loading}
+					color='primary'
+					sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}
+				>
+					{loading ? 'Creating...' : 'Create'}
+				</Button>
 			</Box>
 		</Box>
 	);
