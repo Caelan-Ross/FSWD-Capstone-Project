@@ -1,4 +1,11 @@
-import { Typography, Box, IconButton, TextField, Button, Alert } from '@mui/material';
+import {
+	Typography,
+	Box,
+	IconButton,
+	TextField,
+	Button,
+	Alert,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
@@ -12,7 +19,7 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const API_BASE = 'http://localhost:3000/api/customer/create'
+	const API_BASE = 'http://localhost:3000/api/customer/create';
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -40,7 +47,7 @@ export default function Home() {
 		} finally {
 			setLoading(false);
 		}
-	}
+	};
 
 	return (
 		<Box
@@ -92,26 +99,24 @@ export default function Home() {
 					padding: '2rem',
 				}}
 			>
-				<Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: '10px' }}>
-					<TextField
-						id='firstName'
-						name='firstName'
-						label='First Name'
-						type='text'
-						variant='outlined'
-						fullWidth
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-					<TextField
-						id='lastName'
-						name='lastName'
-						label='Last Name'
-						type='text'
-						variant='outlined'
-						fullWidth
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
-				</Box>
+				<TextField
+					id='firstName'
+					name='firstName'
+					label='First Name'
+					type='text'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
+				<TextField
+					id='lastName'
+					name='lastName'
+					label='Last Name'
+					type='text'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/>
 				<TextField
 					id='phoneNumber'
 					name='phoneNumber'
@@ -130,10 +135,16 @@ export default function Home() {
 					type='email'
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
-				<Button className='btn-primary' variant='contained' type='submit' disabled={loading} color='primary' sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}>
+				<Button
+					className='btn-primary'
+					variant='contained'
+					type='submit'
+					disabled={loading}
+					color='primary'
+					sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}
+				>
 					{loading ? 'Creating...' : 'Create'}
 				</Button>
-
 			</Box>
 		</Box>
 	);
