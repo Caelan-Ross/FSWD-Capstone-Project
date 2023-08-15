@@ -110,8 +110,8 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int?>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("customer_id");
 
                     b.Property<string>("QRCode")
                         .IsRequired()
@@ -142,6 +142,15 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BatteryMakeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BatteryModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BatteryTypeId")
                         .HasColumnType("int");
 
                     b.Property<float>("Capacity")
@@ -176,13 +185,13 @@ namespace Battery_Doctor.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BatteryMakeId");
+
+                    b.HasIndex("BatteryModelId");
+
+                    b.HasIndex("BatteryTypeId");
+
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("MakeId");
-
-                    b.HasIndex("ModelId");
-
-                    b.HasIndex("TypeId");
 
                     b.ToTable("Batteries");
                 });
@@ -283,33 +292,41 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("customer_id");
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int(10)")
+                        .HasColumnName("address_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("email");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("first_name");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("phone_number");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -328,15 +345,12 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)");
 
                     b.Property<DateTime>("DateOfSale")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("PaymentMethodId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PaymentMethodId1")
                         .HasColumnType("int");
 
                     b.Property<float>("TotalPrice")
@@ -350,8 +364,6 @@ namespace Battery_Doctor.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("PaymentMethodId");
-
-                    b.HasIndex("PaymentMethodId1");
 
                     b.ToTable("Invoices");
                 });
@@ -371,9 +383,6 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InvoiceId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -382,8 +391,6 @@ namespace Battery_Doctor.Migrations
                     b.HasIndex("AssetId");
 
                     b.HasIndex("InvoiceId");
-
-                    b.HasIndex("InvoiceId1");
 
                     b.ToTable("InvoiceDetails");
                 });
@@ -550,9 +557,7 @@ namespace Battery_Doctor.Migrations
 
                     b.HasOne("Battery_Doctor.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("Battery");
 
@@ -561,27 +566,27 @@ namespace Battery_Doctor.Migrations
 
             modelBuilder.Entity("Battery_Doctor.Models.Battery", b =>
                 {
-                    b.HasOne("BatteryGroup", "BatteryGroup")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Battery_Doctor.Models.BatteryMake", "BatteryMake")
                         .WithMany()
-                        .HasForeignKey("MakeId")
+                        .HasForeignKey("BatteryMakeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Battery_Doctor.Models.BatteryModel", "BatteryModel")
                         .WithMany()
-                        .HasForeignKey("ModelId")
+                        .HasForeignKey("BatteryModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Battery_Doctor.Models.BatteryType", "BatteryType")
                         .WithMany()
-                        .HasForeignKey("TypeId")
+                        .HasForeignKey("BatteryTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BatteryGroup", "BatteryGroup")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -609,9 +614,7 @@ namespace Battery_Doctor.Migrations
                 {
                     b.HasOne("Battery_Doctor.Models.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId");
 
                     b.Navigation("Address");
                 });
@@ -625,14 +628,10 @@ namespace Battery_Doctor.Migrations
                         .IsRequired();
 
                     b.HasOne("Battery_Doctor.Models.PaymentMethod", "PaymentMethod")
-                        .WithMany()
+                        .WithMany("Invoices")
                         .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Battery_Doctor.Models.PaymentMethod", null)
-                        .WithMany("Invoices")
-                        .HasForeignKey("PaymentMethodId1");
 
                     b.Navigation("Customer");
 
@@ -648,14 +647,10 @@ namespace Battery_Doctor.Migrations
                         .IsRequired();
 
                     b.HasOne("Battery_Doctor.Models.Invoice", "Invoice")
-                        .WithMany()
+                        .WithMany("InvoiceDetails")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Battery_Doctor.Models.Invoice", null)
-                        .WithMany("InvoiceDetails")
-                        .HasForeignKey("InvoiceId1");
 
                     b.Navigation("Asset");
 

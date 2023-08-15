@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Battery_Doctor.Models
 {
@@ -18,17 +19,18 @@ namespace Battery_Doctor.Models
         public string PhoneNumber { get; set; }
 
         [Required]
-        [Column("first_name", TypeName = "varchar")]
+        [Column("first_name", TypeName = "varchar(255)")]
         public string FirstName { get; set; }
 
         [Required]
-        [Column("last_name", TypeName = "varchar")]
+        [Column("last_name", TypeName = "varchar(255)")]
         public string LastName { get; set; }
 
         [EmailAddress]
-        [Column("email")]
+        [Column("email", TypeName = "varchar(255)")]
         public string Email { get; set; }
 
+        [AllowNull]
         [ForeignKey("Address")]
         [Column("address_id", TypeName = "int(10)")]
         public int? AddressId { get; set; }
@@ -39,7 +41,7 @@ namespace Battery_Doctor.Models
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
-        public Address? Address { get; set; }
+        public virtual Address? Address { get; set; }
     }
 }
 

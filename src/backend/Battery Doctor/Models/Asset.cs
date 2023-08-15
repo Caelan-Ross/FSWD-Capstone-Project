@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Battery_Doctor.Models
 {
@@ -30,6 +31,7 @@ namespace Battery_Doctor.Models
         [StringLength(50)]
         public string Status { get; set; }
 
+        [AllowNull]
         [ForeignKey("Customer")]
         [Column("customer_id", TypeName = "int(10)")]
         public int? CustomerId { get; set; }  
@@ -44,7 +46,7 @@ namespace Battery_Doctor.Models
 
         public Battery Battery { get; set; }
 
-        public Customer Customer { get; set; }
+        public virtual Customer? Customer { get; set; }
     }
 }
 

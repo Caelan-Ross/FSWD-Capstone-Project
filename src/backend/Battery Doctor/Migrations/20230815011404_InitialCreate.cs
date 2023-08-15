@@ -21,18 +21,18 @@ namespace Battery_Doctor.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Street = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Street = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    City = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    City = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Province = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    Province = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PostalCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
+                    PostalCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Country = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    Country = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -125,29 +125,28 @@ namespace Battery_Doctor.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    customer_id = table.Column<int>(type: "int(10)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PhoneNumber = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                    phone_number = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    FirstName = table.Column<string>(type: "longtext", nullable: false)
+                    first_name = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LastName = table.Column<string>(type: "longtext", nullable: false)
+                    last_name = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    email = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    AddressId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    address_id = table.Column<int>(type: "int(10)", nullable: true),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.customer_id);
                     table.ForeignKey(
-                        name: "FK_Customers_Addresses_AddressId",
-                        column: x => x.AddressId,
+                        name: "FK_Customers_Addresses_address_id",
+                        column: x => x.address_id,
                         principalTable: "Addresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -240,13 +239,12 @@ namespace Battery_Doctor.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int(10)", nullable: false),
                     PaymentMethodId = table.Column<int>(type: "int", nullable: false),
                     DateOfSale = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TotalPrice = table.Column<float>(type: "float", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PaymentMethodId1 = table.Column<int>(type: "int", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,7 +253,7 @@ namespace Battery_Doctor.Migrations
                         name: "FK_Invoices_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "Id",
+                        principalColumn: "customer_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Invoices_PaymentMethods_PaymentMethodId",
@@ -263,11 +261,6 @@ namespace Battery_Doctor.Migrations
                         principalTable: "PaymentMethods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Invoices_PaymentMethods_PaymentMethodId1",
-                        column: x => x.PaymentMethodId1,
-                        principalTable: "PaymentMethods",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -311,7 +304,10 @@ namespace Battery_Doctor.Migrations
                     QuantityOnHand = table.Column<int>(type: "int", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    BatteryTypeId = table.Column<int>(type: "int", nullable: false),
+                    BatteryModelId = table.Column<int>(type: "int", nullable: false),
+                    BatteryMakeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -323,20 +319,20 @@ namespace Battery_Doctor.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Batteries_BatteryMakes_MakeId",
-                        column: x => x.MakeId,
+                        name: "FK_Batteries_BatteryMakes_BatteryMakeId",
+                        column: x => x.BatteryMakeId,
                         principalTable: "BatteryMakes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Batteries_BatteryModels_ModelId",
-                        column: x => x.ModelId,
+                        name: "FK_Batteries_BatteryModels_BatteryModelId",
+                        column: x => x.BatteryModelId,
                         principalTable: "BatteryModels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Batteries_BatteryTypes_TypeId",
-                        column: x => x.TypeId,
+                        name: "FK_Batteries_BatteryTypes_BatteryTypeId",
+                        column: x => x.BatteryTypeId,
                         principalTable: "BatteryTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -355,7 +351,7 @@ namespace Battery_Doctor.Migrations
                     WarrantyDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    customer_id = table.Column<int>(type: "int(10)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -369,11 +365,10 @@ namespace Battery_Doctor.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Assets_Customers_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_Assets_Customers_customer_id",
+                        column: x => x.customer_id,
                         principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "customer_id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -417,8 +412,7 @@ namespace Battery_Doctor.Migrations
                     InvoiceId = table.Column<int>(type: "int", nullable: false),
                     AssetId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    InvoiceId1 = table.Column<int>(type: "int", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -435,11 +429,6 @@ namespace Battery_Doctor.Migrations
                         principalTable: "Invoices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_InvoiceDetails_Invoices_InvoiceId1",
-                        column: x => x.InvoiceId1,
-                        principalTable: "Invoices",
-                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -449,29 +438,29 @@ namespace Battery_Doctor.Migrations
                 column: "BatteryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Assets_CustomerId",
+                name: "IX_Assets_customer_id",
                 table: "Assets",
-                column: "CustomerId");
+                column: "customer_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Batteries_BatteryMakeId",
+                table: "Batteries",
+                column: "BatteryMakeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Batteries_BatteryModelId",
+                table: "Batteries",
+                column: "BatteryModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Batteries_BatteryTypeId",
+                table: "Batteries",
+                column: "BatteryTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Batteries_GroupId",
                 table: "Batteries",
                 column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Batteries_MakeId",
-                table: "Batteries",
-                column: "MakeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Batteries_ModelId",
-                table: "Batteries",
-                column: "ModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Batteries_TypeId",
-                table: "Batteries",
-                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BatteryGroups_UnitId",
@@ -484,9 +473,9 @@ namespace Battery_Doctor.Migrations
                 column: "BatteryMakeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_AddressId",
+                name: "IX_Customers_address_id",
                 table: "Customers",
-                column: "AddressId");
+                column: "address_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvoiceDetails_AssetId",
@@ -499,11 +488,6 @@ namespace Battery_Doctor.Migrations
                 column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InvoiceDetails_InvoiceId1",
-                table: "InvoiceDetails",
-                column: "InvoiceId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Invoices_CustomerId",
                 table: "Invoices",
                 column: "CustomerId");
@@ -512,11 +496,6 @@ namespace Battery_Doctor.Migrations
                 name: "IX_Invoices_PaymentMethodId",
                 table: "Invoices",
                 column: "PaymentMethodId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Invoices_PaymentMethodId1",
-                table: "Invoices",
-                column: "PaymentMethodId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrderDetails_BatteryId",
