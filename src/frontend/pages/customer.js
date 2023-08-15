@@ -63,6 +63,22 @@ export default function Home() {
 			});
 	}, []);
 
+	// Function to delete customer
+	const handleDelete = (customerId) => {
+		axios
+			.delete(`${API_BASE}/${customerId}`)
+			.then((response) => {
+				console.log('Customer deleted:', response.data);
+				// Remove the deleted customer from customerData state
+				setCustomerData((prevData) =>
+					prevData.filter((customer) => customer.id !== customerId)
+				);
+			})
+			.catch((error) => {
+				console.error('Error deleting customer:', error);
+			});
+	};
+
 	return (
 		<Box
 			display='flex'
