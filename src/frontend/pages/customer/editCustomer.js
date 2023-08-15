@@ -13,7 +13,7 @@ export default function EditCustomer() {
     id: '',
     firstName: '',
     lastName: '',
-    phoneNumber: '',
+    phoneNumber: 0,
     email: '',
   });
 

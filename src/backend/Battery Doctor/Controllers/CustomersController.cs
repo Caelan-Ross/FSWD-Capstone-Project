@@ -104,6 +104,7 @@ namespace Battery_Doctor.Controllers
             customer.FirstName = customerDto.FirstName;
             customer.LastName = customerDto.LastName;
             customer.Email = customerDto.Email;
+            customer.PhoneNumber = customerDto.PhoneNumber;
 
             customer.Address = null;
 
