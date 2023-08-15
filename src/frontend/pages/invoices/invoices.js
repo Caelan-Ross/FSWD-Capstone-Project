@@ -14,6 +14,14 @@ export default function Invoices() {
 		router.push(path);
 	};
 
+
+	// Temporary invoice edit function
+	// WILL BE REDIRECTING TO CUSTOMER, THIS IS FOR PROTOTYPE/TESTING PURPOSES**
+	
+	const handleEdit = (customerId) => {
+		router.push(`/customer/editCustomer?id=${customerId}`);
+	};
+
 	// Dummy invoice data
 	const invoiceData = [
 		{
@@ -92,7 +100,7 @@ export default function Invoices() {
 				>
 					Invoices
 				</Typography>
-				<IconButton>
+				<IconButton onClick={() => handleNavigation('/invoices/createInvoice')}>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>

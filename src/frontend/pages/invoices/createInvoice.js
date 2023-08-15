@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
 	Typography,
 	Box,
@@ -8,65 +7,45 @@ import {
 	Alert,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import { useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import axios from 'axios';
 
-export default function EditCustomer() {
+export default function Home() {
 	const router = useRouter();
-	const customerId = router.query.id; // Get the customerId from the URL query parameter
-	const API_BASE = 'http://localhost:7166/api/customers'; // Update the API endpoint
-
-	const [customerDetails, setCustomerDetails] = useState({
-		id: '',
-		firstName: '',
-		lastName: '',
-		phoneNumber: 0,
-		email: '',
-	});
-
-	const [isSuccess, setIsSuccess] = useState(false); // State for showing success message
-
-	useEffect(() => {
-		// Fetch customer details by customerId
-		axios
-			.get(`${API_BASE}/${customerId}`, {
-				headers: {
-					accept: 'text/plain',
-				},
-			})
-			.then((response) => {
-				console.log(response);
-				// Update customerDetails state with fetched data
-				setCustomerDetails(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching customer details:', error);
-			});
-	}, [customerId]);
-
-	const handleFieldChange = (field, value) => {
-		setCustomerDetails((prevDetails) => ({
-			...prevDetails,
-			[field]: value,
-		}));
+	const handleNavigation = (path) => {
+		router.push(path);
 	};
 
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const API_BASE = 'http://localhost:3000/api/invoices/create';
+
+	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const updatedCustomer = {
-			...customerDetails,
-		};
+		const form = event.target;
 
+		const queryParams = new URLSearchParams();
+		queryParams.append('firstName', form.firstName.value);
+		queryParams.append('lastName', form.lastName.value);
+		queryParams.append('phoneNumber', form.phoneNumber.value);
+		queryParams.append('email', form.email.value);
+		const url = `${API_BASE}?${queryParams.toString()}`;
 		try {
-			// Send updated customer details to API
-			await axios.put(`${API_BASE}/${customerId}`, updatedCustomer);
-			setIsSuccess(true);
-			setTimeout(() => {
-				setIsSuccess(false); // Hide success after delay
-				router.push('/customer/customer'); // Navigate back to the customer list page
-			}, 1500);
+			setLoading(true);
+			// Perform any additional validation or processing here if needed
+			setError(null);
+
+			await axios.post(url);
+			// Display success message
+			alert('Customer created successfully');
+			// Reset form fields
+			form.reset();
 		} catch (error) {
-			console.error('Error updating customer details:', error);
+			setError('Failed to create customer');
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -93,10 +72,12 @@ export default function EditCustomer() {
 					width: '100%',
 				}}
 			>
+				{error && <Alert severity='error'>{error}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
-					Edit Customer
+					Create Invoice
 				</Typography>
-				<Box display='flex' onClick={() => router.push('/customer/customer')}>
+
+				<Box display='flex' onClick={() => handleNavigation('/invoices/invoices')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
@@ -104,7 +85,6 @@ export default function EditCustomer() {
 					</IconButton>
 				</Box>
 			</Box>
-
 			<Box
 				component='form'
 				onSubmit={handleSubmit}
@@ -126,8 +106,6 @@ export default function EditCustomer() {
 					type='text'
 					variant='outlined'
 					fullWidth
-					value={customerDetails.firstName}
-					onChange={(e) => handleFieldChange('firstName', e.target.value)}
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
@@ -137,8 +115,6 @@ export default function EditCustomer() {
 					type='text'
 					variant='outlined'
 					fullWidth
-					value={customerDetails.lastName}
-					onChange={(e) => handleFieldChange('lastName', e.target.value)}
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
@@ -147,8 +123,7 @@ export default function EditCustomer() {
 					label='Phone Number'
 					fullWidth
 					variant='outlined'
-					value={customerDetails.phoneNumber}
-					onChange={(e) => handleFieldChange('phoneNumber', e.target.value)}
+					type=''
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
@@ -158,25 +133,18 @@ export default function EditCustomer() {
 					fullWidth
 					variant='outlined'
 					type='email'
-					value={customerDetails.email}
-					onChange={(e) => handleFieldChange('email', e.target.value)}
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<Button
 					className='btn-primary'
 					variant='contained'
 					type='submit'
+					disabled={loading}
 					color='primary'
 					sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}
 				>
-					Save
+					{loading ? 'Creating...' : 'Create'}
 				</Button>
-				{/* Success Message */}
-				{isSuccess && (
-					<Alert severity='success' sx={{ mt: 2 }}>
-						Edit successful!
-					</Alert>
-				)}
 			</Box>
 		</Box>
 	);

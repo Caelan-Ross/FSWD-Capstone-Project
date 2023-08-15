@@ -30,11 +30,11 @@ const Navbar = () => {
 
     const icons = [
         { icon: <HomeIcon sx={{ fontSize: '2rem' }} />, text: 'Home', path: '/' },
-        { icon: <ReceiptIcon sx={{ fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices' },
-        { icon: <InventoryIcon sx={{ fontSize: '2rem' }} />, text: 'Inventory', path: '/inventory' },
-        { icon: <GroupAddIcon sx={{ fontSize: '2rem' }} />, text: 'Customers', path: '/customer' },
+        { icon: <ReceiptIcon sx={{ fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices/invoices' },
+        { icon: <InventoryIcon sx={{ fontSize: '2rem' }} />, text: 'Inventory', path: '/inventory/inventory' },
+        { icon: <GroupAddIcon sx={{ fontSize: '2rem' }} />, text: 'Customers', path: '/customer/customer' },
         { icon: <LogoutIcon sx={{ color: 'red', fontSize: '2rem' }} />, text: 'Logout', path: '/' },
-        { icon: <SettingsIcon sx={{ fontSize: '2rem' }} />, text: 'Settings', path: '/settings' },
+        { icon: <SettingsIcon sx={{ fontSize: '2rem' }} />, text: 'Settings', path: '/settings/settings' },
     ];
 
     return (
