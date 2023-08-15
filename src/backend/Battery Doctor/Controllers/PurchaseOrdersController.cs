@@ -24,7 +24,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PurchaseOrderReadDto>>> GetPurchaseOrders()
         {
-            var purchaseOrders = await _context.PurchaseOrders.Include(p => p.PurchaseOrderDetails).ToListAsync();
+            var purchaseOrders = await _context.Purchase_Orders.Include(p => p.PurchaseOrderDetails).ToListAsync();
 
             var purchaseOrderDtos = purchaseOrders.Select(purchaseOrder => new PurchaseOrderReadDto
             {
@@ -50,7 +50,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PurchaseOrderReadDto>> GetPurchaseOrder(int id)
         {
-            var purchaseOrder = await _context.PurchaseOrders.Include(p => p.PurchaseOrderDetails)
+            var purchaseOrder = await _context.Purchase_Orders.Include(p => p.PurchaseOrderDetails)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (purchaseOrder == null)
@@ -92,7 +92,7 @@ namespace Battery_Doctor.Controllers
                 UpdatedAt = DateTime.UtcNow
             };
 
-            _context.PurchaseOrders.Add(purchaseOrder);
+            _context.Purchase_Orders.Add(purchaseOrder);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetPurchaseOrder), new { id = purchaseOrder.Id }, purchaseOrder);
@@ -102,7 +102,7 @@ namespace Battery_Doctor.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPurchaseOrder(int id, PurchaseOrderCreateUpdateDto purchaseOrderDto)
         {
-            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+            var purchaseOrder = await _context.Purchase_Orders.FindAsync(id);
 
             if (purchaseOrder == null)
             {
@@ -140,13 +140,13 @@ namespace Battery_Doctor.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePurchaseOrder(int id)
         {
-            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+            var purchaseOrder = await _context.Purchase_Orders.FindAsync(id);
             if (purchaseOrder == null)
             {
                 return NotFound();
             }
 
-            _context.PurchaseOrders.Remove(purchaseOrder);
+            _context.Purchase_Orders.Remove(purchaseOrder);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -154,7 +154,7 @@ namespace Battery_Doctor.Controllers
 
         private bool PurchaseOrderExists(int id)
         {
-            return _context.PurchaseOrders.Any(e => e.Id == id);
+            return _context.Purchase_Orders.Any(e => e.Id == id);
         }
     }
 }

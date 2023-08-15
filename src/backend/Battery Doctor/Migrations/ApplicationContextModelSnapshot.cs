@@ -23,74 +23,90 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("groupd_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("GroupName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("group_name");
 
                     b.Property<float>("Height")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("height");
 
                     b.Property<float>("Length")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("length");
 
                     b.Property<int>("UnitId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("unit_id");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.Property<float>("Width")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("width");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("BatteryGroups");
+                    b.ToTable("Battery_Groups");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("address_id");
 
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("city");
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("country");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("postal_code");
 
                     b.Property<string>("Province")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("province");
 
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("street");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -101,13 +117,16 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("asset_id");
 
                     b.Property<int>("BatteryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("battery_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int(10)")
@@ -116,18 +135,22 @@ namespace Battery_Doctor.Migrations
                     b.Property<string>("QRCode")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("qr_code");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("status");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.Property<DateTime>("WarrantyDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("warranty_date");
 
                     b.HasKey("Id");
 
@@ -142,56 +165,58 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("BatteryMakeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BatteryModelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BatteryTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("battery_id");
 
                     b.Property<float>("Capacity")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("capacity");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("groupd_id");
 
                     b.Property<int>("MakeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("make_id");
 
                     b.Property<int>("ModelId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("model_id");
 
                     b.Property<float>("Price")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("price");
 
                     b.Property<int>("QuantityOnHand")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("quantity_on_hand");
 
                     b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("type_id");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.Property<float>("Voltage")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("voltage");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BatteryMakeId");
-
-                    b.HasIndex("BatteryModelId");
-
-                    b.HasIndex("BatteryTypeId");
-
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("MakeId");
+
+                    b.HasIndex("ModelId");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Batteries");
                 });
@@ -200,92 +225,106 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("condition_id");
 
                     b.Property<string>("ConditionName")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("condition_name");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BatteryConditions");
+                    b.ToTable("Battery_Conditions");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.BatteryMake", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("make_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("last_name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BatteryMakes");
+                    b.ToTable("Battery_Makes");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.BatteryModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("model_id");
 
                     b.Property<int>("BatteryMakeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("make_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("ModelName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("first_name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BatteryMakeId");
 
-                    b.ToTable("BatteryModels");
+                    b.ToTable("Battery_Models");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.BatteryType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("customer_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("TypeName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("first_name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BatteryTypes");
+                    b.ToTable("Battery_Types");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.Customer", b =>
@@ -339,25 +378,32 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("invoice_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<int>("CustomerId")
-                        .HasColumnType("int(10)");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("customer_id");
 
                     b.Property<DateTime>("DateOfSale")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_of_sale");
 
                     b.Property<int>("PaymentMethodId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("payment_method_id");
 
                     b.Property<float>("TotalPrice")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("total_price");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -372,19 +418,23 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("invoice_details_id");
 
                     b.Property<int>("AssetId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("asset_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -392,79 +442,94 @@ namespace Battery_Doctor.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("InvoiceDetails");
+                    b.ToTable("Invoice_Details");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("payment_method_id");
 
                     b.Property<string>("Method")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("method");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethods");
+                    b.ToTable("Payment_Methods");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.PurchaseOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("purchase_order_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<DateTime>("DateOfDelivery")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_of_delivery");
 
                     b.Property<DateTime>("DateOfOrder")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_of_order");
 
                     b.Property<bool>("IsVerified")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_verfied");
 
                     b.Property<int>("SupplierId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("supplier_id");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("PurchaseOrders");
+                    b.ToTable("Purchase_Orders");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.PurchaseOrderDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("customer_id");
 
                     b.Property<int>("BatteryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("battery_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<float>("PricePerBattery")
-                        .HasColumnType("float");
+                        .HasColumnType("float")
+                        .HasColumnName("price_per_battery");
 
                     b.Property<int>("PurchaseOrderId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("purchase_order_id");
 
                     b.Property<int>("QuantityOrdered")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("quantity_ordered");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -472,46 +537,52 @@ namespace Battery_Doctor.Migrations
 
                     b.HasIndex("PurchaseOrderId");
 
-                    b.ToTable("PurchaseOrderDetails");
+                    b.ToTable("Purchase_Order_Details");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.Supplier", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("supplier_id");
 
                     b.Property<int>("AddressId")
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("address_id");
 
                     b.Property<string>("ContactEmail")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("email");
 
                     b.Property<string>("ContactFirstName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("first_name");
 
                     b.Property<string>("ContactLastName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("last_name");
 
                     b.Property<string>("ContactPhone")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("phone_number");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("name");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id");
 
@@ -524,12 +595,13 @@ namespace Battery_Doctor.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("customer_id");
 
                     b.Property<string>("UnitType")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("unit_type");
 
                     b.HasKey("Id");
 
@@ -566,27 +638,27 @@ namespace Battery_Doctor.Migrations
 
             modelBuilder.Entity("Battery_Doctor.Models.Battery", b =>
                 {
+                    b.HasOne("BatteryGroup", "BatteryGroup")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Battery_Doctor.Models.BatteryMake", "BatteryMake")
                         .WithMany()
-                        .HasForeignKey("BatteryMakeId")
+                        .HasForeignKey("MakeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Battery_Doctor.Models.BatteryModel", "BatteryModel")
                         .WithMany()
-                        .HasForeignKey("BatteryModelId")
+                        .HasForeignKey("ModelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Battery_Doctor.Models.BatteryType", "BatteryType")
                         .WithMany()
-                        .HasForeignKey("BatteryTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BatteryGroup", "BatteryGroup")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

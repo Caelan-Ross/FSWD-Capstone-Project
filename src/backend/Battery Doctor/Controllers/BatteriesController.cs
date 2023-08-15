@@ -86,10 +86,10 @@ namespace Battery_Doctor.Controllers
         public async Task<ActionResult<BatteryReadDto>> PostBattery(BatteryCreateUpdateDto batteryCreateDto)
         {
             // Validate the associated Ids
-            if (!_context.BatteryTypes.Any(e => e.Id == batteryCreateDto.TypeId) ||
-                !_context.BatteryModels.Any(e => e.Id == batteryCreateDto.ModelId) ||
-                !_context.BatteryMakes.Any(e => e.Id == batteryCreateDto.MakeId) ||
-                !_context.BatteryGroups.Any(e => e.Id == batteryCreateDto.GroupId))
+            if (!_context.Battery_Types.Any(e => e.Id == batteryCreateDto.TypeId) ||
+                !_context.Battery_Models.Any(e => e.Id == batteryCreateDto.ModelId) ||
+                !_context.Battery_Makes.Any(e => e.Id == batteryCreateDto.MakeId) ||
+                !_context.Battery_Groups.Any(e => e.Id == batteryCreateDto.GroupId))
             {
                 return BadRequest("One or more associated Ids are invalid.");
             }
@@ -125,10 +125,10 @@ namespace Battery_Doctor.Controllers
             }
 
             // Validate the associated Ids
-            if (!_context.BatteryTypes.Any(e => e.Id == batteryUpdateDto.TypeId) ||
-                !_context.BatteryModels.Any(e => e.Id == batteryUpdateDto.ModelId) ||
-                !_context.BatteryMakes.Any(e => e.Id == batteryUpdateDto.MakeId) ||
-                !_context.BatteryGroups.Any(e => e.Id == batteryUpdateDto.GroupId))
+            if (!_context.Battery_Types.Any(e => e.Id == batteryUpdateDto.TypeId) ||
+                !_context.Battery_Models.Any(e => e.Id == batteryUpdateDto.ModelId) ||
+                !_context.Battery_Makes.Any(e => e.Id == batteryUpdateDto.MakeId) ||
+                !_context.Battery_Groups.Any(e => e.Id == batteryUpdateDto.GroupId))
             {
                 return BadRequest("One or more associated Ids are invalid.");
             }

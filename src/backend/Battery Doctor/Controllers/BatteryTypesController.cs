@@ -21,14 +21,14 @@ namespace Battery_Doctor.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BatteryType>>> GetBatteryTypes()
         {
-            return await _context.BatteryTypes.ToListAsync();
+            return await _context.Battery_Types.ToListAsync();
         }
 
         // GET: api/BatteryTypes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BatteryType>> GetBatteryType(int id)
         {
-            var batteryType = await _context.BatteryTypes.FindAsync(id);
+            var batteryType = await _context.Battery_Types.FindAsync(id);
 
             if (batteryType == null)
             {
@@ -44,7 +44,7 @@ namespace Battery_Doctor.Controllers
         {
             batteryType.CreatedAt = DateTime.UtcNow;
             batteryType.UpdatedAt = DateTime.UtcNow;
-            _context.BatteryTypes.Add(batteryType);
+            _context.Battery_Types.Add(batteryType);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetBatteryType), new { id = batteryType.Id }, batteryType);
@@ -85,13 +85,13 @@ namespace Battery_Doctor.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBatteryType(int id)
         {
-            var batteryType = await _context.BatteryTypes.FindAsync(id);
+            var batteryType = await _context.Battery_Types.FindAsync(id);
             if (batteryType == null)
             {
                 return NotFound();
             }
 
-            _context.BatteryTypes.Remove(batteryType);
+            _context.Battery_Types.Remove(batteryType);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -99,7 +99,7 @@ namespace Battery_Doctor.Controllers
 
         private bool BatteryTypeExists(int id)
         {
-            return _context.BatteryTypes.Any(e => e.Id == id);
+            return _context.Battery_Types.Any(e => e.Id == id);
         }
     }
 }

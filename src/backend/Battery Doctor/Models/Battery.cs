@@ -26,34 +26,39 @@ namespace Battery_Doctor.Models
         public int MakeId { get; set; }
 
         [Required, Range(0, float.MaxValue, ErrorMessage = "Please enter valid float Number")]
-        [Column("voltage", TypeName = "float5")]
+        [Column("voltage")]
         public float Voltage { get; set; }
 
         [Required, Range(0, float.MaxValue, ErrorMessage = "Please enter valid float Number")]
+        [Column("capacity")]
         public float Capacity { get; set; }
 
         [Required, Range(0, float.MaxValue, ErrorMessage = "Please enter valid float Number")]
+        [Column("price")]
         public float Price { get; set; }
 
         [Required, Range(0, int.MaxValue, ErrorMessage = "Please enter a valid quantity")]
+        [Column("quantity_on_hand")]
         public int QuantityOnHand { get; set; }
 
         [Required]
         [ForeignKey("BatteryGroup")]
+        [Column("groupd_id", TypeName = "int(10)")]
         public int GroupId { get; set; }
 
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; }
 
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
-        // Navigation property
-        public BatteryType BatteryType { get; set; }
+        public virtual BatteryType BatteryType { get; set; }
 
-        public BatteryModel BatteryModel { get; set; }
+        public virtual BatteryModel BatteryModel { get; set; }
 
-        public BatteryMake BatteryMake { get; set; }
+        public virtual BatteryMake BatteryMake { get; set; }
 
-        public BatteryGroup BatteryGroup { get; set; }
+        public virtual BatteryGroup BatteryGroup { get; set; }
     }
 }
 

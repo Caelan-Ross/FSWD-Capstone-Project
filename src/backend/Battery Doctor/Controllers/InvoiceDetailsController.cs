@@ -21,7 +21,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InvoiceDetails>>> GetInvoiceDetails()
         {
-            return await _context.InvoiceDetails.Include(i => i.Invoice)
+            return await _context.Invoice_Details.Include(i => i.Invoice)
                                                  .Include(a => a.Asset)
                                                  .ToListAsync();
         }
@@ -30,7 +30,7 @@ namespace Battery_Doctor.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<InvoiceDetails>> GetInvoiceDetails(int id)
         {
-            var invoiceDetails = await _context.InvoiceDetails.Include(i => i.Invoice)
+            var invoiceDetails = await _context.Invoice_Details.Include(i => i.Invoice)
                                                               .Include(a => a.Asset)
                                                               .FirstOrDefaultAsync(invDet => invDet.Id == id);
 
@@ -48,7 +48,7 @@ namespace Battery_Doctor.Controllers
         {
             invoiceDetails.CreatedAt = DateTime.UtcNow;
             invoiceDetails.UpdatedAt = DateTime.UtcNow;
-            _context.InvoiceDetails.Add(invoiceDetails);
+            _context.Invoice_Details.Add(invoiceDetails);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetInvoiceDetails), new { id = invoiceDetails.Id }, invoiceDetails);
@@ -89,13 +89,13 @@ namespace Battery_Doctor.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInvoiceDetails(int id)
         {
-            var invoiceDetails = await _context.InvoiceDetails.FindAsync(id);
+            var invoiceDetails = await _context.Invoice_Details.FindAsync(id);
             if (invoiceDetails == null)
             {
                 return NotFound();
             }
 
-            _context.InvoiceDetails.Remove(invoiceDetails);
+            _context.Invoice_Details.Remove(invoiceDetails);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -103,7 +103,7 @@ namespace Battery_Doctor.Controllers
 
         private bool InvoiceDetailsExists(int id)
         {
-            return _context.InvoiceDetails.Any(e => e.Id == id);
+            return _context.Invoice_Details.Any(e => e.Id == id);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Battery_Doctor.Models
         public DateTime CreatedAt { get; set; }
 
         [Required]
-        [Column("created_at")]
+        [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
     }
 }

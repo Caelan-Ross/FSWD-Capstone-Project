@@ -86,7 +86,7 @@ namespace Battery_Doctor.Controllers
                 Email = customer.Email,
             };
 
-            return CreatedAtAction(nameof(GetCustomer), new { phoneNumber = customer.PhoneNumber }, readDto);
+            return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, readDto);
         }
 
         // PUT: api/Customers/5
