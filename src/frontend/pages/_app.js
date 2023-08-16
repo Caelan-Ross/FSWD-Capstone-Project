@@ -74,7 +74,7 @@ export default function App({ Component, pageProps }) {
             </Box>
             <Box>
               <Button
-                onClick={() => handleNavigation('/invoices/createInvoice')}
+                onClick={() => handleNavigation('/invoices/create')}
                 startIcon={<AddIcon />}
                 className='btn-primary'
                 sx={{

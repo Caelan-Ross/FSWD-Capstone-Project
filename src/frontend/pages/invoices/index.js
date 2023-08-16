@@ -121,7 +121,7 @@ export default function Invoices() {
 				>
 					Invoices
 				</Typography>
-				<IconButton onClick={() => handleNavigation('/invoices/createInvoice')}>
+				<IconButton onClick={() => handleNavigation('/invoices/create')}>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>
