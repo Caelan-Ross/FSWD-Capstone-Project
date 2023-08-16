@@ -114,7 +114,7 @@ export default function Home() {
 						display: 'flex',
 						flexDirection: 'row',
 						alignItems: 'center',
-						margin: '0 auto',
+						margin: '0 auto 2rem auto',
 						width: '49%',
 						height: '40rem',
 						backgroundColor: '#ffffff80',
@@ -173,7 +173,7 @@ export default function Home() {
 								label='Notes'
 								type='text'
 								multiline
-								rows={11}
+								rows={9}
 								variant='outlined'
 								fullWidth
 								sx={{ mt: 2}}
