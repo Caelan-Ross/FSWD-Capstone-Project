@@ -112,7 +112,7 @@ export default function Customer() {
 				setShowSnackbar(true); // Show the success Snackbar
 				setTimeout(() => {
 					setShowSnackbar(false); // Hide the Snackbar after 1 second
-				}, 1000);
+				}, 2000);
 			})
 			.catch((error) => {
 				console.error('Error deleting customer:', error);
@@ -121,7 +121,7 @@ export default function Customer() {
 
 	// Send user to editCustomer.js
 	const handleEdit = (customerId) => {
-		router.push(`/customer/editCustomer?id=${customerId}`);
+		router.push(`/customer/edit?id=${customerId}`);
 	};
 
 	return (
@@ -156,7 +156,7 @@ export default function Customer() {
 					Customers
 				</Typography>
 				<IconButton
-					onClick={() => handleNavigation('/customer/createCustomer')}
+					onClick={() => handleNavigation('/customer/create')}
 				>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
@@ -167,7 +167,7 @@ export default function Customer() {
 				onClose={() => setShowSnackbar(false)} // Close on click away
 			>
 				<SnackbarContent
-					message='Battery deleted successfully'
+					message='Customer deleted successfully'
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
