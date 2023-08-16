@@ -15,6 +15,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -31,6 +33,7 @@ export default function Home() {
 		open: false,
 		batteryId: null,
 	});
+	const [showSnackbar, setShowSnackbar] = useState(false);
 
 	// Data Fields
 	const columns = [
@@ -106,6 +109,10 @@ export default function Home() {
 					prevData.filter((battery) => battery.id !== batteryId)
 				);
 				closeDeleteConfirmation();
+				setShowSnackbar(true); // Show the success Snackbar
+				setTimeout(() => {
+					setShowSnackbar(false); // Hide the Snackbar after 1 second
+				}, 1000);
 			})
 			.catch((error) => {
 				console.error('Error deleting battery:', error);
@@ -147,6 +154,16 @@ export default function Home() {
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={1000} // 1 second
+				onClose={() => setShowSnackbar(false)} // Close on click away
+			>
+				<SnackbarContent
+					message='Battery deleted successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 
 			{/* Inventory DataGrid */}
 			<div
