@@ -13,7 +13,7 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 export default function EditCustomer() {
 	const router = useRouter();
-	const customerId = router.query.id; // Get the customerId from the URL query parameter
+	const invoiceId = router.query.id; // Get the customerId from the URL query parameter
 	const API_BASE = 'http://localhost:7166/api/customers'; // Update the API endpoint
 
 	const [customerDetails, setCustomerDetails] = useState({
@@ -63,7 +63,7 @@ export default function EditCustomer() {
 			setIsSuccess(true);
 			setTimeout(() => {
 				setIsSuccess(false); // Hide success after delay
-				router.push('/customer/customer'); // Navigate back to the customer list page
+				router.push('/invoices/invoices'); // Navigate back to the customer list page
 			}, 1500);
 		} catch (error) {
 			console.error('Error updating customer details:', error);
@@ -94,9 +94,9 @@ export default function EditCustomer() {
 				}}
 			>
 				<Typography variant='h3' align='center' component='h2'>
-					Edit Customer
+					Edit Invoice
 				</Typography>
-				<Box display='flex' onClick={() => router.push('/customer/customer')}>
+				<Box display='flex' onClick={() => router.push('/invoices/invoices')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
