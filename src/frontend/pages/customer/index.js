@@ -25,8 +25,8 @@ export default function Customer() {
 		router.push(path);
 	};
 
-	const [customerData, setCustomerData] = useState([]);
 	const API_BASE = 'http://localhost:7166/api/Customers';
+	const [customerData, setCustomerData] = useState([]);
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
 		open: false,
 		customerId: null,
@@ -60,8 +60,9 @@ export default function Customer() {
 		},
 	];
 
+
+	// Fetch Customer Data
 	useEffect(() => {
-		// Fetch data from API using axios
 		axios
 			.get(API_BASE, {
 				headers: {

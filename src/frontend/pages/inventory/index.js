@@ -14,104 +14,19 @@ export default function Home() {
 		router.push(path);
 	};
 
-	const [batteryData, setBatteryData] = useState([]);
-	const API_BASE = 'http://localhost.7166/api/Batteries';
-
-	// Dummy inventory data
-	const inventoryData = [
-		{
-			id: 100000,
-			invoiceDate: '01/01/2000',
-			customerName: 'Doe',
-			batteryAmt: 10,
-			saleAmount: '$100.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		// Add more dummy data rows here
-	];
+	const API_BASE = 'http://localhost:7166/api/Batteries';
+	const [inventoryData, setInventoryData] = useState([]);
+	const [deleteConfirmation, setDeleteConfirmation] = useState({
+		open: false,
+		batteryId: null,
+	});
 
 	const columns = [
-		{ field: 'id', headerName: 'Invoice No.', width: 150 },
-		{ field: 'invoiceDate', headerName: 'Date', width: 150 },
-		{ field: 'customerName', headerName: 'Name', width: 150 },
-		{ field: 'batteryAmt', headerName: '# Of Batteries', width: 150 },
-		{ field: 'saleAmount', headerName: 'Sale Amount', width: 250 },
+		{ field: 'id', headerName: 'Battery ID', width: 150 },
+		{ field: 'voltage', headerName: 'voltage', width: 150 },
+		{ field: 'capacity', headerName: 'capacity', width: 150 },
+		{ field: 'price', headerName: 'price', width: 150 },
+		{ field: 'quantityOnHand', headerName: 'qtyOnHand', width: 250 },
 		{
 			field: 'edit', // Edit column
 			headerName: 'Edit',
@@ -133,6 +48,24 @@ export default function Home() {
 			),
 		},
 	];
+
+	// Fetch Inventory Data
+	useEffect(() => {
+		axios
+			.get(API_BASE, {
+				headers: {
+					accept: 'text/plain',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+				// Update inventoryData state with fetched data
+				setInventoryData(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customer data:', error);
+			});
+	}, []);
 
 	return (
 		<Box
@@ -168,14 +101,6 @@ export default function Home() {
 				<IconButton>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
-			</Box>
-			<Box textAlign='left' mt={2}>
-				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-					neque consequuntur in tempora, placeat ullam nihil praesentium
-					reprehenderit quaerat, numquam quibusdam repellendus quidem tempore
-					temporibus quas est? Nesciunt, recusandae et.
-				</Typography>
 			</Box>
 
 			{/* Inventory DataGrid */}
