@@ -77,7 +77,7 @@ export default function Home() {
 					Create Invoice
 				</Typography>
 
-				<Box display='flex' onClick={() => handleNavigation('/invoices/invoices')}>
+				<Box display='flex' onClick={() => handleNavigation('/invoices')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
