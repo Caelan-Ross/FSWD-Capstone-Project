@@ -45,13 +45,13 @@ export default function Invoices() {
 
 
 	const columns = [
-		{ field: 'id', headerName: 'Invoice ID', width: 150 },
-		{ field: 'paymentMethod', headerName: 'Payment Method', width: 150 },
-		{ field: 'dateOfSale', headerName: 'Date of Invoice', width: 150 },
-		{ field: 'totalPrice', headerName: 'Total Amount', width: 250 },
+		{ field: 'id', headerName: <strong>Invoice ID</strong>, width: 100 },
+		{ field: 'paymentMethod', headerName: <strong>Payment Method</strong>, width: 200 },
+		{ field: 'dateOfSale', headerName: <strong>Date of Invoice</strong>, width: 200 },
+		{ field: 'totalPrice', headerName: <strong>Total Amount</strong>, width: 200 },
 		{
 			field: 'edit', // Edit column
-			headerName: 'Edit',
+			headerName: <strong>Edit</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -61,7 +61,7 @@ export default function Invoices() {
 		},
 		{
 			field: 'delete',
-			headerName: 'Delete',
+			headerName: <strong>Delete</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleDelete(params.row.id)}>
@@ -125,25 +125,18 @@ export default function Invoices() {
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>
-			<Box textAlign='left' mt={2}>
-				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-					neque consequuntur in tempora, placeat ullam nihil praesentium
-					reprehenderit quaerat, numquam quibusdam repellendus quidem tempore
-					temporibus quas est? Nesciunt, recusandae et.
-				</Typography>
-			</Box>
 
 			{/* Invoice DataGrid */}
 			<div
 				style={{
-					height: '80%',
-					width: '100%',
+					height: '90%',
+					width: '95%',
 					marginTop: theme.spacing(2),
 					backgroundColor: 'white',
+					borderRadius: '10px',
 				}}
 			>
-				<DataGrid rows={invoiceData} columns={columns} pageSize={5} />
+				<DataGrid rows={invoiceData} columns={columns} pageSize={5} sx={{alignItems: 'center', width: '100%', margin: 'auto'}}/>
 			</div>
 		</Box>
 	);

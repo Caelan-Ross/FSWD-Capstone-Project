@@ -37,14 +37,14 @@ export default function Home() {
 
 	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: 'Battery ID', width: 150 },
-		{ field: 'voltage', headerName: 'voltage', width: 150 },
-		{ field: 'capacity', headerName: 'capacity', width: 150 },
-		{ field: 'price', headerName: 'price', width: 150 },
-		{ field: 'quantityOnHand', headerName: 'qtyOnHand', width: 250 },
+		{ field: 'id', headerName: <strong>Battery ID</strong>, width: 100 },
+		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 200 },
+		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 200 },
+		{ field: 'price', headerName: <strong>Price</strong>, width: 200 },
+		{ field: 'quantityOnHand', headerName: <strong>Qty on Hand</strong>, width: 200 },
 		{
 			field: 'edit', // Edit column
-			headerName: 'Edit',
+			headerName: <strong>Edit</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -54,7 +54,7 @@ export default function Home() {
 		},
 		{
 			field: 'delete',
-			headerName: 'Delete',
+			headerName: <strong>Delete</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
@@ -177,13 +177,14 @@ export default function Home() {
 			{/* Inventory DataGrid */}
 			<div
 				style={{
-					height: '80%',
-					width: '100%',
+					height: '90%',
+					width: '95%',
 					marginTop: theme.spacing(2),
 					backgroundColor: 'white',
+					borderRadius: '10px',
 				}}
 			>
-				<DataGrid rows={inventoryData} columns={columns} pageSize={5} />
+				<DataGrid rows={inventoryData} columns={columns} pageSize={5} sx={{alignItems: 'center', width: '100%', margin: 'auto'}} />
 			</div>
 
 			{/* Delete Confirmation Dialog */}

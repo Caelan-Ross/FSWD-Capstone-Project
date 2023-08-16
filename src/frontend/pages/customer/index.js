@@ -37,14 +37,14 @@ export default function Customer() {
 
 	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: 'Customer ID', width: 150 },
-		{ field: 'firstName', headerName: 'First Name', width: 150 },
-		{ field: 'lastName', headerName: 'Last Name', width: 150 },
-		{ field: 'phoneNumber', headerName: 'Phone No.', width: 150 },
-		{ field: 'email', headerName: 'Email', width: 250 },
+		{ field: 'id', headerName: <strong>Customer ID</strong>, width: 100 },
+		{ field: 'firstName', headerName: <strong>First Name</strong>, width: 300 },
+		{ field: 'lastName', headerName: <strong>Last Name</strong>, width: 300 },
+		{ field: 'phoneNumber', headerName: <strong>Phone No.</strong>, width: 300 },
+		{ field: 'email', headerName: <strong>Email</strong>, width: 300 },
 		{
 			field: 'edit',
-			headerName: 'Edit',
+			headerName: <strong>Edit</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -54,7 +54,7 @@ export default function Customer() {
 		},
 		{
 			field: 'delete',
-			headerName: 'Delete',
+			headerName: <strong>Delete</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
@@ -175,13 +175,14 @@ export default function Customer() {
 			{/* Customer DataGrid */}
 			<div
 				style={{
-					height: '80%',
-					width: '100%',
+					height: '90%',
+					width: '95%',
 					marginTop: theme.spacing(2),
 					backgroundColor: 'white',
+					borderRadius: '10px',
 				}}
 			>
-				<DataGrid rows={customerData} columns={columns} pageSize={5} />
+				<DataGrid rows={customerData} columns={columns} pageSize={5} sx={{alignItems: 'center', width: '100%', margin: 'auto'}}/>
 			</div>
 
 			{/* Delete Confirmation Dialog */}
