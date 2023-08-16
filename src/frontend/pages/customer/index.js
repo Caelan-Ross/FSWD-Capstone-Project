@@ -153,7 +153,7 @@ export default function Customer() {
 					component='h2'
 					sx={{ marginRight: '1rem' }}
 				>
-					Customer
+					Customers
 				</Typography>
 				<IconButton
 					onClick={() => handleNavigation('/customer/createCustomer')}
@@ -179,7 +179,7 @@ export default function Customer() {
 					width: '95%',
 					marginTop: theme.spacing(2),
 					backgroundColor: 'white',
-					borderRadius: '10px',
+					borderRadius: '10px'
 				}}
 			>
 				<DataGrid rows={customerData} columns={columns} pageSize={5} sx={{alignItems: 'center', width: '100%', margin: 'auto'}}/>
