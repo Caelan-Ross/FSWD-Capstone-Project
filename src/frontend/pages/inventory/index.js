@@ -119,6 +119,11 @@ export default function Home() {
 			});
 	};
 
+	// Send user to edit
+	const handleEdit = (batteryId) => {
+		router.push(`/inventory/edit?id=${batteryId}`);
+	};
+
 	return (
 		<Box
 			display='flex'
@@ -150,10 +155,14 @@ export default function Home() {
 				>
 					Inventory
 				</Typography>
-				<IconButton>
+				<IconButton
+					onClick={() => handleNavigation('/inventory/create')}	
+				>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>
+
+			{/* Display create success */}
 			<Snackbar
 				open={showSnackbar}
 				autoHideDuration={1000} // 1 second

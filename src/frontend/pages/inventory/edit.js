@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
 	Typography,
 	Box,
@@ -7,48 +8,23 @@ import {
 	Alert,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import axios from 'axios';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
-export default function Home() {
+export default function EditCustomer() {
 	const router = useRouter();
-	const handleNavigation = (path) => {
-		router.push(path);
-	};
+	const customerId = router.query.id; // Get the customerId from the URL query parameter
+	const API_BASE = 'http://localhost:7166/api/Batteries'; // Update the API endpoint
 
-	const [error, setError] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const API_BASE = 'http://localhost:3000/api/customer/create';
+	const [batteryDetails, setBatteryDetails] = useState({
+		id: '',
+		voltage: '',
+		capacity: '',
+		price: '',
+		qtyOnHand: '',
+	});
 
-	// Submit Button
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-		const form = event.target;
-
-		const queryParams = new URLSearchParams();
-		queryParams.append('firstName', form.firstName.value);
-		queryParams.append('lastName', form.lastName.value);
-		queryParams.append('phoneNumber', form.phoneNumber.value);
-		queryParams.append('email', form.email.value);
-		const url = `${API_BASE}?${queryParams.toString()}`;
-		try {
-			setLoading(true);
-			// Perform any additional validation or processing here if needed
-			setError(null);
-
-			await axios.post(url);
-			// Display success message
-			alert('Customer created successfully');
-			// Reset form fields
-			form.reset();
-		} catch (error) {
-			setError('Failed to create customer');
-		} finally {
-			setLoading(false);
-		}
-	};
-
+	const [isSuccess, setIsSuccess] = useState(false); // State for showing success message
 	return (
 		<Box
 			display='flex'
@@ -72,12 +48,10 @@ export default function Home() {
 					width: '100%',
 				}}
 			>
-				{error && <Alert severity='error'>{error}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
-					Create Customer
+					Edit Battery
 				</Typography>
-
-				<Box display='flex' onClick={() => handleNavigation('/customer')}>
+				<Box display='flex' onClick={() => router.push('/inventory')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
@@ -85,10 +59,10 @@ export default function Home() {
 					</IconButton>
 				</Box>
 			</Box>
-			{/* Entry form */}
+
 			<Box
 				component='form'
-				onSubmit={handleSubmit}
+				// onSubmit={handleSubmit}
 				mt={12}
 				sx={{
 					display: 'flex',
@@ -101,30 +75,35 @@ export default function Home() {
 				}}
 			>
 				<TextField
-					id='firstName'
-					name='firstName'
-					label='First Name'
+					id='voltage'
+					name='voltage'
+					label='voltage'
 					type='text'
 					variant='outlined'
 					fullWidth
+					// value={customerDetails.firstName}
+					// onChange={(e) => handleFieldChange('firstName', e.target.value)}
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
-					id='lastName'
-					name='lastName'
-					label='Last Name'
+					id='capacity'
+					name='capacity'
+					label='capacity'
 					type='text'
 					variant='outlined'
 					fullWidth
+					// value={customerDetails.lastName}
+					// onChange={(e) => handleFieldChange('lastName', e.target.value)}
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
-					id='phoneNumber'
-					name='phoneNumber'
-					label='Phone Number'
+					id='qtyOnHand'
+					name='qtyOnHand'
+					label='Qty On Hand'
 					fullWidth
 					variant='outlined'
-					type=''
+					// value={customerDetails.phoneNumber}
+					// onChange={(e) => handleFieldChange('phoneNumber', e.target.value)}
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
@@ -134,18 +113,25 @@ export default function Home() {
 					fullWidth
 					variant='outlined'
 					type='email'
+					// value={customerDetails.email}
+					// onChange={(e) => handleFieldChange('email', e.target.value)}
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<Button
 					className='btn-primary'
 					variant='contained'
 					type='submit'
-					disabled={loading}
 					color='primary'
 					sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}
 				>
-					{loading ? 'Creating...' : 'Create'}
+					Save
 				</Button>
+				{/* Success Message */}
+				{isSuccess && (
+					<Alert severity='success' sx={{ mt: 2 }}>
+						Edit successful!
+					</Alert>
+				)}
 			</Box>
 		</Box>
 	);

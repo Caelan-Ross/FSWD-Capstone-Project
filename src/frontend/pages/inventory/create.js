@@ -19,34 +19,34 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const API_BASE = 'http://localhost:3000/api/customer/create';
+	const API_BASE = 'http://localhost:3000/api/Batteries';
 
 	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const form = event.target;
+		// const form = event.target;
 
-		const queryParams = new URLSearchParams();
-		queryParams.append('firstName', form.firstName.value);
-		queryParams.append('lastName', form.lastName.value);
-		queryParams.append('phoneNumber', form.phoneNumber.value);
-		queryParams.append('email', form.email.value);
-		const url = `${API_BASE}?${queryParams.toString()}`;
-		try {
-			setLoading(true);
-			// Perform any additional validation or processing here if needed
-			setError(null);
+		// const queryParams = new URLSearchParams();
+		// queryParams.append('firstName', form.firstName.value);
+		// queryParams.append('lastName', form.lastName.value);
+		// queryParams.append('phoneNumber', form.phoneNumber.value);
+		// queryParams.append('email', form.email.value);
+		// const url = `${API_BASE}?${queryParams.toString()}`;
+		// try {
+		// 	setLoading(true);
+		// 	// Perform any additional validation or processing here if needed
+		// 	setError(null);
 
-			await axios.post(url);
-			// Display success message
-			alert('Customer created successfully');
-			// Reset form fields
-			form.reset();
-		} catch (error) {
-			setError('Failed to create customer');
-		} finally {
-			setLoading(false);
-		}
+		// 	await axios.post(url);
+		// 	// Display success message
+		// 	alert('Customer created successfully');
+		// 	// Reset form fields
+		// 	form.reset();
+		// } catch (error) {
+		// 	setError('Failed to create customer');
+		// } finally {
+		// 	setLoading(false);
+		// }
 	};
 
 	return (
@@ -74,10 +74,10 @@ export default function Home() {
 			>
 				{error && <Alert severity='error'>{error}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
-					Create Customer
+					Create Battery
 				</Typography>
 
-				<Box display='flex' onClick={() => handleNavigation('/customer')}>
+				<Box display='flex' onClick={() => handleNavigation('/inventory')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
@@ -101,36 +101,36 @@ export default function Home() {
 				}}
 			>
 				<TextField
-					id='firstName'
-					name='firstName'
-					label='First Name'
+					id='voltage'
+					name='voltage'
+					label='Voltage'
 					type='text'
 					variant='outlined'
 					fullWidth
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
-					id='lastName'
-					name='lastName'
-					label='Last Name'
+					id='capacity'
+					name='capacity'
+					label='Capacity'
 					type='text'
 					variant='outlined'
 					fullWidth
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
-					id='phoneNumber'
-					name='phoneNumber'
-					label='Phone Number'
+					id='price'
+					name='price'
+					label='Price'
 					fullWidth
 					variant='outlined'
 					type=''
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				<TextField
-					id='email'
-					name='email'
-					label='Email'
+					id='qtyOnHand'
+					name='qtyOnHand'
+					label='Qty On Hand'
 					fullWidth
 					variant='outlined'
 					type='email'
