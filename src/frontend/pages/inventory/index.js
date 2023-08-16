@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, useTheme, IconButton } from '@mui/material';
+import {
+	Typography,
+	Box,
+	useTheme,
+	IconButton,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+	Button,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,6 +32,7 @@ export default function Home() {
 		batteryId: null,
 	});
 
+	// Data Fields
 	const columns = [
 		{ field: 'id', headerName: 'Battery ID', width: 150 },
 		{ field: 'voltage', headerName: 'voltage', width: 150 },
@@ -42,7 +54,7 @@ export default function Home() {
 			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => handleDelete(params.row.id)}>
+				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
 					<DeleteIcon />
 				</IconButton>
 			),
@@ -66,6 +78,39 @@ export default function Home() {
 				console.error('Error fetching customer data:', error);
 			});
 	}, []);
+
+	// Function to open the delete confirmation dialog
+	const openDeleteConfirmation = (batteryId) => {
+		setDeleteConfirmation({
+			open: true,
+			batteryId: batteryId,
+		});
+	};
+
+	// Function to close the delete confirmation dialog
+	const closeDeleteConfirmation = () => {
+		setDeleteConfirmation({
+			open: false,
+			batteryId: null,
+		});
+	};
+
+	// Function to delete a battery
+	const handleDelete = (batteryId) => {
+		axios
+			.delete(`${API_BASE}/${batteryId}`)
+			.then((response) => {
+				console.log('Battery deleted:', response.data);
+				// Remove the deleted battery from inventoryData state
+				setInventoryData((prevData) =>
+					prevData.filter((battery) => battery.id !== batteryId)
+				);
+				closeDeleteConfirmation();
+			})
+			.catch((error) => {
+				console.error('Error deleting battery:', error);
+			});
+	};
 
 	return (
 		<Box
@@ -114,6 +159,25 @@ export default function Home() {
 			>
 				<DataGrid rows={inventoryData} columns={columns} pageSize={5} />
 			</div>
+
+			{/* Delete Confirmation Dialog */}
+			<Dialog open={deleteConfirmation.open} onClose={closeDeleteConfirmation}>
+				<DialogTitle>Delete Battery</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Are you sure you want to delete this battery?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
+					<Button
+						onClick={() => handleDelete(deleteConfirmation.batteryId)}
+						color='primary'
+					>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 }

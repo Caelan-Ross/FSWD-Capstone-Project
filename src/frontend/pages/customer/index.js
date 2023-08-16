@@ -32,6 +32,7 @@ export default function Customer() {
 		customerId: null,
 	});
 
+	// Data Fields
 	const columns = [
 		{ field: 'id', headerName: 'Customer ID', width: 150 },
 		{ field: 'firstName', headerName: 'First Name', width: 150 },
@@ -154,14 +155,6 @@ export default function Customer() {
 				>
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
-			</Box>
-			<Box textAlign='left' mt={2}>
-				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-					neque consequuntur in tempora, placeat ullam nihil praesentium
-					reprehenderit quaerat, numquam quibusdam repellendus quidem tempore
-					temporibus quas est? Nesciunt, recusandae et.
-				</Typography>
 			</Box>
 
 			{/* Customer DataGrid */}
