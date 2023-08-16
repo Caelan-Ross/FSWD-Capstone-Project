@@ -63,7 +63,7 @@ export default function EditCustomer() {
 			setIsSuccess(true);
 			setTimeout(() => {
 				setIsSuccess(false); // Hide success after delay
-				router.push('/invoices/invoices'); // Navigate back to the customer list page
+				router.push('/invoices'); // Navigate back to the customer list page
 			}, 1500);
 		} catch (error) {
 			console.error('Error updating customer details:', error);
@@ -96,7 +96,7 @@ export default function EditCustomer() {
 				<Typography variant='h3' align='center' component='h2'>
 					Edit Invoice
 				</Typography>
-				<Box display='flex' onClick={() => router.push('/invoices/invoices')}>
+				<Box display='flex' onClick={() => router.push('/invoices')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
