@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, useTheme, IconButton } from '@mui/material';
+import {
+	Typography,
+	Box,
+	useTheme,
+	IconButton,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+	Button,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -17,36 +30,25 @@ export default function Invoices() {
 
 	// Temporary invoice edit function
 	// WILL BE REDIRECTING TO CUSTOMER, THIS IS FOR PROTOTYPE/TESTING PURPOSES**
-	
-	const handleEdit = (customerId) => {
-		router.push(`/customer/editCustomer?id=${customerId}`);
+
+	const handleEdit = (invoiceId) => {
+		router.push(`/invoice/editInvoice?id=${invoiceId}`);
 	};
 
-	// Dummy invoice data
-	const invoiceData = [
-		{
-			id: 100000,
-			invoiceDate: '01/01/2000',
-			customerName: 'Doe',
-			batteryAmt: 10,
-			saleAmount: '$100.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		// Add more dummy data rows here
-	];
+	const API_BASE = 'http://localhost:7166/api/Invoices';
+	const [invoiceData, setInvoiceData] = useState([]);
+	const [deleteConfirmation, setDeleteConfirmation] = useState({
+		open: false,
+		customerId: null,
+	});
+	const [showSnackbar, setShowSnackbar] = useState(false);
+
 
 	const columns = [
-		{ field: 'id', headerName: 'Invoice No.', width: 150 },
-		{ field: 'invoiceDate', headerName: 'Date', width: 150 },
-		{ field: 'customerName', headerName: 'Name', width: 150 },
-		{ field: 'batteryAmt', headerName: '# Of Batteries', width: 150 },
-		{ field: 'saleAmount', headerName: 'Sale Amount', width: 250 },
+		{ field: 'id', headerName: 'Invoice ID', width: 150 },
+		{ field: 'paymentMethod', headerName: 'Payment Method', width: 150 },
+		{ field: 'dateOfSale', headerName: 'Date of Invoice', width: 150 },
+		{ field: 'totalPrice', headerName: 'Total Amount', width: 250 },
 		{
 			field: 'edit', // Edit column
 			headerName: 'Edit',
@@ -68,6 +70,25 @@ export default function Invoices() {
 			),
 		},
 	];
+
+	// Fetch Invoice Data
+	useEffect(() => {
+		axios
+			.get(API_BASE, {
+				headers: {
+					accept: 'text/plain',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+				// Update invoiceData state with fetched data
+				setInvoiceData(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching invoice data:', error);
+			});
+	}, []);
+
 
 	return (
 		<Box
