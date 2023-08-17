@@ -158,113 +158,129 @@ export default function Home() {
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
-					width: '30%',
+					width: '80%',
 					backgroundColor: '#ffffff80',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',
 				}}
 			>
-				{/* Dropdown for Battery Type */}
-				<TextField
-					select
-					id='typeName'
-					name='typeName'
-					label='Type'
-					variant='outlined'
-					fullWidth
-					sx={{ mt: 2, backgroundColor: 'white' }}
+				<Box
+					component='form'
+					onSubmit={handleSubmit}
+					sx={{
+						display: 'flex',
+						flexDirection: 'row',
+						padding: '2rem',
+						width: '100%',
+						justifyContent: 'space-between',
+						margin: '4rem auto'
+					}}
 				>
-					{typeOptions.map((option) => (
-						<MenuItem key={option.id} value={option.id}>
-							{option.typeName}
-						</MenuItem>
-					))}
-				</TextField>
-				{/* Dropdown for Battery Model */}
-				<TextField
-					select
-					id='modelName'
-					name='modelName'
-					label='Model'
-					variant='outlined'
-					fullWidth
-					sx={{ mt: 2, backgroundColor: 'white' }}
-				>
-					{modelOptions.map((option) => (
-						<MenuItem key={option.id} value={option.id}>
-							{option.modelName}
-						</MenuItem>
-					))}
-				</TextField>
-				{/* Dropdown for Battery Make */}
-				<TextField
-					select
-					id='makeName'
-					name='makeName'
-					label='Make'
-					variant='outlined'
-					fullWidth
-					sx={{ mt: 2, backgroundColor: 'white' }}
-				>
-					{makeOptions.map((option) => (
-						<MenuItem key={option.id} value={option.id}>
-							{option.name}
-						</MenuItem>
-					))}
-				</TextField>
-				<TextField
-					id='voltage'
-					name='voltage'
-					label='Voltage'
-					type='text'
-					variant='outlined'
-					fullWidth
-					sx={{ mt: 2, backgroundColor: 'white' }}
-				/>
-				<TextField
-					id='capacity'
-					name='capacity'
-					label='Capacity'
-					type='text'
-					variant='outlined'
-					fullWidth
-					sx={{ mt: 2, backgroundColor: 'white' }}
-				/>
-				<TextField
-					id='price'
-					name='price'
-					label='Price'
-					fullWidth
-					variant='outlined'
-					type=''
-					sx={{ mt: 2, backgroundColor: 'white' }}
-				/>
-				<TextField
-					id='qtyOnHand'
-					name='qtyOnHand'
-					label='Qty On Hand'
-					fullWidth
-					variant='outlined'
-					type='text'
-					sx={{ mt: 2, backgroundColor: 'white' }}
-				/>
-				{/* Dropdown for Battery Group */}
-				<TextField
-					select
-					id='groupName'
-					name='groupName'
-					label='Group'
-					variant='outlined'
-					fullWidth
-					sx={{ mt: 2, backgroundColor: 'white' }}
-				>
-					{groupOptions.map((option) => (
-						<MenuItem key={option.id} value={option.id}>
-							{option.groupName}
-						</MenuItem>
-					))}
-				</TextField>
+					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '48%' }}>
+						{/* Dropdown for Battery Type */}
+						<TextField
+							select
+							id='typeName'
+							name='typeName'
+							label='Type'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						>
+							{typeOptions.map((option) => (
+								<MenuItem key={option.id} value={option.id}>
+									{option.typeName}
+								</MenuItem>
+							))}
+						</TextField>
+						{/* Dropdown for Battery Model */}
+						<TextField
+							select
+							id='modelName'
+							name='modelName'
+							label='Model'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						>
+							{modelOptions.map((option) => (
+								<MenuItem key={option.id} value={option.id}>
+									{option.modelName}
+								</MenuItem>
+							))}
+						</TextField>
+						{/* Dropdown for Battery Make */}
+						<TextField
+							select
+							id='makeName'
+							name='makeName'
+							label='Make'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						>
+							{makeOptions.map((option) => (
+								<MenuItem key={option.id} value={option.id}>
+									{option.name}
+								</MenuItem>
+							))}
+						</TextField>
+						<TextField
+							id='voltage'
+							name='voltage'
+							label='Voltage'
+							type='text'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						/>
+					</Box>
+					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '48%' }}>
+						<TextField
+							id='capacity'
+							name='capacity'
+							label='Capacity'
+							type='text'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						/>
+						<TextField
+							id='price'
+							name='price'
+							label='Price'
+							fullWidth
+							variant='outlined'
+							type=''
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						/>
+						<TextField
+							id='qtyOnHand'
+							name='qtyOnHand'
+							label='Qty On Hand'
+							fullWidth
+							variant='outlined'
+							type='text'
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						/>
+						{/* Dropdown for Battery Group */}
+						<TextField
+							select
+							id='groupName'
+							name='groupName'
+							label='Group'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						>
+							{groupOptions.map((option) => (
+								<MenuItem key={option.id} value={option.id}>
+									{option.groupName}
+								</MenuItem>
+							))}
+						</TextField>
+					</Box></Box>
 				{/* Create Button */}
 				<Button
 					className='btn-primary'
@@ -272,7 +288,7 @@ export default function Home() {
 					type='submit'
 					disabled={loading}
 					color='primary'
-					sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}
+					sx={{ mt: 3, width: '30%', textAlign: 'center', margin: '1rem auto' }}
 				>
 					{loading ? 'Creating...' : 'Create'}
 				</Button>

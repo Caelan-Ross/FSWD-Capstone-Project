@@ -92,7 +92,7 @@ export default function Home() {
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
-					width: '100%',
+					width: '90%',
 					backgroundColor: '#ffffff80',
 					borderRadius: '8px',
 					outline: '1px solid black',
