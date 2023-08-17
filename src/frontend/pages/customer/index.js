@@ -178,7 +178,7 @@ export default function Customer() {
 					height: '90%',
 					width: '95%',
 					marginTop: theme.spacing(2),
-					backgroundColor: 'white',
+					backgroundColor: '#fffffff2',
 					borderRadius: '10px'
 				}}
 			>

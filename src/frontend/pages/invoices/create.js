@@ -56,7 +56,6 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: '#E6E8E7',
 				outline: '1px solid lightgrey',
 				borderRadius: '8px',
 				margin: '2rem',
@@ -93,12 +92,13 @@ export default function Home() {
 					display: 'flex',
 					flexDirection: 'column',
 					width: '100%',
-					backgroundColor: '#ffffff80',
+					backgroundColor: '#fffffff2',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '1rem',
 					justifyContent: 'space-evenly',
 					alignItems: 'center',
+					margin: '1rem auto'
 				}}>
 				<Box sx={{
 					display: 'flex',
@@ -107,7 +107,7 @@ export default function Home() {
 					alignItems: 'flex-start',
 					margin: '0 auto',
 					width: '100%',
-					backgroundColor: '#ffffff80',
+					backgroundColor: '#fffffff2',
 					borderRadius: '8px',
 				}}>
 						<Box sx={{

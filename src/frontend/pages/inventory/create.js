@@ -159,7 +159,7 @@ export default function Home() {
 					display: 'flex',
 					flexDirection: 'column',
 					width: '80%',
-					backgroundColor: '#ffffff80',
+					backgroundColor: '#fffffff2',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',

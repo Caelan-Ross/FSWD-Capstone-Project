@@ -68,7 +68,7 @@ export default function EditCustomer() {
 					display: 'flex',
 					flexDirection: 'column',
 					width: '30%',
-					backgroundColor: '#ffffff80',
+					backgroundColor: '#fffffff2',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',
