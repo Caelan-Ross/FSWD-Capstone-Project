@@ -62,7 +62,7 @@ export default function Home() {
 				padding: '2rem',
 				height: '92%',
 				overflow: 'auto',
-				backgroundColor: 'white'
+				backgroundColor: '#E6E8E7',
 			}}
 		>
 			{/* Page Heading & Back Button */}

@@ -1,4 +1,6 @@
 import { Typography, Box, useTheme } from '@mui/material';
+import Icon from '@mui/material';
+import BatterySaverIcon from '@mui/icons-material/BatterySaver';
 import Link from '@mui/material/Link';
 
 export default function Home() {
@@ -22,13 +24,14 @@ export default function Home() {
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'space-between',
+					alignItems: 'center',
 					width: '100%',
 				}}
 			>
 				<Typography variant='h3' align='center' component='h2'>
-					Home
+					The Battery Doctor 
 				</Typography>
+				<BatterySaverIcon sx={{fontSize: '5rem', color: 'red', transform: 'rotate(270deg)', marginLeft: '.5rem'}}></BatterySaverIcon>
 			</Box>
 			<Box textAlign='left' mt={2}>
 				<Typography variant='body1' component='p'>
