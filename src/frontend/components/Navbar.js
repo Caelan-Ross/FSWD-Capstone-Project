@@ -31,12 +31,12 @@ const Navbar = () => {
     };
 
     const icons = [
-        { icon: <HomeIcon sx={{ fontSize: '2rem' }} />, text: 'Home', path: '/' },
-        { icon: <ReceiptLongIcon sx={{ fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices' },
-        { icon: <InventoryIcon sx={{ fontSize: '1.8rem' }} />, text: 'Inventory', path: '/inventory' },
-        { icon: <PersonSearchIcon sx={{ fontSize: '2rem' }} />, text: 'Customers', path: '/customer' },
+        { icon: <HomeIcon sx={{ color: 'black', fontSize: '2rem' }} />, text: 'Home', path: '/' },
+        { icon: <ReceiptLongIcon sx={{ color: 'black', fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices' },
+        { icon: <InventoryIcon sx={{ color: 'black', fontSize: '1.8rem' }} />, text: 'Inventory', path: '/inventory' },
+        { icon: <PersonSearchIcon sx={{ color: 'black', fontSize: '2rem' }} />, text: 'Customers', path: '/customer' },
         { icon: <LogoutIcon sx={{ color: 'red', fontSize: '2rem' }} />, text: 'Logout', path: '/' },
-        { icon: <SettingsIcon sx={{ fontSize: '2rem' }} />, text: 'Settings', path: '/settings' },
+        { icon: <SettingsIcon sx={{ color: 'black', fontSize: '2rem' }} />, text: 'Settings', path: '/settings' },
     ];
 
     return (
