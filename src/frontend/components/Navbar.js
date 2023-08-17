@@ -11,8 +11,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import HomeIcon from '@mui/icons-material/Home';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 
@@ -30,9 +32,9 @@ const Navbar = () => {
 
     const icons = [
         { icon: <HomeIcon sx={{ fontSize: '2rem' }} />, text: 'Home', path: '/' },
-        { icon: <ReceiptIcon sx={{ fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices' },
-        { icon: <InventoryIcon sx={{ fontSize: '2rem' }} />, text: 'Inventory', path: '/inventory' },
-        { icon: <GroupAddIcon sx={{ fontSize: '2rem' }} />, text: 'Customers', path: '/customer' },
+        { icon: <ReceiptLongIcon sx={{ fontSize: '2rem' }} />, text: 'Invoices', path: '/invoices' },
+        { icon: <InventoryIcon sx={{ fontSize: '1.8rem' }} />, text: 'Inventory', path: '/inventory' },
+        { icon: <PersonSearchIcon sx={{ fontSize: '2rem' }} />, text: 'Customers', path: '/customer' },
         { icon: <LogoutIcon sx={{ color: 'red', fontSize: '2rem' }} />, text: 'Logout', path: '/' },
         { icon: <SettingsIcon sx={{ fontSize: '2rem' }} />, text: 'Settings', path: '/settings' },
     ];
