@@ -38,13 +38,14 @@ export default function Home() {
 	// Data Fields
 	const columns = [
 		{ field: 'id', headerName: <strong>Battery ID</strong>, width: 100 },
-		{ field: 'typeName', headerName: <strong>Type</strong>, width: 100 },
+		{ field: 'typeName', headerName: <strong>Type</strong>, width: 150 },
 		{ field: 'modelName', headerName: <strong>Model</strong>, width: 100 },
 		{ field: 'makeName', headerName: <strong>Make</strong>, width: 100 },
-		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 200 },
-		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 200 },
-		{ field: 'price', headerName: <strong>Price</strong>, width: 200 },
-		{ field: 'quantityOnHand', headerName: <strong>Qty on Hand</strong>, width: 200 },
+		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 100},
+		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100},
+		{ field: 'price', headerName: <strong>Price</strong>, width: 100},
+		{ field: 'quantityOnHand', headerName: <strong>Qty on Hand</strong>, width: 100},
+		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
 		{
 			field: 'edit', // Edit column
 			headerName: <strong>Edit</strong>,
