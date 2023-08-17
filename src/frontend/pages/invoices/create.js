@@ -104,24 +104,22 @@ export default function Home() {
 					display: 'flex',
 					flexDirection: 'row',
 					justifyContent: 'space-between',
-					alignItems: 'center',
+					alignItems: 'flex-start',
 					margin: '0 auto',
 					width: '100%',
 					backgroundColor: '#ffffff80',
 					borderRadius: '8px',
 				}}>
-					<Box sx={{
+						<Box sx={{
 						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'center',
-						margin: '0 auto 2rem auto',
-						width: '49%',
-						height: '40rem',
+						flexDirection: 'column',
+						alignItems: 'left',
+						margin: '0 auto',
+						width: '80%',
 						backgroundColor: '#ffffff80',
 						borderRadius: '8px',
 					}}>
-						<Box sx={{ width: '100%'}}>
-						<Typography variant='h6'>Customer/Invoice Details</Typography>
+							<Typography variant='h6'>Customer/Invoice Details</Typography>
 							<TextField
 								id='invoiceNumber'
 								name='invoiceNumber'
@@ -132,62 +130,257 @@ export default function Home() {
 								sx={{ mt: 2, backgroundColor: 'white' }}
 							/>
 							<Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-							<TextField
-								id='firstName'
-								name='firstName'
-								label='First Name'
-								variant='outlined'
-								type='text'
-								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-							/>
-							<TextField
-								id='lastName'
-								name='lastName'
-								label='Last Name'
-								variant='outlined'
-								type='text'
-								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-							/></Box>
+								<TextField
+									id='firstName'
+									name='firstName'
+									label='First Name'
+									variant='outlined'
+									type='text'
+									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+								/>
+								<TextField
+									id='lastName'
+									name='lastName'
+									label='Last Name'
+									variant='outlined'
+									type='text'
+									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+								/></Box>
 							<Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-							<TextField
-								id='email'
-								name='email'
-								label='Email'
-								fullWidth
-								variant='outlined'
-								type='email'
-								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-							/>
-							<TextField
-								id='phoneNumber'
-								name='phoneNumber'
-								label='Phone Number'
-								fullWidth
-								variant='outlined'
-								type='text'
-								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-							/></Box>
+								<TextField
+									id='email'
+									name='email'
+									label='Email'
+									fullWidth
+									variant='outlined'
+									type='email'
+									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+								/>
+								<TextField
+									id='phoneNumber'
+									name='phoneNumber'
+									label='Phone Number'
+									fullWidth
+									variant='outlined'
+									type='text'
+									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+								/></Box>
 							<TextField
 								id='notes'
 								name='notes'
 								label='Notes'
 								type='text'
 								multiline
-								rows={9}
+								rows={10}
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 2}}
+								sx={{ mt: 2, marginBottom: '7.3rem' }}
 							/>
+						</Box><Box>
+						<Box sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							margin: '0 auto 2rem auto',
+							width: '90%',
+							backgroundColor: '#ffffff80',
+							borderRadius: '8px',
+						}}>
+							<Box sx={{ width: '85%' }}>
+								<Typography variant='h6'>Line Items</Typography>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ mt: 2, backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='item'
+									name='item'
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+							</Box>
+							<Box sx={{ width: '15%' }}>
+								<Typography variant='h6'>Quantity</Typography>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ mt: 2, backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+								<TextField
+									id='quantity'
+									name='quantity'
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								/>
+							</Box>
 						</Box>
 					</Box>
 					<Box sx={{
 						display: 'flex',
 						flexDirection: 'row',
 						justifyContent: 'space-between',
-						alignItems: 'center',
+						alignItems: 'flex-start',
 						margin: '0 auto',
-						width: '49%',
-						height: '40rem',
+						width: '80%',
 						backgroundColor: '#ffffff80',
 						borderRadius: '8px',
 					}}>
@@ -254,11 +447,11 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 4, mb: 4, backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px'  }}
+								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px' }}
 							/>
 						</Box>
 						<Box sx={{ width: '15%' }}>
-						<Typography variant='h6'>Amount</Typography>
+							<Typography variant='h6'>Amount</Typography>
 							<TextField
 								id='amount'
 								name='amount'
@@ -302,7 +495,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ mt: 4, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px'  }}
+								sx={{ mt: 4, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
 							/>
 							<TextField
 								id='amount'
@@ -311,7 +504,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px'  }}
+								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
 							/>
 							<TextField
 								id='amount'
@@ -320,7 +513,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ mt: 4, mb: 4, backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px'  }}
+								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px' }}
 							/>
 						</Box>
 					</Box>
