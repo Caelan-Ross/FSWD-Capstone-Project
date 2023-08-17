@@ -9,6 +9,8 @@ import {
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 
 export default function Home() {
@@ -19,6 +21,7 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [showSnackbar, setShowSnackbar] = useState(false);
 	const API_BASE = 'http://localhost:3000/api/customer/create';
 
 	// Submit Button
@@ -39,7 +42,11 @@ export default function Home() {
 
 			await axios.post(url);
 			// Display success message
-			alert('Customer created successfully');
+			setShowSnackbar(true); // Show the success Snackbar
+			setTimeout(() => {
+				setShowSnackbar(false);
+				router.push('/customer');
+			}, 2000);
 			// Reset form fields
 			form.reset();
 		} catch (error) {
@@ -147,6 +154,16 @@ export default function Home() {
 					{loading ? 'Creating...' : 'Create'}
 				</Button>
 			</Box>
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={1000} // 1 second
+				onClose={() => setShowSnackbar(false)} // Close on click away
+			>
+				<SnackbarContent
+					message='Customer created successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 		</Box>
 	);
 }

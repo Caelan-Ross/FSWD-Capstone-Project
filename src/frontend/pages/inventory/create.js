@@ -10,6 +10,8 @@ import {
 	MenuItem,
 } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 
 export default function Home() {
@@ -20,6 +22,7 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [showSnackbar, setShowSnackbar] = useState(false);
 	const API_BASE = 'http://localhost:3000/api/Batteries';
 
 	// Drop down for Battery Type Dropdown
@@ -96,9 +99,14 @@ export default function Home() {
 				},
 			});
 			// Display success message
-			alert('Battery created successfully');
+			setShowSnackbar(true); // Show the success Snackbar
+			setTimeout(() => {
+				setShowSnackbar(false);
+				router.push('/inventory');
+			}, 2000);
 			// Reset form fields
 			form.reset();
+			// Redirect to the inventory page
 		} catch (error) {
 			setError('Failed to create customer');
 		} finally {
@@ -269,6 +277,16 @@ export default function Home() {
 					{loading ? 'Creating...' : 'Create'}
 				</Button>
 			</Box>
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={1000} // 1 second
+				onClose={() => setShowSnackbar(false)} // Close on click away
+			>
+				<SnackbarContent
+					message='Battery created successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 		</Box>
 	);
 }
