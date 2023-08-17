@@ -31,7 +31,7 @@ export default function Home() {
 				<Typography variant='h3' align='center' component='h2'>
 					The Battery Doctor 
 				</Typography>
-				<BatterySaverIcon sx={{fontSize: '3rem', color: 'red', transform: 'rotate(45deg)', marginLeft: '.5rem'}}></BatterySaverIcon>
+				<BatterySaverIcon sx={{fontSize: '4rem', color: 'red', transform: 'rotate(90deg)', marginLeft: '.5rem', backgroundColor: 'lavenderblush', borderRadius: '50%', padding: '.5rem', outline: '1px solid black'}}></BatterySaverIcon>
 			</Box>
 			<Box textAlign='left' mt={2} sx={{height: '90%', width: '95%', backgroundColor: '#fffffff2',
 					borderRadius: '10px'}}>
