@@ -27,6 +27,7 @@ export default function Home() {
 	const [modelOptions, setModelOptions] = useState([]);
 	const [makeOptions, setMakeOptions] = useState([]);
 	const [groupOptions, setGroupOptions] = useState([]);
+
 	useEffect(() => {
 		// Fetch data for battery type dropdown
 		axios
@@ -72,29 +73,37 @@ export default function Home() {
 	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		// const form = event.target;
+		const form = event.target;
+		const url = `http://localhost:7166/api/Batteries`;
+		const requestData = {
+			typeId: form.typeName.value,
+			modelId: form.modelName.value,
+			makeId: form.makeName.value,
+			voltage: form.voltage.value,
+			capacity: form.capacity.value,
+			price: form.price.value,
+			quantityOnHand: form.qtyOnHand.value,
+			groupId: form.groupName.value,
+		};
+		try {
+			setLoading(true);
+			// Perform any additional validation or processing here if needed
+			setError(null);
 
-		// const queryParams = new URLSearchParams();
-		// queryParams.append('firstName', form.firstName.value);
-		// queryParams.append('lastName', form.lastName.value);
-		// queryParams.append('phoneNumber', form.phoneNumber.value);
-		// queryParams.append('email', form.email.value);
-		// const url = `${API_BASE}?${queryParams.toString()}`;
-		// try {
-		// 	setLoading(true);
-		// 	// Perform any additional validation or processing here if needed
-		// 	setError(null);
-
-		// 	await axios.post(url);
-		// 	// Display success message
-		// 	alert('Customer created successfully');
-		// 	// Reset form fields
-		// 	form.reset();
-		// } catch (error) {
-		// 	setError('Failed to create customer');
-		// } finally {
-		// 	setLoading(false);
-		// }
+			await axios.post(url, requestData, {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+			// Display success message
+			alert('Battery created successfully');
+			// Reset form fields
+			form.reset();
+		} catch (error) {
+			setError('Failed to create customer');
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -229,7 +238,7 @@ export default function Home() {
 					label='Qty On Hand'
 					fullWidth
 					variant='outlined'
-					type='email'
+					type='text'
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
 				{/* Dropdown for Battery Group */}
