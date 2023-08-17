@@ -38,6 +38,9 @@ export default function Home() {
 	// Data Fields
 	const columns = [
 		{ field: 'id', headerName: <strong>Battery ID</strong>, width: 100 },
+		{ field: 'typeName', headerName: <strong>Type</strong>, width: 100 },
+		{ field: 'modelName', headerName: <strong>Model</strong>, width: 100 },
+		{ field: 'makeName', headerName: <strong>Make</strong>, width: 100 },
 		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 200 },
 		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 200 },
 		{ field: 'price', headerName: <strong>Price</strong>, width: 200 },
