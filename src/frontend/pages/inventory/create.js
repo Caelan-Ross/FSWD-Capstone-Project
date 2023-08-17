@@ -5,6 +5,7 @@ import {
 	TextField,
 	Button,
 	Alert,
+	MenuItem,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -20,6 +21,27 @@ export default function Home() {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const API_BASE = 'http://localhost:3000/api/Batteries';
+
+	// Dummy Data for the lists
+	const [typeOptions, setTypeOptions] = useState([
+		{ id: 1, name: 'Type A' },
+		{ id: 2, name: 'Type B' },
+	]);
+
+	const [modelOptions, setModelOptions] = useState([
+		{ id: 1, name: 'Model X' },
+		{ id: 2, name: 'Model Y' },
+	]);
+
+	const [makeOptions, setMakeOptions] = useState([
+		{ id: 1, name: 'Make 1' },
+		{ id: 2, name: 'Make 2' },
+	]);
+
+	const [groupOptions, setGroupOptions] = useState([
+		{ id: 1, name: 'Group Alpha' },
+		{ id: 2, name: 'Group Beta' },
+	]);
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -100,6 +122,63 @@ export default function Home() {
 					padding: '2rem',
 				}}
 			>
+				{/* <TextField
+					id='typeName'
+					name='typeName'
+					label='Type'
+					type='text'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				/> */}
+				{/* Dropdown for Battery Type */}
+				<TextField
+					select
+					id='type'
+					name='type'
+					label='Type'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				>
+					{typeOptions.map((option) => (
+						<MenuItem key={option.id} value={option.id}>
+							{option.name}
+						</MenuItem>
+					))}
+				</TextField>
+				{/* Dropdown for Battery Model */}
+				<TextField
+					select
+					id='modelName'
+					name='modelName'
+					label='Model'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				>
+					{modelOptions.map((option) => (
+						<MenuItem key={option.id} value={option.id}>
+							{option.name}
+						</MenuItem>
+					))}
+				</TextField>
+				{/* Dropdown for Battery Make */}
+				<TextField
+					select
+					id='makeName'
+					name='makeName'
+					label='Make'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				>
+					{makeOptions.map((option) => (
+						<MenuItem key={option.id} value={option.id}>
+							{option.name}
+						</MenuItem>
+					))}
+				</TextField>
 				<TextField
 					id='voltage'
 					name='voltage'
@@ -136,6 +215,23 @@ export default function Home() {
 					type='email'
 					sx={{ mt: 2, backgroundColor: 'white' }}
 				/>
+				{/* Dropdown for Battery Group */}
+				<TextField
+					select
+					id='groupName'
+					name='groupName'
+					label='Group'
+					variant='outlined'
+					fullWidth
+					sx={{ mt: 2, backgroundColor: 'white' }}
+				>
+					{groupOptions.map((option) => (
+						<MenuItem key={option.id} value={option.id}>
+							{option.name}
+						</MenuItem>
+					))}
+				</TextField>
+				{/* Create Button */}
 				<Button
 					className='btn-primary'
 					variant='contained'
