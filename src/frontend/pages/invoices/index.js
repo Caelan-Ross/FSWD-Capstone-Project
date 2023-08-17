@@ -101,7 +101,7 @@ export default function Invoices() {
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
 			}}
 		>

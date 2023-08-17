@@ -61,8 +61,9 @@ export default function Home() {
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
+				backgroundColor: 'white'
 			}}
 		>
 			{/* Page Heading & Back Button */}
@@ -88,7 +89,6 @@ export default function Home() {
 			</Box>
 			<Box component='form'
 				onSubmit={handleSubmit}
-				mt={12}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
@@ -96,14 +96,14 @@ export default function Home() {
 					backgroundColor: '#ffffff80',
 					borderRadius: '8px',
 					outline: '1px solid black',
-					padding: '2rem',
-					justifyContent: 'space-between',
+					padding: '1rem',
+					justifyContent: 'space-evenly',
 					alignItems: 'center',
 				}}>
 				<Box sx={{
 					display: 'flex',
 					flexDirection: 'row',
-					justifyContent: 'space-between',
+					justifyContent: 'space-evenly',
 					alignItems: 'flex-start',
 					margin: '0 auto',
 					width: '100%',
@@ -115,7 +115,7 @@ export default function Home() {
 						flexDirection: 'column',
 						alignItems: 'left',
 						margin: '0 auto',
-						width: '80%',
+						width: '90%',
 						backgroundColor: '#ffffff80',
 						borderRadius: '8px',
 					}}>
@@ -127,7 +127,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 2, backgroundColor: 'white' }}
+								sx={{ mt: 1, backgroundColor: 'white' }}
 							/>
 							<Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
 								<TextField
@@ -171,22 +171,22 @@ export default function Home() {
 								label='Notes'
 								type='text'
 								multiline
-								rows={10}
+								rows={7.3}
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 2, marginBottom: '7.3rem' }}
+								sx={{ mt: 2}}
 							/>
 						</Box><Box>
 						<Box sx={{
 							display: 'flex',
 							flexDirection: 'row',
 							alignItems: 'center',
-							margin: '0 auto 2rem auto',
+							margin: '0 auto 1rem auto',
 							width: '90%',
 							backgroundColor: '#ffffff80',
 							borderRadius: '8px',
 						}}>
-							<Box sx={{ width: '85%' }}>
+							<Box sx={{ width: '32rem' }}>
 								<Typography variant='h6'>Line Items</Typography>
 								<TextField
 									id='item'
@@ -195,34 +195,7 @@ export default function Home() {
 									type='text'
 									variant='outlined'
 									fullWidth
-									sx={{ mt: 2, backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+									sx={{ mt: 1, backgroundColor: 'white' }}
 								/>
 								<TextField
 									id='item'
@@ -279,7 +252,7 @@ export default function Home() {
 									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 								/>
 							</Box>
-							<Box sx={{ width: '15%' }}>
+							<Box sx={{ width: '5rem' }}>
 								<Typography variant='h6'>Quantity</Typography>
 								<TextField
 									id='quantity'
@@ -288,34 +261,7 @@ export default function Home() {
 									type='text'
 									variant='outlined'
 									fullWidth
-									sx={{ mt: 2, backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+									sx={{ mt: 1, backgroundColor: 'white' }}
 								/>
 								<TextField
 									id='quantity'
@@ -377,14 +323,13 @@ export default function Home() {
 					<Box sx={{
 						display: 'flex',
 						flexDirection: 'row',
-						justifyContent: 'space-between',
 						alignItems: 'flex-start',
 						margin: '0 auto',
-						width: '80%',
+						width: '90%',
 						backgroundColor: '#ffffff80',
 						borderRadius: '8px',
 					}}>
-						<Box sx={{ width: '85%' }}>
+						<Box sx={{ width: '25rem' }}>
 							<Typography variant='h6'>Payment Type</Typography>
 							<TextField
 								id='cash'
@@ -393,7 +338,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 2, backgroundColor: 'white' }}
+								sx={{ mt: 1, backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='credit'
@@ -402,7 +347,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white' }}
+								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='debit'
@@ -411,7 +356,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white' }}
+								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='customerCredit'
@@ -420,7 +365,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white' }}
+								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='taxes'
@@ -429,7 +374,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 4, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{ mt: 3, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
 							/>
 							<TextField
 								id='subtotal'
@@ -438,7 +383,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
 							/>
 							<TextField
 								id='total'
@@ -447,10 +392,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
 							/>
 						</Box>
-						<Box sx={{ width: '15%' }}>
+						<Box sx={{ width: '20%' }}>
 							<Typography variant='h6'>Amount</Typography>
 							<TextField
 								id='amount'
@@ -459,7 +404,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 2, backgroundColor: 'white' }}
+								sx={{ mt: 1, backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='amount'
@@ -468,7 +413,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white' }}
+								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='amount'
@@ -477,7 +422,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white' }}
+								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='amount'
@@ -486,7 +431,7 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white' }}
+								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
 								id='amount'
@@ -495,7 +440,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ mt: 4, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{ mt: 3, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
 							/>
 							<TextField
 								id='amount'
@@ -504,7 +449,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
 							/>
 							<TextField
 								id='amount'
@@ -513,7 +458,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
 							/>
 						</Box>
 					</Box>
@@ -525,7 +470,7 @@ export default function Home() {
 						type='submit'
 						disabled={loading}
 						color='primary'
-						sx={{ mt: 3, width: '20rem', textAlign: 'center', margin: '1rem auto' }}
+						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto' }}
 					>
 						{loading ? 'Submitting...' : 'Submit'}
 					</Button>

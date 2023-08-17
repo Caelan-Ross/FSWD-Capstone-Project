@@ -125,7 +125,7 @@ export default function Home() {
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
 			}}
 		>
@@ -154,7 +154,7 @@ export default function Home() {
 			<Box
 				component='form'
 				onSubmit={handleSubmit}
-				mt={12}
+				mt={8}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
@@ -174,7 +174,7 @@ export default function Home() {
 						padding: '2rem',
 						width: '100%',
 						justifyContent: 'space-between',
-						margin: '4rem auto'
+						margin: '0 auto'
 					}}
 				>
 					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '48%' }}>

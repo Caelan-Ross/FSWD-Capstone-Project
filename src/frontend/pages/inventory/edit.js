@@ -36,7 +36,7 @@ export default function EditCustomer() {
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
 			}}
 		>
@@ -63,7 +63,7 @@ export default function EditCustomer() {
 			<Box
 				component='form'
 				// onSubmit={handleSubmit}
-				mt={12}
+				mt={8}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
