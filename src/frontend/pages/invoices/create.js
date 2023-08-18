@@ -23,6 +23,11 @@ export default function Home() {
 	const [loading, setLoading] = useState(false);
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+	const [subtotal, setSubtotal] = useState(0);
+	const [taxAmount, setTaxAmount] = useState(0.05);
+	const [totalAmount, setTotalAmount] = useState(0);
+
 	const API_BASE = 'http://localhost:3000/api/invoices/create';
 
 	useEffect(() => {
@@ -36,6 +41,25 @@ export default function Home() {
 				console.error('Error fetching customers:', error);
 			});
 	}, []);
+
+	const handleInputChange = () => {
+		const cashAmount =
+			parseFloat(document.getElementById('cashAmount').value) || 0;
+		const creditAmount =
+			parseFloat(document.getElementById('creditAmount').value) || 0;
+		const debitAmount =
+			parseFloat(document.getElementById('debitAmount').value) || 0;
+		const customerCreditAmount =
+			parseFloat(document.getElementById('customerCreditAmount').value) || 0;
+
+		const newSubtotal =
+			cashAmount + creditAmount + debitAmount + customerCreditAmount;
+		const newTotalAmount = newSubtotal + newSubtotal * taxAmount;
+
+		setSubtotal(newSubtotal);
+		setTotalAmount(newTotalAmount);
+	};
+
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -509,47 +533,60 @@ export default function Home() {
 						</Box>
 						<Box sx={{ width: '20%' }}>
 							<Typography variant='h6'>Amount</Typography>
+							{/* Cash Amount */}
 							<TextField
-								id='amount'
-								name='amount'
+								id='cashAmount'
+								name='cashAmount'
 								label='Amount'
 								type='text'
 								variant='outlined'
 								fullWidth
+								onChange={handleInputChange}
 								sx={{ mt: 1, backgroundColor: 'white' }}
 							/>
+							{/* Credit Amount */}
 							<TextField
-								id='amount'
-								name='amount'
+								id='creditAmount'
+								name='creditAmount'
 								label='Amount'
 								type='text'
 								variant='outlined'
 								fullWidth
+								onChange={handleInputChange}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
+							{/* Debit Amount */}
 							<TextField
-								id='amount'
-								name='amount'
+								id='debitAmount'
+								name='debitAmount'
 								label='Amount'
 								type='text'
 								variant='outlined'
 								fullWidth
+								onChange={handleInputChange}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
+							{/* Customer Credit Amount */}
 							<TextField
-								id='amount'
-								name='amount'
+								id='customerCreditAmount'
+								name='customerCreditAmount'
 								label='Amount'
 								type='text'
 								variant='outlined'
 								fullWidth
+								onChange={handleInputChange}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
+							{/* Tax Amount */}
 							<TextField
-								id='amount'
-								name='amount'
+								id='taxAmount'
+								name='taxAmount'
 								label='Amount'
 								fullWidth
+								value={taxAmount}
+								InputProps={{
+									readOnly: true,
+								}}
 								variant='outlined'
 								type='text'
 								sx={{
@@ -559,13 +596,18 @@ export default function Home() {
 									borderRadius: '8px',
 								}}
 							/>
+							{/* SubTotal Amount */}
 							<TextField
-								id='amount'
-								name='amount'
+								id='subTotalAmount'
+								name='subTotalAmount'
 								label='Amount'
 								fullWidth
 								variant='outlined'
 								type='text'
+								value={subtotal.toFixed(2)}
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{
 									backgroundColor: 'white',
 									outline: '1px solid red',
@@ -573,13 +615,18 @@ export default function Home() {
 									marginTop: '.25rem',
 								}}
 							/>
+							{/* Total Amount */}
 							<TextField
-								id='amount'
-								name='amount'
+								id='totalAmount'
+								name='totalAmount'
 								label='Amount'
 								fullWidth
 								variant='outlined'
 								type='text'
+								value={totalAmount.toFixed(2)}
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{
 									backgroundColor: 'lavenderblush',
 									outline: '1px solid red',
