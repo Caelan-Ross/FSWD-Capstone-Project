@@ -131,7 +131,6 @@ export default function Customer() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',

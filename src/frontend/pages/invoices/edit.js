@@ -77,7 +77,6 @@ export default function EditCustomer() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#fbfbfbf9',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',

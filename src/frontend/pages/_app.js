@@ -95,6 +95,7 @@ export default function App({ Component, pageProps }) {
               margin: '.25rem auto',
               maxHeight: 'calc(100vh - 8.25rem)',
               width: '100%',
+              backgroundColor: '#E6E8E7',
             }}
           >
             <Component {...pageProps} />

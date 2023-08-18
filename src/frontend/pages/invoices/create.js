@@ -56,7 +56,6 @@ export default function Home() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',
