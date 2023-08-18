@@ -70,12 +70,29 @@ export default function Home() {
 			// Perform any additional validation or processing here if needed
 			setError(null);
 
-			const paymentMethodId = 1;
+			var paymentMethod = "";
+
+			if(document.getElementById('cashAmount').value != ""){
+				paymentMethod = paymentMethod + "cash+";
+			}
+
+			if(document.getElementById('creditAmount').value != ""){
+				paymentMethod = paymentMethod + "credit+";
+			}
+
+			if(document.getElementById('debitAmount').value != ""){
+				paymentMethod = paymentMethod + "debit+";
+			}
+
+			if(document.getElementById('customerCreditAmount').value != ""){
+				paymentMethod = paymentMethod + "customerCredit+";
+			}
+
 			const requestData = {
-				customerId: selectedCustomer.id,
-				paymentMethodId: paymentMethodId,
-				dateOfSale: new Date().toISOString(),
-				totalPrice: totalAmount.toFixed(2),
+				Id: 0,
+				CustomerId: selectedCustomer.id,
+				PaymentMethodR: paymentMethod,
+				TotalPrice: totalAmount.toFixed(2),
 			};
 
 			await axios.post(url, requestData, {

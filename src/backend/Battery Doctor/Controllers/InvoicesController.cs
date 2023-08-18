@@ -69,7 +69,7 @@ namespace Battery_Doctor.Controllers
 
         // POST: api/Invoices
         [HttpPost]
-        public async Task<ActionResult<InvoiceR_DTO>> PostInvoice(InvoiceR_DTO invoiceDto)
+        public async Task<ActionResult<InvoiceCU_DTO>> PostInvoice(InvoiceCU_DTO invoiceDto)
         {
             PaymentMethod? paymentMethod = (PaymentMethod?)_context.Payment_Methods.FirstOrDefault(n => n.Method == invoiceDto.PaymentMethodR);
 
@@ -103,6 +103,7 @@ namespace Battery_Doctor.Controllers
                 TotalPrice = invoice.TotalPrice,
             };
 
+            _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetInvoice), new { id = invoice.Id }, invoiceReadDto);
@@ -110,7 +111,7 @@ namespace Battery_Doctor.Controllers
 
         // PUT: api/Invoices/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInvoice(int id, InvoiceR_DTO invoiceDto)
+        public async Task<IActionResult> PutInvoice(int id, InvoiceCU_DTO invoiceDto)
         {
             var invoice = await _context.Invoices.FindAsync(id);
             if(invoice == null)
@@ -131,7 +132,6 @@ namespace Battery_Doctor.Controllers
             }
 
             invoice.UpdatedAt = DateTime.Now;
-            invoice.DateOfSale = invoiceDto.DateOfSale;
             invoice.TotalPrice = invoiceDto.TotalPrice;
             invoice.PaymentMethodId = paymentMethod.Id;
             invoice.CustomerId = invoiceDto.CustomerId;
