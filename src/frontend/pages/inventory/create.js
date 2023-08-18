@@ -79,14 +79,14 @@ export default function Home() {
 		const form = event.target;
 		const url = `http://localhost:7166/api/Batteries`;
 		const requestData = {
-			typeId: form.typeName.value,
-			modelId: form.modelName.value,
-			makeId: form.makeName.value,
+			typeName: form.typeName.value,
+			modelName: form.modelName.value,
+			makeName: form.makeName.value,
 			voltage: form.voltage.value,
 			capacity: form.capacity.value,
 			price: form.price.value,
 			quantityOnHand: form.qtyOnHand.value,
-			groupId: form.groupName.value,
+			groupName: form.groupName.value,
 		};
 		try {
 			setLoading(true);
