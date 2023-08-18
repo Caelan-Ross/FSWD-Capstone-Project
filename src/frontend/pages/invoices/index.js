@@ -95,7 +95,7 @@ export default function Invoices() {
 			headerName: <strong>Delete</strong>,
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => handleDelete(params.row.id)}>
+				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
 					<DeleteIcon />
 				</IconButton>
 			),
@@ -126,6 +126,43 @@ export default function Invoices() {
 				console.error('Error fetching invoice data:', error);
 			});
 	}, []);
+
+	// Function to open the delete confirmation dialog
+	const openDeleteConfirmation = (invoiceId) => {
+		setDeleteConfirmation({
+			open: true,
+			invoiceId: invoiceId,
+		});
+	};
+
+	// Function to close the delete confirmation dialog
+	const closeDeleteConfirmation = () => {
+		setDeleteConfirmation({
+			open: false,
+			invoiceId: null,
+		});
+	};
+
+	// Function to delete an invoice
+	const handleDelete = (invoiceId) => {
+		axios
+			.delete(`${API_BASE}/${invoiceId}`)
+			.then((response) => {
+				console.log('Invoice deleted:', response.data);
+				// Remove the deleted invoice from invoiceData state
+				setInvoiceData((prevData) =>
+					prevData.filter((invoice) => invoice.id !== invoiceId)
+				);
+				closeDeleteConfirmation();
+				setShowSnackbar(true); // Show the success Snackbar
+				setTimeout(() => {
+					setShowSnackbar(false); // Hide the Snackbar after 1 second
+				}, 2000);
+			})
+			.catch((error) => {
+				console.error('Error deleting invoice:', error);
+			});
+	};
 
 	return (
 		<Box
@@ -161,6 +198,16 @@ export default function Invoices() {
 					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 				</IconButton>
 			</Box>
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={1000} // 1 second
+				onClose={() => setShowSnackbar(false)} // Close on click away
+			>
+				<SnackbarContent
+					message='Invoice deleted successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 
 			{/* Invoice DataGrid */}
 			<div
@@ -179,6 +226,24 @@ export default function Invoices() {
 					sx={{ alignItems: 'center', width: '100%', margin: 'auto' }}
 				/>
 			</div>
+			{/* Delete Confirmation Dialog */}
+			<Dialog open={deleteConfirmation.open} onClose={closeDeleteConfirmation}>
+				<DialogTitle>Delete Invoice</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Are you sure you want to delete this invoice?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
+					<Button
+						onClick={() => handleDelete(deleteConfirmation.invoiceId)}
+						color='primary'
+					>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 }
