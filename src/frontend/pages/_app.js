@@ -89,14 +89,13 @@ export default function App({ Component, pageProps }) {
           </Box>
           <Box
             sx={{
-              backgroundColor: '#959595',
-              outline: '1px solid #E6E8E7',
               borderRadius: '8px',
               flex: '1',
               overflow: 'auto',
               margin: '.25rem auto',
               maxHeight: 'calc(100vh - 8.25rem)',
               width: '100%',
+              backgroundColor: '#E6E8E7',
             }}
           >
             <Component {...pageProps} />
