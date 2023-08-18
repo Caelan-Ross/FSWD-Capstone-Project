@@ -166,7 +166,6 @@ export default function Home() {
 				}}
 			>
 				<Box
-					component='form'
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
