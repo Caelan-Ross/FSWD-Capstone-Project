@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Battery_Doctor.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230815015137_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230818013431_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,7 +310,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("battery_type_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -508,7 +508,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("purchase_order_details_id");
 
                     b.Property<int>("BatteryId")
                         .HasColumnType("int(10)")
@@ -599,7 +599,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("unit_id");
 
                     b.Property<string>("UnitType")
                         .IsRequired()

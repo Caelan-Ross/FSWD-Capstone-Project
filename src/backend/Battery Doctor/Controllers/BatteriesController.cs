@@ -85,33 +85,107 @@ namespace Battery_Doctor.Controllers
         [HttpPost]
         public async Task<ActionResult<BatteryReadDto>> PostBattery(BatteryCreateUpdateDto batteryCreateDto)
         {
-            // Validate the associated Ids
-            if (!_context.Battery_Types.Any(e => e.Id == batteryCreateDto.TypeId) ||
-                !_context.Battery_Models.Any(e => e.Id == batteryCreateDto.ModelId) ||
-                !_context.Battery_Makes.Any(e => e.Id == batteryCreateDto.MakeId) ||
-                !_context.Battery_Groups.Any(e => e.Id == batteryCreateDto.GroupId))
+            BatteryType? type = (BatteryType?)_context.Battery_Types.FirstOrDefault(n => n.TypeName == batteryCreateDto.TypeName);
+
+            BatteryMake? make = (BatteryMake?)_context.Battery_Makes.FirstOrDefault(n => n.Name == batteryCreateDto.MakeName);
+
+            BatteryModel? model = (BatteryModel?)_context.Battery_Models.FirstOrDefault(n => n.ModelName == batteryCreateDto.ModelName);
+
+            BatteryGroup? group = (BatteryGroup?)_context.Battery_Groups.FirstOrDefault();
+
+            if(group == null)
             {
-                return BadRequest("One or more associated Ids are invalid.");
+                Unit unit = new Unit
+                {
+                    UnitType = "default"
+                };
+
+                _context.Units.Add(unit);
+                await _context.SaveChangesAsync();
+
+                group = new BatteryGroup
+                {
+                    UnitId = unit.Id,
+                    GroupName = "default",
+                    Length = 0,
+                    Width = 0,
+                    Height = 0,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                };
+                _context.Battery_Groups.Add(group);
+                await _context.SaveChangesAsync();
+            }
+
+            if(type == null)
+            {
+                type = new BatteryType
+                {
+                    TypeName = batteryCreateDto.TypeName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt= DateTime.Now
+                };
+                _context.Battery_Types.Add(type);
+                await _context.SaveChangesAsync();
+            }
+
+            if(make == null)
+            {
+                make = new BatteryMake
+                {
+                    Name = batteryCreateDto.MakeName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                _context.Battery_Makes.Add(make);
+                await _context.SaveChangesAsync();
+            }
+
+            if(model == null)
+            {
+                model = new BatteryModel
+                {
+                    ModelName = batteryCreateDto.ModelName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    BatteryMakeId = make.Id
+                };
+                _context.Battery_Models.Add(model);
+                await _context.SaveChangesAsync();
             }
 
             var battery = new Battery
             {
-                TypeId = batteryCreateDto.TypeId,
-                ModelId = batteryCreateDto.ModelId,
-                MakeId = batteryCreateDto.MakeId,
+                TypeId = type.Id,
+                ModelId = model.Id,
+                MakeId = make.Id,
                 Voltage = batteryCreateDto.Voltage,
                 Capacity = batteryCreateDto.Capacity,
                 Price = batteryCreateDto.Price,
                 QuantityOnHand = batteryCreateDto.QuantityOnHand,
-                GroupId = batteryCreateDto.GroupId,
+                GroupId = group.Id,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
-
+            
             _context.Batteries.Add(battery);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetBattery), new { id = battery.Id }, battery);
+            var batteryReadDto = new BatteryReadDto
+            {
+                Id = battery.Id,
+                TypeName = type.TypeName,
+                ModelName = model.ModelName,
+                MakeName = make.Name,
+                Voltage = battery.Voltage,
+                Capacity = battery.Capacity,
+                Price = battery.Price,
+                QuantityOnHand = battery.QuantityOnHand,
+                GroupName = group.GroupName,
+                CreatedAt = battery.CreatedAt,
+                UpdatedAt = battery.UpdatedAt
+            };
+            return CreatedAtAction(nameof(GetBattery), new { id = battery.Id }, batteryReadDto);
         }
 
         // PUT: api/Batteries/5
@@ -124,23 +198,83 @@ namespace Battery_Doctor.Controllers
                 return NotFound();
             }
 
-            // Validate the associated Ids
-            if (!_context.Battery_Types.Any(e => e.Id == batteryUpdateDto.TypeId) ||
-                !_context.Battery_Models.Any(e => e.Id == batteryUpdateDto.ModelId) ||
-                !_context.Battery_Makes.Any(e => e.Id == batteryUpdateDto.MakeId) ||
-                !_context.Battery_Groups.Any(e => e.Id == batteryUpdateDto.GroupId))
+            BatteryType? type = (BatteryType?)_context.Battery_Types.FirstOrDefault(n => n.TypeName == batteryUpdateDto.TypeName);
+
+            BatteryMake? make = (BatteryMake?)_context.Battery_Makes.FirstOrDefault(n => n.Name == batteryUpdateDto.MakeName);
+
+            BatteryModel? model = (BatteryModel?)_context.Battery_Models.FirstOrDefault(n => n.ModelName == batteryUpdateDto.ModelName);
+
+            BatteryGroup? group = (BatteryGroup?)_context.Battery_Groups.FirstOrDefault();
+
+            if(group == null)
             {
-                return BadRequest("One or more associated Ids are invalid.");
+                Unit unit = new Unit
+                {
+                    UnitType = "default"
+                };
+
+                _context.Units.Add(unit);
+                await _context.SaveChangesAsync();
+
+                group = new BatteryGroup
+                {
+                    UnitId = unit.Id,
+                    GroupName = "default",
+                    Length = 0,
+                    Width = 0,
+                    Height = 0,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                };
+                _context.Battery_Groups.Add(group);
+                await _context.SaveChangesAsync();
             }
 
-            battery.TypeId = batteryUpdateDto.TypeId;
-            battery.ModelId = batteryUpdateDto.ModelId;
-            battery.MakeId = batteryUpdateDto.MakeId;
+            if(type == null)
+            {
+                type = new BatteryType
+                {
+                    TypeName = batteryUpdateDto.TypeName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                _context.Battery_Types.Add(type);
+                await _context.SaveChangesAsync();
+            }
+
+            if(make == null)
+            {
+                make = new BatteryMake
+                {
+                    Name = batteryUpdateDto.MakeName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                _context.Battery_Makes.Add(make);
+                await _context.SaveChangesAsync();
+            }
+
+            if(model == null)
+            {
+                model = new BatteryModel
+                {
+                    ModelName = batteryUpdateDto.ModelName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    BatteryMakeId = make.Id
+                };
+                _context.Battery_Models.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            battery.TypeId = type.Id;
+            battery.ModelId = model.Id;
+            battery.MakeId = make.Id;
             battery.Voltage = batteryUpdateDto.Voltage;
             battery.Capacity = batteryUpdateDto.Capacity;
             battery.Price = batteryUpdateDto.Price;
             battery.QuantityOnHand = batteryUpdateDto.QuantityOnHand;
-            battery.GroupId = batteryUpdateDto.GroupId;
+            battery.GroupId = group.Id;
             battery.UpdatedAt = DateTime.UtcNow;
 
             _context.Entry(battery).State = EntityState.Modified;
