@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Battery_Doctor.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,7 +78,7 @@ namespace Battery_Doctor.Migrations
                 name: "Battery_Types",
                 columns: table => new
                 {
-                    customer_id = table.Column<int>(type: "int(10)", nullable: false)
+                    battery_type_id = table.Column<int>(type: "int(10)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     first_name = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -87,7 +87,7 @@ namespace Battery_Doctor.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Battery_Types", x => x.customer_id);
+                    table.PrimaryKey("PK_Battery_Types", x => x.battery_type_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -110,14 +110,14 @@ namespace Battery_Doctor.Migrations
                 name: "Units",
                 columns: table => new
                 {
-                    customer_id = table.Column<int>(type: "int(10)", nullable: false)
+                    unit_id = table.Column<int>(type: "int(10)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     unit_type = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Units", x => x.customer_id);
+                    table.PrimaryKey("PK_Units", x => x.unit_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -228,7 +228,7 @@ namespace Battery_Doctor.Migrations
                         name: "FK_Battery_Groups_Units_unit_id",
                         column: x => x.unit_id,
                         principalTable: "Units",
-                        principalColumn: "customer_id",
+                        principalColumn: "unit_id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -331,7 +331,7 @@ namespace Battery_Doctor.Migrations
                         name: "FK_Batteries_Battery_Types_type_id",
                         column: x => x.type_id,
                         principalTable: "Battery_Types",
-                        principalColumn: "customer_id",
+                        principalColumn: "battery_type_id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -373,7 +373,7 @@ namespace Battery_Doctor.Migrations
                 name: "Purchase_Order_Details",
                 columns: table => new
                 {
-                    customer_id = table.Column<int>(type: "int(10)", nullable: false)
+                    purchase_order_details_id = table.Column<int>(type: "int(10)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     purchase_order_id = table.Column<int>(type: "int(10)", nullable: false),
                     battery_id = table.Column<int>(type: "int(10)", nullable: false),
@@ -384,7 +384,7 @@ namespace Battery_Doctor.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Purchase_Order_Details", x => x.customer_id);
+                    table.PrimaryKey("PK_Purchase_Order_Details", x => x.purchase_order_details_id);
                     table.ForeignKey(
                         name: "FK_Purchase_Order_Details_Batteries_battery_id",
                         column: x => x.battery_id,

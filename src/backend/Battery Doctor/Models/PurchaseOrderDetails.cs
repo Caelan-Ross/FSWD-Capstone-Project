@@ -8,7 +8,7 @@ namespace Battery_Doctor.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("customer_id", TypeName = "int(10)")]
+        [Column("purchase_order_details_id", TypeName = "int(10)")]
         public int Id { get; set; }
 
         [Required]

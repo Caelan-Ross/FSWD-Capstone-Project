@@ -307,7 +307,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("battery_type_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -505,7 +505,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("purchase_order_details_id");
 
                     b.Property<int>("BatteryId")
                         .HasColumnType("int(10)")
@@ -596,7 +596,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("unit_id");
 
                     b.Property<string>("UnitType")
                         .IsRequired()
