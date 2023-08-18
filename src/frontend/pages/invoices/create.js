@@ -5,9 +5,10 @@ import {
 	TextField,
 	Button,
 	Alert,
+	MenuItem,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import axios from 'axios';
 import { red } from '@mui/material/colors';
@@ -20,7 +21,20 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [customerOptions, setCustomerOptions] = useState([]);
 	const API_BASE = 'http://localhost:3000/api/invoices/create';
+
+	useEffect(() => {
+		// Fetch data for customers dropdown
+		axios
+			.get('http://localhost:7166/api/Customers')
+			.then((response) => {
+				setCustomerOptions(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customers:', error);
+			});
+	}, []);
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -85,7 +99,8 @@ export default function Home() {
 					</IconButton>
 				</Box>
 			</Box>
-			<Box component='form'
+			<Box
+				component='form'
 				onSubmit={handleSubmit}
 				sx={{
 					display: 'flex',
@@ -97,95 +112,27 @@ export default function Home() {
 					padding: '1rem',
 					justifyContent: 'space-evenly',
 					alignItems: 'center',
-					margin: '1rem auto'
-				}}>
-				<Box sx={{
-					display: 'flex',
-					flexDirection: 'row',
-					justifyContent: 'space-evenly',
-					alignItems: 'flex-start',
-					margin: '0 auto',
-					width: '100%',
-					backgroundColor: '#fbfbfbf9',
-					borderRadius: '8px',
-				}}>
-						<Box sx={{
+					margin: '1rem auto',
+				}}
+			>
+				<Box
+					sx={{
 						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'left',
+						flexDirection: 'row',
+						justifyContent: 'space-evenly',
+						alignItems: 'flex-start',
 						margin: '0 auto',
-						width: '90%',
+						width: '100%',
 						backgroundColor: '#fbfbfbf9',
-						borderRight: '1px solid lightgray',
-						borderLeft: '1px solid lightgray',
-						borderBottom: '1px solid #ecececf9',
-						borderTop: '1px solid #ecececf9',
-						padding: '10px',
-						borderRadius: '10px',
-					}}>
-							<Typography variant='h6'>Customer/Invoice Details</Typography>
-							<TextField
-								id='invoiceNumber'
-								name='invoiceNumber'
-								label='Invoice No.'
-								type='text'
-								variant='outlined'
-								fullWidth
-								sx={{ mt: 1, backgroundColor: 'white' }}
-							/>
-							<Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-								<TextField
-									id='firstName'
-									name='firstName'
-									label='First Name'
-									variant='outlined'
-									type='text'
-									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-								/>
-								<TextField
-									id='lastName'
-									name='lastName'
-									label='Last Name'
-									variant='outlined'
-									type='text'
-									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-								/></Box>
-							<Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-								<TextField
-									id='email'
-									name='email'
-									label='Email'
-									fullWidth
-									variant='outlined'
-									type='email'
-									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-								/>
-								<TextField
-									id='phoneNumber'
-									name='phoneNumber'
-									label='Phone Number'
-									fullWidth
-									variant='outlined'
-									type='text'
-									sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
-								/></Box>
-							<TextField
-								id='notes'
-								name='notes'
-								label='Notes'
-								type='text'
-								multiline
-								rows={7.3}
-								variant='outlined'
-								fullWidth
-								sx={{ mt: 2}}
-							/>
-						</Box><Box>
-						<Box sx={{
+						borderRadius: '8px',
+					}}
+				>
+					<Box
+						sx={{
 							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							margin: '0 auto 1rem auto',
+							flexDirection: 'column',
+							alignItems: 'left',
+							margin: '0 auto',
 							width: '90%',
 							backgroundColor: '#fbfbfbf9',
 							borderRight: '1px solid lightgray',
@@ -194,7 +141,105 @@ export default function Home() {
 							borderTop: '1px solid #ecececf9',
 							padding: '10px',
 							borderRadius: '10px',
-						}}>
+						}}
+					>
+						<Typography variant='h6'>Customer Details</Typography>
+						<TextField
+							select
+							id='customerId'
+							name='customerId'
+							label='Customer'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 1, backgroundColor: 'white' }}
+						>
+							{customerOptions.map((option) => (
+								<MenuItem key={option.id} value={option.id}>
+									{option.firstName} {option.lastName}
+								</MenuItem>
+							))}
+						</TextField>
+						<Box
+							sx={{
+								width: '100%',
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+							}}
+						>
+							<TextField
+								id='firstName'
+								name='firstName'
+								label='First Name'
+								variant='outlined'
+								type='text'
+								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+							/>
+							<TextField
+								id='lastName'
+								name='lastName'
+								label='Last Name'
+								variant='outlined'
+								type='text'
+								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+							/>
+						</Box>
+						<Box
+							sx={{
+								width: '100%',
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'space-between',
+							}}
+						>
+							<TextField
+								id='email'
+								name='email'
+								label='Email'
+								fullWidth
+								variant='outlined'
+								type='email'
+								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+							/>
+							<TextField
+								id='phoneNumber'
+								name='phoneNumber'
+								label='Phone Number'
+								fullWidth
+								variant='outlined'
+								type='text'
+								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
+							/>
+						</Box>
+						<TextField
+							id='notes'
+							name='notes'
+							label='Notes'
+							type='text'
+							multiline
+							rows={7.3}
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2 }}
+						/>
+					</Box>
+					<Box>
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								margin: '0 auto 1rem auto',
+								width: '90%',
+								backgroundColor: '#fbfbfbf9',
+								borderRight: '1px solid lightgray',
+								borderLeft: '1px solid lightgray',
+								borderBottom: '1px solid #ecececf9',
+								borderTop: '1px solid #ecececf9',
+								padding: '10px',
+								borderRadius: '10px',
+							}}
+						>
 							<Box sx={{ width: '32rem' }}>
 								<Typography variant='h6'>Line Items</Typography>
 								<TextField
@@ -329,20 +374,22 @@ export default function Home() {
 							</Box>
 						</Box>
 					</Box>
-					<Box sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						alignItems: 'flex-start',
-						margin: '0 auto',
-						width: '90%',
-						backgroundColor: '#fbfbfbf9',
-						borderRight: '1px solid lightgray',
-						borderLeft: '1px solid lightgray',
-						borderBottom: '1px solid #ecececf9',
-						borderTop: '1px solid #ecececf9',
-						padding: '10px',
-						borderRadius: '10px',
-					}}>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'flex-start',
+							margin: '0 auto',
+							width: '90%',
+							backgroundColor: '#fbfbfbf9',
+							borderRight: '1px solid lightgray',
+							borderLeft: '1px solid lightgray',
+							borderBottom: '1px solid #ecececf9',
+							borderTop: '1px solid #ecececf9',
+							padding: '10px',
+							borderRadius: '10px',
+						}}
+					>
 						<Box sx={{ width: '25rem' }}>
 							<Typography variant='h6'>Payment Type</Typography>
 							<TextField
@@ -388,7 +435,12 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ mt: 3, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{
+									mt: 3,
+									backgroundColor: 'white',
+									outline: '1px solid red',
+									borderRadius: '8px',
+								}}
 							/>
 							<TextField
 								id='subtotal'
@@ -397,7 +449,12 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
+								sx={{
+									backgroundColor: 'white',
+									outline: '1px solid red',
+									borderRadius: '8px',
+									marginTop: '.25rem',
+								}}
 							/>
 							<TextField
 								id='total'
@@ -406,7 +463,12 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
+								sx={{
+									backgroundColor: 'lavenderblush',
+									outline: '1px solid red',
+									borderRadius: '8px',
+									marginTop: '.25rem',
+								}}
 							/>
 						</Box>
 						<Box sx={{ width: '20%' }}>
@@ -454,7 +516,12 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ mt: 3, backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px' }}
+								sx={{
+									mt: 3,
+									backgroundColor: 'white',
+									outline: '1px solid red',
+									borderRadius: '8px',
+								}}
 							/>
 							<TextField
 								id='amount'
@@ -463,7 +530,12 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ backgroundColor: 'white', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
+								sx={{
+									backgroundColor: 'white',
+									outline: '1px solid red',
+									borderRadius: '8px',
+									marginTop: '.25rem',
+								}}
 							/>
 							<TextField
 								id='amount'
@@ -472,7 +544,12 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								sx={{ backgroundColor: 'lavenderblush', outline: '1px solid red', borderRadius: '8px', marginTop: '.25rem' }}
+								sx={{
+									backgroundColor: 'lavenderblush',
+									outline: '1px solid red',
+									borderRadius: '8px',
+									marginTop: '.25rem',
+								}}
 							/>
 						</Box>
 					</Box>
