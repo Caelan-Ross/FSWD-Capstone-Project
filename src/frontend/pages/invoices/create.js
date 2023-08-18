@@ -22,6 +22,7 @@ export default function Home() {
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [customerOptions, setCustomerOptions] = useState([]);
+	const [selectedCustomer, setSelectedCustomer] = useState(null);
 	const API_BASE = 'http://localhost:3000/api/invoices/create';
 
 	useEffect(() => {
@@ -143,6 +144,7 @@ export default function Home() {
 							borderRadius: '10px',
 						}}
 					>
+						{/* Customer Column */}
 						<Typography variant='h6'>Customer Details</Typography>
 						<TextField
 							select
@@ -151,6 +153,14 @@ export default function Home() {
 							label='Customer'
 							variant='outlined'
 							fullWidth
+							value={selectedCustomer ? selectedCustomer.id : ''}
+							onChange={(event) => {
+								const customerId = event.target.value;
+								const customer = customerOptions.find(
+									(option) => option.id === customerId
+								);
+								setSelectedCustomer(customer);
+							}}
 							sx={{ mt: 1, backgroundColor: 'white' }}
 						>
 							{customerOptions.map((option) => (
@@ -173,6 +183,13 @@ export default function Home() {
 								label='First Name'
 								variant='outlined'
 								type='text'
+								value={selectedCustomer ? selectedCustomer.firstName : ''}
+								InputLabelProps={{
+									shrink:
+										selectedCustomer && selectedCustomer.firstName
+											? true
+											: false,
+								}}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 							<TextField
@@ -181,6 +198,13 @@ export default function Home() {
 								label='Last Name'
 								variant='outlined'
 								type='text'
+								value={selectedCustomer ? selectedCustomer.lastName : ''}
+								InputLabelProps={{
+									shrink:
+										selectedCustomer && selectedCustomer.lastName
+											? true
+											: false,
+								}}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 						</Box>
@@ -199,6 +223,11 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='email'
+								value={selectedCustomer ? selectedCustomer.email : ''}
+								InputLabelProps={{
+									shrink:
+										selectedCustomer && selectedCustomer.email ? true : false,
+								}}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 							<TextField
@@ -208,6 +237,13 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
+								value={selectedCustomer ? selectedCustomer.phoneNumber : ''}
+								InputLabelProps={{
+									shrink:
+										selectedCustomer && selectedCustomer.phoneNumber
+											? true
+											: false,
+								}}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 						</Box>
