@@ -53,7 +53,7 @@ export default function Home() {
 		const debitAmount =
 			parseFloat(document.getElementById('debitAmount').value) || 0;
 		const customerCreditAmount =
-			parseFloat(document.getElementById('customerCreditAmount').value) || 0;
+			-1*parseFloat(document.getElementById('customerCreditAmount').value) || 0;
 
 		const newSubtotal =
 			cashAmount + creditAmount + debitAmount + customerCreditAmount;
@@ -76,19 +76,35 @@ export default function Home() {
 			var paymentMethod = "";
 
 			if(document.getElementById('cashAmount').value != ""){
-				paymentMethod = paymentMethod + "cash+";
+				if(paymentMethod != ""){
+					paymentMethod = paymentMethod + " | Cash";
+				}else{
+					paymentMethod = "Cash"
+				}
 			}
 
 			if(document.getElementById('creditAmount').value != ""){
-				paymentMethod = paymentMethod + "credit+";
+				if(paymentMethod != ""){
+					paymentMethod = paymentMethod + " | Credit";
+				}else{
+					paymentMethod = "Credit"
+				}
 			}
 
 			if(document.getElementById('debitAmount').value != ""){
-				paymentMethod = paymentMethod + "debit+";
+				if(paymentMethod != ""){
+					paymentMethod = paymentMethod + " | Debit";
+				}else{
+					paymentMethod = "Debit"
+				}
 			}
 
 			if(document.getElementById('customerCreditAmount').value != ""){
-				paymentMethod = paymentMethod + "customerCredit+";
+				if(paymentMethod != ""){
+					paymentMethod = paymentMethod + " | Customer Credit";
+				}else{
+					paymentMethod = "Customer Credit"
+				}
 			}
 
 			const requestData = {

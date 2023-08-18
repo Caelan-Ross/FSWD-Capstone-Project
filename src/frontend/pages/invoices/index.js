@@ -20,6 +20,11 @@ import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
+function toShortDate(dateString) {
+	const date = new Date(dateString);
+	return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+}
+
 export default function Invoices() {
 	const theme = useTheme();
 	const router = useRouter();
@@ -78,6 +83,7 @@ export default function Invoices() {
 			field: 'dateOfSale',
 			headerName: "Date of Invoice",
 			width: 200,
+			valueGetter: (params) => toShortDate(params.row.dateOfSale),
 		},
 		{
 			field: 'totalPrice',
@@ -253,3 +259,4 @@ export default function Invoices() {
 		</Box>
 	);
 }
+
