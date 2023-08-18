@@ -76,7 +76,7 @@ export default function EditCustomer() {
 			flexDirection='column'
 			alignItems='center'
 			sx={{
-				backgroundColor: '#E6E8E7',
+				backgroundColor: '#fbfbfbf9',
 				outline: '1px solid lightgrey',
 				borderRadius: '8px',
 				margin: '2rem',
@@ -113,7 +113,7 @@ export default function EditCustomer() {
 					display: 'flex',
 					flexDirection: 'column',
 					width: '30%',
-					backgroundColor: '#fffffff2',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',

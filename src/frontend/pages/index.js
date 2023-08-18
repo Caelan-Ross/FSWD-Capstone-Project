@@ -33,7 +33,7 @@ export default function Home() {
 				</Typography>
 				<BatterySaverIcon sx={{fontSize: '4rem', color: 'red', transform: 'rotate(90deg)', marginLeft: '.5rem', backgroundColor: 'lavenderblush', borderRadius: '50%', padding: '.5rem', outline: '1px solid black'}}></BatterySaverIcon>
 			</Box>
-			<Box textAlign='left' mt={2} sx={{height: '90%', width: '95%', backgroundColor: '#fffffff2',
+			<Box textAlign='left' mt={2} sx={{height: '90%', width: '95%', backgroundColor: '#fbfbfbf9',
 					borderRadius: '10px'}}>
 				<Typography variant='body1' component='p'>
 					PLACEHOLDER CONTENT FOR TWO DASHBOARDS

@@ -44,14 +44,14 @@ export default function Setting() {
 				</Box>
 			</Box>
 			<Box
-				mt={12}
+				mt={8}
 				sx={{
 					display: 'flex',
 					flexDirection: 'row',
 				}}
 			>
 				{/* Column 1: Edit Profile */}
-				<Box sx={{ flex: 1, marginRight: '20px' }}>
+				<Box sx={{ flex: 1, marginRight: '20px', backgroundColor: '#fbfbfbf9', padding: '2rem', borderRadius: '10px'  }}>
 					<Typography variant='h4' align='center' component='h3'>
 						Edit Profile
 					</Typography>
@@ -65,7 +65,7 @@ export default function Setting() {
 				</Box>
 
 				{/* Column 2: Change Password */}
-				<Box sx={{ flex: 1 }}>
+				<Box sx={{ flex: 1, backgroundColor: '#fbfbfbf9', padding: '2rem', borderRadius: '10px' }}>
 					<Typography variant='h4' align='center' component='h3'>
 						Change Password
 					</Typography>

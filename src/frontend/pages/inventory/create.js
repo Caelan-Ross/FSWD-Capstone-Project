@@ -159,7 +159,7 @@ export default function Home() {
 					display: 'flex',
 					flexDirection: 'column',
 					width: '80%',
-					backgroundColor: '#fffffff2',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',
@@ -172,7 +172,13 @@ export default function Home() {
 						padding: '2rem',
 						width: '100%',
 						justifyContent: 'space-between',
-						margin: '0 auto'
+						margin: '0 auto',
+						borderRight: '1px solid lightgray',
+						borderLeft: '1px solid lightgray',
+						borderBottom: '1px solid #ecececf9',
+						borderTop: '1px solid #ecececf9',
+						padding: '10px',
+						borderRadius: '10px',
 					}}
 				>
 					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '48%' }}>

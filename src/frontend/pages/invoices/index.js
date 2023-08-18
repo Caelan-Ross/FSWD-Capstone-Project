@@ -132,7 +132,7 @@ export default function Invoices() {
 					height: '90%',
 					width: '95%',
 					marginTop: theme.spacing(2),
-					backgroundColor: '#fffffff2',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '10px',
 				}}
 			>

@@ -92,7 +92,7 @@ export default function Home() {
 					display: 'flex',
 					flexDirection: 'column',
 					width: '100%',
-					backgroundColor: '#fffffff2',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '1rem',
@@ -107,7 +107,7 @@ export default function Home() {
 					alignItems: 'flex-start',
 					margin: '0 auto',
 					width: '100%',
-					backgroundColor: '#fffffff2',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '8px',
 				}}>
 						<Box sx={{
@@ -116,8 +116,13 @@ export default function Home() {
 						alignItems: 'left',
 						margin: '0 auto',
 						width: '90%',
-						backgroundColor: '#ffffff80',
-						borderRadius: '8px',
+						backgroundColor: '#fbfbfbf9',
+						borderRight: '1px solid lightgray',
+						borderLeft: '1px solid lightgray',
+						borderBottom: '1px solid #ecececf9',
+						borderTop: '1px solid #ecececf9',
+						padding: '10px',
+						borderRadius: '10px',
 					}}>
 							<Typography variant='h6'>Customer/Invoice Details</Typography>
 							<TextField
@@ -183,8 +188,13 @@ export default function Home() {
 							alignItems: 'center',
 							margin: '0 auto 1rem auto',
 							width: '90%',
-							backgroundColor: '#ffffff80',
-							borderRadius: '8px',
+							backgroundColor: '#fbfbfbf9',
+							borderRight: '1px solid lightgray',
+							borderLeft: '1px solid lightgray',
+							borderBottom: '1px solid #ecececf9',
+							borderTop: '1px solid #ecececf9',
+							padding: '10px',
+							borderRadius: '10px',
 						}}>
 							<Box sx={{ width: '32rem' }}>
 								<Typography variant='h6'>Line Items</Typography>
@@ -326,8 +336,13 @@ export default function Home() {
 						alignItems: 'flex-start',
 						margin: '0 auto',
 						width: '90%',
-						backgroundColor: '#ffffff80',
-						borderRadius: '8px',
+						backgroundColor: '#fbfbfbf9',
+						borderRight: '1px solid lightgray',
+						borderLeft: '1px solid lightgray',
+						borderBottom: '1px solid #ecececf9',
+						borderTop: '1px solid #ecececf9',
+						padding: '10px',
+						borderRadius: '10px',
 					}}>
 						<Box sx={{ width: '25rem' }}>
 							<Typography variant='h6'>Payment Type</Typography>

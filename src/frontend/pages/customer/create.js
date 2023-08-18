@@ -101,7 +101,7 @@ export default function Home() {
 					display: 'flex',
 					flexDirection: 'column',
 					width: '30%',
-					backgroundColor: '#fffffff2',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',
