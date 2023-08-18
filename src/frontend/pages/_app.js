@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }) {
     setOpen(!open);
   };
 
-  const user = 'John Doe';
+  const user = 'Nathan Reiman';
 
   return (
     <CssBaseline>
@@ -65,7 +65,7 @@ export default function App({ Component, pageProps }) {
               <Avatar src='/path/to/avatar-image.jpg' alt='User Avatar' />
               <Box sx={{ marginLeft: '0.625rem' }}>
                 <Typography variant='body1'>
-                  The Battery Doctor - Welcome '{user}'!
+                  The Battery Doctor - Welcome {user}!
                 </Typography>
                 <Typography variant='caption' color='textSecondary'>
                   2023-08-04
