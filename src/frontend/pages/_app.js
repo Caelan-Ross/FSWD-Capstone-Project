@@ -27,6 +27,7 @@ export default function App({ Component, pageProps }) {
           display: 'flex',
           flexDirection: 'row',
           height: '100vh',
+          width: '1920px',
         }}
       >
         <Navbar
@@ -39,7 +40,7 @@ export default function App({ Component, pageProps }) {
             display: 'flex',
             flexDirection: 'column',
             padding: '0px 20px',
-            width: '100%',
+            width: '1920px',
             margin: '0 auto',
           }}
         >
@@ -51,7 +52,7 @@ export default function App({ Component, pageProps }) {
               alignItems: 'center',
               justifyContent: 'space-between',
               height: '6rem',
-              width: '100%',
+              width: '1920px',
               margin: '0 auto',
             }}
           >
@@ -62,7 +63,7 @@ export default function App({ Component, pageProps }) {
                 flexGrow: 1,
               }}
             >
-              <Avatar src='/path/to/avatar-image.jpg' alt='User Avatar' />
+              {/* <Avatar src='/path/to/avatar-image.jpg' alt='User Avatar' /> */}
               <Box sx={{ marginLeft: '0.625rem' }}>
                 <Typography variant='body1'>
                   The Battery Doctor - Welcome {user}!
@@ -94,7 +95,7 @@ export default function App({ Component, pageProps }) {
               overflow: 'auto',
               margin: '.25rem auto',
               maxHeight: 'calc(100vh - 8.25rem)',
-              width: '100%',
+              width: '1920px',
               backgroundColor: '#E6E8E7',
             }}
           >

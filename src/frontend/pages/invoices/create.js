@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import axios from 'axios';
 import { red } from '@mui/material/colors';
@@ -21,6 +23,7 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const [showSnackbar, setShowSnackbar] = useState(false);
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
 
@@ -110,6 +113,7 @@ export default function Home() {
 			form.reset();
 			// Redirect to the inventory page
 		} catch (error) {
+			console.log(error)
 			setError('Failed to create invoice');
 		} finally {
 			setLoading(false);
@@ -707,6 +711,16 @@ export default function Home() {
 					</Button>
 				</Box>
 			</Box>
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={1000} // 1 second
+				onClose={() => setShowSnackbar(false)} // Close on click away
+			>
+				<SnackbarContent
+					message='Battery created successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 		</Box>
 	);
 }

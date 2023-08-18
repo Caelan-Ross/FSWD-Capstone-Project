@@ -54,35 +54,39 @@ export default function Invoices() {
 
 	// Display Headings
 	const columns = [
-		{ field: 'id', headerName: <strong>Invoice ID</strong>, width: 100 },
+		{ 
+			field: 'id', 
+			headerName: "Invoice ID", 
+			width: 100 
+		},
 		{
 			field: 'customerFirstName',
-			headerName: <strong>First Name</strong>,
+			headerName: "First Name",
 			width: 150,
 		},
 		{
 			field: 'customerLastName',
-			headerName: <strong>Last Name</strong>,
+			headerName: "Last Name",
 			width: 150,
 		},
 		{
 			field: 'paymentMethodR',
-			headerName: <strong>Payment Method</strong>,
+			headerName: "Payment Method",
 			width: 200,
 		},
 		{
 			field: 'dateOfSale',
-			headerName: <strong>Date of Invoice</strong>,
+			headerName: "Date of Invoice",
 			width: 200,
 		},
 		{
 			field: 'totalPrice',
-			headerName: <strong>Total Price</strong>,
+			headerName: "Total Price",
 			width: 200,
 		},
 		{
 			field: 'edit', // Edit column
-			headerName: <strong>Edit</strong>,
+			headerName: "Edit",
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -92,7 +96,7 @@ export default function Invoices() {
 		},
 		{
 			field: 'delete',
-			headerName: <strong>Delete</strong>,
+			headerName: "Delete",
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
@@ -174,7 +178,8 @@ export default function Invoices() {
 				borderRadius: '8px',
 				margin: '2rem',
 				padding: '2rem',
-				height: '92%',
+				height: '993px',
+				width: '1920px',
 				overflow: 'auto',
 			}}
 		>
@@ -212,8 +217,8 @@ export default function Invoices() {
 			{/* Invoice DataGrid */}
 			<div
 				style={{
-					height: '90%',
-					width: '95%',
+					height: '800px',
+					width: '1300px',
 					marginTop: theme.spacing(2),
 					backgroundColor: '#fbfbfbf9',
 					borderRadius: '10px',
@@ -223,7 +228,8 @@ export default function Invoices() {
 					rows={invoiceData}
 					columns={columns}
 					pageSize={5}
-					sx={{ alignItems: 'center', width: '100%', margin: 'auto' }}
+					autoHeight 
+					sx={{ alignItems: 'center', margin: 'auto' }}
 				/>
 			</div>
 			{/* Delete Confirmation Dialog */}
