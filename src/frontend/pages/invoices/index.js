@@ -27,10 +27,6 @@ export default function Invoices() {
 		router.push(path);
 	};
 
-
-	// Temporary invoice edit function
-	// WILL BE REDIRECTING TO CUSTOMER, THIS IS FOR PROTOTYPE/TESTING PURPOSES**
-
 	const handleEdit = (invoiceId) => {
 		router.push(`/invoice/editInvoice?id=${invoiceId}`);
 	};
@@ -43,12 +39,47 @@ export default function Invoices() {
 	});
 	const [showSnackbar, setShowSnackbar] = useState(false);
 
+	// Get customer details by ID
+	const fetchCustomer = async (customerId) => {
+		try {
+			const response = await axios.get(
+				`http://localhost:7166/api/Customers/${customerId}`
+			);
+			return response.data;
+		} catch (error) {
+			console.error('Error fetching customer details:', error);
+			return null;
+		}
+	};
 
+	// Display Headings
 	const columns = [
 		{ field: 'id', headerName: <strong>Invoice ID</strong>, width: 100 },
-		{ field: 'paymentMethod', headerName: <strong>Payment Method</strong>, width: 200 },
-		{ field: 'dateOfSale', headerName: <strong>Date of Invoice</strong>, width: 200 },
-		{ field: 'totalPrice', headerName: <strong>Total Amount</strong>, width: 200 },
+		{
+			field: 'customerFirstName',
+			headerName: <strong>First Name</strong>,
+			width: 150,
+		},
+		{
+			field: 'customerLastName',
+			headerName: <strong>Last Name</strong>,
+			width: 150,
+		},
+		{
+			field: 'paymentMethodR',
+			headerName: <strong>Payment Method</strong>,
+			width: 200,
+		},
+		{
+			field: 'dateOfSale',
+			headerName: <strong>Date of Invoice</strong>,
+			width: 200,
+		},
+		{
+			field: 'totalPrice',
+			headerName: <strong>Total Price</strong>,
+			width: 200,
+		},
 		{
 			field: 'edit', // Edit column
 			headerName: <strong>Edit</strong>,
@@ -71,24 +102,30 @@ export default function Invoices() {
 		},
 	];
 
-	// Fetch Invoice Data
 	useEffect(() => {
 		axios
-			.get(API_BASE, {
-				headers: {
-					accept: 'text/plain',
-				},
-			})
-			.then((response) => {
-				console.log(response);
-				// Update invoiceData state with fetched data
-				setInvoiceData(response.data);
+			.get(API_BASE)
+			.then(async (response) => {
+				const invoices = response.data;
+
+				// Fetch customer names for each invoice
+				const invoicesWithCustomerNames = await Promise.all(
+					invoices.map(async (invoice) => {
+						const customer = await fetchCustomer(invoice.customerId);
+						return {
+							...invoice,
+							customerFirstName: customer.firstName,
+							customerLastName: customer.lastName,
+						};
+					})
+				);
+
+				setInvoiceData(invoicesWithCustomerNames);
 			})
 			.catch((error) => {
 				console.error('Error fetching invoice data:', error);
 			});
 	}, []);
-
 
 	return (
 		<Box
@@ -135,7 +172,12 @@ export default function Invoices() {
 					borderRadius: '10px',
 				}}
 			>
-				<DataGrid rows={invoiceData} columns={columns} pageSize={5} sx={{alignItems: 'center', width: '100%', margin: 'auto'}}/>
+				<DataGrid
+					rows={invoiceData}
+					columns={columns}
+					pageSize={5}
+					sx={{ alignItems: 'center', width: '100%', margin: 'auto' }}
+				/>
 			</div>
 		</Box>
 	);
