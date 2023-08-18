@@ -167,7 +167,6 @@ export default function Home() {
 			>
 				<Box
 					component='form'
-					onSubmit={handleSubmit}
 					sx={{
 						display: 'flex',
 						flexDirection: 'row',
