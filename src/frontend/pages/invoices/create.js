@@ -60,30 +60,40 @@ export default function Home() {
 		setTotalAmount(newTotalAmount);
 	};
 
-
 	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const form = event.target;
-
-		const queryParams = new URLSearchParams();
-		queryParams.append('firstName', form.firstName.value);
-		queryParams.append('lastName', form.lastName.value);
-		queryParams.append('phoneNumber', form.phoneNumber.value);
-		queryParams.append('email', form.email.value);
-		const url = `${API_BASE}?${queryParams.toString()}`;
+		const url = `http://localhost:7166/api/Invoices`;
 		try {
 			setLoading(true);
 			// Perform any additional validation or processing here if needed
 			setError(null);
 
-			await axios.post(url);
+			const paymentMethodId = 1;
+			const requestData = {
+				customerId: selectedCustomer.id,
+				paymentMethodId: paymentMethodId,
+				dateOfSale: new Date().toISOString(),
+				totalPrice: totalAmount.toFixed(2),
+			};
+
+			await axios.post(url, requestData, {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
 			// Display success message
-			alert('Customer created successfully');
+			setShowSnackbar(true); // Show the success Snackbar
+			setTimeout(() => {
+				setShowSnackbar(false);
+				router.push('/invoices');
+			}, 2000);
 			// Reset form fields
 			form.reset();
+			// Redirect to the inventory page
 		} catch (error) {
-			setError('Failed to create customer');
+			setError('Failed to create invoice');
 		} finally {
 			setLoading(false);
 		}
@@ -459,6 +469,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
+								value='Cash'
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{ mt: 1, backgroundColor: 'white' }}
 							/>
 							<TextField
@@ -468,6 +482,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
+								value='Credit'
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
@@ -477,6 +495,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
+								value='Debit'
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
@@ -486,6 +508,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
+								value='Customer Credit'
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							<TextField
@@ -495,6 +521,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
+								value='Taxes'
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{
 									mt: 3,
 									backgroundColor: 'white',
@@ -509,6 +539,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
+								value='Subtotal'
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{
 									backgroundColor: 'white',
 									outline: '1px solid red',
@@ -523,6 +557,10 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
+								value='Total'
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{
 									backgroundColor: 'lavenderblush',
 									outline: '1px solid red',
@@ -531,6 +569,7 @@ export default function Home() {
 								}}
 							/>
 						</Box>
+
 						<Box sx={{ width: '20%' }}>
 							<Typography variant='h6'>Amount</Typography>
 							{/* Cash Amount */}
@@ -638,6 +677,7 @@ export default function Home() {
 					</Box>
 				</Box>
 				<Box>
+					{/* Create Button */}
 					<Button
 						className='btn-primary'
 						variant='contained'
@@ -646,7 +686,7 @@ export default function Home() {
 						color='primary'
 						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto' }}
 					>
-						{loading ? 'Submitting...' : 'Submit'}
+						{loading ? 'Creating...' : 'Create'}
 					</Button>
 				</Box>
 			</Box>
