@@ -53,7 +53,8 @@ export default function Home() {
 		const debitAmount =
 			parseFloat(document.getElementById('debitAmount').value) || 0;
 		const customerCreditAmount =
-			-1*parseFloat(document.getElementById('customerCreditAmount').value) || 0;
+			-1 * parseFloat(document.getElementById('customerCreditAmount').value) ||
+			0;
 
 		const newSubtotal =
 			cashAmount + creditAmount + debitAmount + customerCreditAmount;
@@ -73,37 +74,37 @@ export default function Home() {
 			// Perform any additional validation or processing here if needed
 			setError(null);
 
-			var paymentMethod = "";
+			var paymentMethod = '';
 
-			if(document.getElementById('cashAmount').value != ""){
-				if(paymentMethod != ""){
-					paymentMethod = paymentMethod + " | Cash";
-				}else{
-					paymentMethod = "Cash"
+			if (document.getElementById('cashAmount').value != '') {
+				if (paymentMethod != '') {
+					paymentMethod = paymentMethod + ' | Cash';
+				} else {
+					paymentMethod = 'Cash';
 				}
 			}
 
-			if(document.getElementById('creditAmount').value != ""){
-				if(paymentMethod != ""){
-					paymentMethod = paymentMethod + " | Credit";
-				}else{
-					paymentMethod = "Credit"
+			if (document.getElementById('creditAmount').value != '') {
+				if (paymentMethod != '') {
+					paymentMethod = paymentMethod + ' | Credit';
+				} else {
+					paymentMethod = 'Credit';
 				}
 			}
 
-			if(document.getElementById('debitAmount').value != ""){
-				if(paymentMethod != ""){
-					paymentMethod = paymentMethod + " | Debit";
-				}else{
-					paymentMethod = "Debit"
+			if (document.getElementById('debitAmount').value != '') {
+				if (paymentMethod != '') {
+					paymentMethod = paymentMethod + ' | Debit';
+				} else {
+					paymentMethod = 'Debit';
 				}
 			}
 
-			if(document.getElementById('customerCreditAmount').value != ""){
-				if(paymentMethod != ""){
-					paymentMethod = paymentMethod + " | Customer Credit";
-				}else{
-					paymentMethod = "Customer Credit"
+			if (document.getElementById('customerCreditAmount').value != '') {
+				if (paymentMethod != '') {
+					paymentMethod = paymentMethod + ' | Customer Credit';
+				} else {
+					paymentMethod = 'Customer Credit';
 				}
 			}
 
@@ -129,7 +130,7 @@ export default function Home() {
 			form.reset();
 			// Redirect to the inventory page
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			setError('Failed to create invoice');
 		} finally {
 			setLoading(false);
@@ -171,6 +172,8 @@ export default function Home() {
 					</IconButton>
 				</Box>
 			</Box>
+
+			{/* Invoice Form */}
 			<Box
 				component='form'
 				onSubmit={handleSubmit}
@@ -215,7 +218,7 @@ export default function Home() {
 							borderRadius: '10px',
 						}}
 					>
-						{/* Customer Column */}
+						{/* Customer Section */}
 						<Typography variant='h6'>Customer Details</Typography>
 						<TextField
 							select
@@ -330,6 +333,7 @@ export default function Home() {
 							sx={{ mt: 2 }}
 						/>
 					</Box>
+					{/* Line Items Section */}
 					<Box>
 						<Box
 							sx={{
@@ -481,6 +485,7 @@ export default function Home() {
 							</Box>
 						</Box>
 					</Box>
+					{/* Payment Section */}
 					<Box
 						sx={{
 							display: 'flex',
@@ -497,6 +502,7 @@ export default function Home() {
 							borderRadius: '10px',
 						}}
 					>
+						{/* Amount Total Labels */}
 						<Box sx={{ width: '25rem' }}>
 							<Typography variant='h6'>Payment Type</Typography>
 							<TextField
@@ -606,7 +612,7 @@ export default function Home() {
 								}}
 							/>
 						</Box>
-
+						{/* Amount Total Numbers */}
 						<Box sx={{ width: '20%' }}>
 							<Typography variant='h6'>Amount</Typography>
 							{/* Cash Amount */}

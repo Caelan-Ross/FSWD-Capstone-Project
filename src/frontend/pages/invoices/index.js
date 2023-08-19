@@ -32,10 +32,6 @@ export default function Invoices() {
 		router.push(path);
 	};
 
-	const handleEdit = (invoiceId) => {
-		router.push(`/invoice/editInvoice?id=${invoiceId}`);
-	};
-
 	const API_BASE = 'http://localhost:7166/api/Invoices';
 	const [invoiceData, setInvoiceData] = useState([]);
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
@@ -57,42 +53,47 @@ export default function Invoices() {
 		}
 	};
 
+	// Send user to edit
+	const handleEdit = (invoiceId) => {
+		router.push(`/invoices/edit?id=${invoiceId}`);
+	};
+
 	// Display Headings
 	const columns = [
-		{ 
-			field: 'id', 
-			headerName: "Invoice ID", 
-			width: 100 
+		{
+			field: 'id',
+			headerName: 'Invoice ID',
+			width: 100,
 		},
 		{
 			field: 'customerFirstName',
-			headerName: "First Name",
+			headerName: 'First Name',
 			width: 150,
 		},
 		{
 			field: 'customerLastName',
-			headerName: "Last Name",
+			headerName: 'Last Name',
 			width: 150,
 		},
 		{
 			field: 'paymentMethodR',
-			headerName: "Payment Method",
+			headerName: 'Payment Method',
 			width: 200,
 		},
 		{
 			field: 'dateOfSale',
-			headerName: "Date of Invoice",
+			headerName: 'Date of Invoice',
 			width: 200,
 			valueGetter: (params) => toShortDate(params.row.dateOfSale),
 		},
 		{
 			field: 'totalPrice',
-			headerName: "Total Price",
+			headerName: 'Total Price',
 			width: 200,
 		},
 		{
 			field: 'edit', // Edit column
-			headerName: "Edit",
+			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -102,7 +103,7 @@ export default function Invoices() {
 		},
 		{
 			field: 'delete',
-			headerName: "Delete",
+			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
@@ -234,7 +235,7 @@ export default function Invoices() {
 					rows={invoiceData}
 					columns={columns}
 					pageSize={5}
-					autoHeight 
+					autoHeight
 					sx={{ alignItems: 'center', margin: 'auto' }}
 				/>
 			</div>
@@ -259,4 +260,3 @@ export default function Invoices() {
 		</Box>
 	);
 }
-
