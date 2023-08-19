@@ -136,7 +136,7 @@ export default function Home() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
 				height: '92%',
 				overflow: 'auto',
@@ -181,13 +181,13 @@ export default function Home() {
 			<div
 				style={{
 					height: '90%',
-					width: '95%',
 					marginTop: theme.spacing(2),
 					backgroundColor: '#fbfbfbf9',
 					borderRadius: '10px',
+					padding: '.5rem'
 				}}
 			>
-				<DataGrid rows={inventoryData} columns={columns} pageSize={5} sx={{alignItems: 'center', width: '100%', margin: 'auto'}} />
+				<DataGrid rows={inventoryData} columns={columns} pageSize={5} sx={{alignItems: 'center', margin: 'auto'}} />
 			</div>
 
 			{/* Delete Confirmation Dialog */}

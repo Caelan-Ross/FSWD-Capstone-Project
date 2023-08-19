@@ -24,10 +24,11 @@ export default function App({ Component, pageProps }) {
       <Box
         sx={{
           color: 'black',
+          backgroundColor: '#fbfbfbf9',
           display: 'flex',
           flexDirection: 'row',
           height: '100vh',
-          width: '1920px',
+          width: '100vw',
         }}
       >
         <Navbar
@@ -40,20 +41,19 @@ export default function App({ Component, pageProps }) {
             display: 'flex',
             flexDirection: 'column',
             padding: '0px 20px',
-            width: '1920px',
-            margin: '0 auto',
+            width: '100vw',
+            margin: '0 auto 0 0',
           }}
         >
           <Box
             sx={{
-              flex: '0 0 auto',
-              backgroundColor: '#ffffff',
+              backgroundColor: '#fbfbfbf9',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               height: '6rem',
-              width: '1920px',
-              margin: '0 auto',
+              width: '95vw',
+              margin: '0 auto 0 0',
             }}
           >
             <Box
@@ -93,9 +93,9 @@ export default function App({ Component, pageProps }) {
               borderRadius: '8px',
               flex: '1',
               overflow: 'auto',
-              margin: '.25rem auto',
+              margin: '.25rem auto 0 0',
               maxHeight: 'calc(100vh - 8.25rem)',
-              width: '1920px',
+              width: '95vw',
               backgroundColor: '#E6E8E7',
             }}
           >

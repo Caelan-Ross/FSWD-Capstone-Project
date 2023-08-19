@@ -132,10 +132,10 @@ export default function Customer() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '92%',
-				overflow: 'auto',
+				height: '90%',
+				overflow: 'none',
 			}}
 		>
 			<Box
@@ -175,13 +175,13 @@ export default function Customer() {
 			<div
 				style={{
 					height: '90%',
-					width: '95%',
+					padding: '.5rem',
 					marginTop: theme.spacing(2),
 					backgroundColor: '#fbfbfbf9',
 					borderRadius: '10px'
 				}}
 			>
-				<DataGrid rows={customerData} columns={columns} pageSize={5} sx={{alignItems: 'center', width: '100%', margin: 'auto'}}/>
+				<DataGrid rows={customerData} columns={columns} pageSize={5} sx={{alignItems: 'center', margin: 'auto'}}/>
 			</div>
 
 			{/* Delete Confirmation Dialog */}

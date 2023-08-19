@@ -144,7 +144,7 @@ export default function Home() {
 			alignItems='center'
 			sx={{
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
 				height: '92%',
 				overflow: 'auto',
