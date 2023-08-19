@@ -56,7 +56,6 @@ export default function Home() {
 				// Update invoiceDetails state with fetched data
 				setInvoiceDetails(response.data);
 
-
 				// Fetch customer details by customerId
 				fetchCustomer(response.data.customerId)
 					.then((customerData) => {
@@ -72,17 +71,16 @@ export default function Home() {
 				console.error('Error fetching invoice details:', error);
 			});
 
-			// Get total customer list and store it in customerOptions state
-			axios
-				.get(`http://localhost:7166/api/Customers`)
-				.then((response) => {
-					console.log(response);
-					setCustomerOptions(response.data);
-				})
-				.catch((error) => {
-					console.error('Error fetching customer database:', error);
-				})
-
+		// Get total customer list and store it in customerOptions state
+		axios
+			.get(`http://localhost:7166/api/Customers`)
+			.then((response) => {
+				console.log(response);
+				setCustomerOptions(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customer database:', error);
+			});
 	}, [invoiceId]);
 
 	// Calculate totals
@@ -109,6 +107,21 @@ export default function Home() {
 		setInvoiceDetails((prevDetails) => ({
 			...prevDetails,
 			[field]: value,
+		}));
+	};
+
+	const handleCustomerSelection = (event) => {
+		const selectedCustomerId = event.target.value;
+		const selectedCustomer = customerOptions.find(
+			(customer) => customer.id === selectedCustomerId
+		);
+		setSelectedCustomer(selectedCustomer);
+
+		// Update customer details in the invoice
+		handleFieldChange('customerId', selectedCustomerId);
+		setInvoiceDetails((prevDetails) => ({
+			...prevDetails,
+			customerId: selectedCustomerId,
 		}));
 	};
 
@@ -221,10 +234,7 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={selectedCustomer}
-							onChange={(event) => {
-								setSelectedCustomer(event.target.value);
-								handleFieldChange('customerId', event.target.value); // Update the invoiceDetails with the selected customerId
-							}}
+							onChange={handleCustomerSelection}
 							sx={{ mt: 1, backgroundColor: 'white' }}
 						>
 							{customerOptions.map((option) => (
