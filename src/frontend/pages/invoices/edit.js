@@ -56,6 +56,7 @@ export default function Home() {
 				// Update invoiceDetails state with fetched data
 				setInvoiceDetails(response.data);
 
+
 				// Fetch customer details by customerId
 				fetchCustomer(response.data.customerId)
 					.then((customerData) => {
@@ -70,6 +71,18 @@ export default function Home() {
 			.catch((error) => {
 				console.error('Error fetching invoice details:', error);
 			});
+
+			// Get total customer list and store it in customerOptions state
+			axios
+				.get(`http://localhost:7166/api/Customers`)
+				.then((response) => {
+					console.log(response);
+					setCustomerOptions(response.data);
+				})
+				.catch((error) => {
+					console.error('Error fetching customer database:', error);
+				})
+
 	}, [invoiceId]);
 
 	// Calculate totals
