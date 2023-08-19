@@ -16,7 +16,7 @@ export default function Setting() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
 				height: '92%',
 				overflow: 'auto',

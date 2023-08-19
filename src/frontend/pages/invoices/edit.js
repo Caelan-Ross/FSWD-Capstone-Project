@@ -134,7 +134,7 @@ export default function Home() {
 			sx={{
 				backgroundColor: '#fbfbfbf9',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
 				height: '92%',
 				overflow: 'auto',

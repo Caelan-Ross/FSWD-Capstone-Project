@@ -183,11 +183,10 @@ export default function Invoices() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '993px',
-				width: '1920px',
-				overflow: 'auto',
+				height: '90%',
+				overflow: 'none',
 			}}
 		>
 			<Box
@@ -224,18 +223,17 @@ export default function Invoices() {
 			{/* Invoice DataGrid */}
 			<div
 				style={{
-					height: '800px',
-					width: '1300px',
+					height: '90%',
+					padding: '.5rem',
 					marginTop: theme.spacing(2),
 					backgroundColor: '#fbfbfbf9',
-					borderRadius: '10px',
+					borderRadius: '10px'
 				}}
 			>
 				<DataGrid
 					rows={invoiceData}
 					columns={columns}
 					pageSize={5}
-					autoHeight
 					sx={{ alignItems: 'center', margin: 'auto' }}
 				/>
 			</div>
