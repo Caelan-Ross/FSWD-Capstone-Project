@@ -25,12 +25,6 @@ export default function Home() {
 	const [taxAmount, setTaxAmount] = useState(0.05);
 	const [totalAmount, setTotalAmount] = useState(0);
 
-	// State for Customer changes
-	const [editedFirstName, setEditedFirstName] = useState('');
-	const [editedLastName, setEditedLastName] = useState('');
-	const [editedEmail, setEditedEmail] = useState('');
-	const [editedPhoneNumber, setEditedPhoneNumber] = useState('');
-
 	const [invoiceDetails, setInvoiceDetails] = useState({
 		id: '',
 		customerId: '',
