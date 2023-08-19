@@ -739,7 +739,7 @@ export default function Home() {
 				onClose={() => setShowSnackbar(false)} // Close on click away
 			>
 				<SnackbarContent
-					message='Battery created successfully'
+					message='Invoice created successfully'
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>

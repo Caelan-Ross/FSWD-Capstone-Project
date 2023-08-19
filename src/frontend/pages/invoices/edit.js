@@ -16,21 +16,17 @@ export default function Home() {
 	const router = useRouter();
 	const invoiceId = router.query.id; // Get the invoiceId from the URL query parameter
 	const API_BASE = 'http://localhost:7166/api/Invoices'; // Update the API endpoint
-
-	const [error, setError] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [customerOptions, setCustomerOptions] = useState([]);
-	const [selectedCustomer, setSelectedCustomer] = useState(null);
-	const [subtotal, setSubtotal] = useState(0);
-	const [taxAmount, setTaxAmount] = useState(0.05);
-	const [totalAmount, setTotalAmount] = useState(0);
-
 	const [invoiceDetails, setInvoiceDetails] = useState({
 		id: '',
 		customerId: '',
 		paymentMethodR: '',
 		totalPrice: '',
 	});
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [customerOptions, setCustomerOptions] = useState([]);
+	const [selectedCustomer, setSelectedCustomer] = useState(null);
+	const [totalAmount, setTotalAmount] = useState(invoiceDetails.totalPrice);
 
 	// Get customer details by ID
 	const fetchCustomer = async (customerId) => {
@@ -83,25 +79,10 @@ export default function Home() {
 			});
 	}, [invoiceId]);
 
-	// Calculate totals
-	const handleInputChange = () => {
-		const cashAmount =
-			parseFloat(document.getElementById('cashAmount').value) || 0;
-		const creditAmount =
-			parseFloat(document.getElementById('creditAmount').value) || 0;
-		const debitAmount =
-			parseFloat(document.getElementById('debitAmount').value) || 0;
-		const customerCreditAmount =
-			-1 * parseFloat(document.getElementById('customerCreditAmount').value) ||
-			0;
-
-		const newSubtotal =
-			cashAmount + creditAmount + debitAmount + customerCreditAmount;
-		const newTotalAmount = newSubtotal + newSubtotal * taxAmount;
-
-		setSubtotal(newSubtotal);
-		setTotalAmount(newTotalAmount);
-	};
+	// Update totalAmount when invoiceDetails.totalPrice changes
+	useEffect(() => {
+		setTotalAmount(invoiceDetails.totalPrice);
+	}, [invoiceDetails.totalPrice]);
 
 	const handleFieldChange = (field, value) => {
 		setInvoiceDetails((prevDetails) => ({
@@ -129,6 +110,7 @@ export default function Home() {
 		event.preventDefault();
 		const updatedInvoice = {
 			...invoiceDetails,
+			totalPrice: totalAmount
 		};
 
 		try {
@@ -624,7 +606,6 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								onChange={handleInputChange}
 								sx={{ mt: 1, backgroundColor: 'white' }}
 							/>
 							{/* Credit Amount */}
@@ -635,7 +616,6 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								onChange={handleInputChange}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							{/* Debit Amount */}
@@ -646,7 +626,6 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								onChange={handleInputChange}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							{/* Customer Credit Amount */}
@@ -657,7 +636,6 @@ export default function Home() {
 								type='text'
 								variant='outlined'
 								fullWidth
-								onChange={handleInputChange}
 								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
 							/>
 							{/* Tax Amount */}
@@ -666,7 +644,6 @@ export default function Home() {
 								name='taxAmount'
 								label='Amount'
 								fullWidth
-								value={taxAmount}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -687,7 +664,6 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={subtotal.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -706,11 +682,8 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								// value={invoiceDetails.totalPrice.toFixed(2)}
-								value={invoiceDetails.totalPrice}
-								InputProps={{
-									readOnly: true,
-								}}
+								value={totalAmount}
+								onChange={(event) => setTotalAmount(event.target.value)}
 								sx={{
 									backgroundColor: 'lavenderblush',
 									outline: '1px solid red',
