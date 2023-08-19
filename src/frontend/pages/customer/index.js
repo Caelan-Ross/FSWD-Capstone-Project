@@ -15,6 +15,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
@@ -141,24 +142,32 @@ export default function Customer() {
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'flex-start',
+					justifyContent: 'space-between',
+					flexDirection: 'row',
 					alignItems: 'center',
 					width: '100%',
 				}}
 			>
-				<Typography
-					variant='h3'
-					align='center'
-					component='h2'
-					sx={{ marginRight: '1rem' }}
-				>
-					Customers
-				</Typography>
-				<IconButton
-					onClick={() => handleNavigation('/customer/create')}
-				>
-					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
-				</IconButton>
+				<Box>
+					<Typography
+						variant='h3'
+						align='center'
+						component='h2'
+						sx={{ marginRight: '1rem' }}
+					>
+						Customers
+					</Typography>
+				</Box>
+				<Box>
+					<IconButton
+						onClick={() => handleNavigation('/inventory/create')}
+					>
+						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					</IconButton>
+					<IconButton onClick={() => handleNavigation('/customer/create')}>
+						<SystemUpdateAltIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					</IconButton>
+				</Box>
 			</Box>
 			<Snackbar
 				open={showSnackbar}
