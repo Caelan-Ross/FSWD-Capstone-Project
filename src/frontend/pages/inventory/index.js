@@ -15,6 +15,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
@@ -41,11 +42,11 @@ export default function Home() {
 		{ field: 'typeName', headerName: <strong>Type</strong>, width: 150 },
 		{ field: 'modelName', headerName: <strong>Model</strong>, width: 100 },
 		{ field: 'makeName', headerName: <strong>Make</strong>, width: 100 },
-		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
-		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100},
 		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 100},
+		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100},
 		{ field: 'price', headerName: <strong>Price</strong>, width: 100},
 		{ field: 'quantityOnHand', headerName: <strong>Qty on Hand</strong>, width: 100},
+		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
 		{
 			field: 'edit', // Edit column
 			headerName: <strong>Edit</strong>,
@@ -145,24 +146,32 @@ export default function Home() {
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'flex-start',
+					justifyContent: 'space-between',
+					flexDirection: 'row',
 					alignItems: 'center',
 					width: '100%',
 				}}
 			>
-				<Typography
-					variant='h3'
-					align='center'
-					component='h2'
-					sx={{ marginRight: '1rem' }}
-				>
-					Inventory
-				</Typography>
-				<IconButton
-					onClick={() => handleNavigation('/inventory/create')}	
-				>
-					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
-				</IconButton>
+				<Box>
+					<Typography
+						variant='h3'
+						align='center'
+						component='h2'
+						sx={{ marginRight: '1rem' }}
+					>
+						Inventory
+					</Typography>
+				</Box>
+				<Box>
+					<IconButton
+						onClick={() => handleNavigation('/inventory/create')}
+					>
+						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					</IconButton>
+					<IconButton onClick={() => handleNavigation('/invoices/create')}>
+						<SystemUpdateAltIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					</IconButton>
+				</Box>
 			</Box>
 
 			{/* Display create success */}
@@ -187,7 +196,7 @@ export default function Home() {
 					padding: '.5rem'
 				}}
 			>
-				<DataGrid rows={inventoryData} columns={columns} pageSize={5} sx={{alignItems: 'center', margin: 'auto'}} />
+				<DataGrid rows={inventoryData} columns={columns} pageSize={5} sx={{ alignItems: 'center', margin: 'auto' }} />
 			</div>
 
 			{/* Delete Confirmation Dialog */}

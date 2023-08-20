@@ -570,8 +570,7 @@ export default function Home() {
 								}}
 								sx={{
 									mt: 3,
-									backgroundColor: 'white',
-									outline: '1px solid red',
+									backgroundColor: '#f3eced',
 									borderRadius: '8px',
 								}}
 							/>
@@ -587,8 +586,7 @@ export default function Home() {
 									readOnly: true,
 								}}
 								sx={{
-									backgroundColor: 'white',
-									outline: '1px solid red',
+									backgroundColor: '#f3eced',
 									borderRadius: '8px',
 									marginTop: '.25rem',
 								}}
@@ -605,8 +603,7 @@ export default function Home() {
 									readOnly: true,
 								}}
 								sx={{
-									backgroundColor: 'lavenderblush',
-									outline: '1px solid red',
+									backgroundColor: '#f3dde0',
 									borderRadius: '8px',
 									marginTop: '.25rem',
 								}}
@@ -673,8 +670,7 @@ export default function Home() {
 								type='text'
 								sx={{
 									mt: 3,
-									backgroundColor: 'white',
-									outline: '1px solid red',
+									backgroundColor: '#f3eced',
 									borderRadius: '8px',
 								}}
 							/>
@@ -691,8 +687,7 @@ export default function Home() {
 									readOnly: true,
 								}}
 								sx={{
-									backgroundColor: 'white',
-									outline: '1px solid red',
+									backgroundColor: '#f3eced',
 									borderRadius: '8px',
 									marginTop: '.25rem',
 								}}
@@ -710,8 +705,7 @@ export default function Home() {
 									readOnly: true,
 								}}
 								sx={{
-									backgroundColor: 'lavenderblush',
-									outline: '1px solid red',
+									backgroundColor: '#f3dde0',
 									borderRadius: '8px',
 									marginTop: '.25rem',
 								}}
