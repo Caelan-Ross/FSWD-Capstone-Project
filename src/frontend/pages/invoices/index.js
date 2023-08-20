@@ -40,6 +40,7 @@ export default function Invoices() {
 		customerId: null,
 	});
 	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
 	// Get customer details by ID
 	const fetchCustomer = async (customerId) => {
@@ -94,7 +95,7 @@ export default function Invoices() {
 		},
 		// Delete and Edit Icons
 		{
-			field: 'edit', 
+			field: 'edit',
 			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
@@ -181,14 +182,14 @@ export default function Invoices() {
 	const handleExport = async () => {
 		try {
 			await axios.post(`${API_BASE}/Export`);
-			setShowSnackbar(true);
+			setShowExportSnackbar(true);
 			setTimeout(() => {
-				setShowSnackbar(false);
-			}, 1000);
+				setShowExportSnackbar(false);
+			}, 2000);
 		} catch (error) {
 			console.error('Error exporting invoice:', error);
 		}
-	}
+	};
 
 	return (
 		<Box
@@ -204,7 +205,6 @@ export default function Invoices() {
 				overflow: 'none',
 			}}
 		>
-
 			<Box
 				sx={{
 					display: 'flex',
@@ -231,10 +231,13 @@ export default function Invoices() {
 					</IconButton>
 					{/* Export Invoices */}
 					<IconButton onClick={handleExport}>
-						<SystemUpdateAltIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+						<SystemUpdateAltIcon
+							sx={{ fontSize: '2.5rem', color: '#000000' }}
+						/>
 					</IconButton>
 				</Box>
 			</Box>
+			{/* Delete Invoice Snackbar */}
 			<Snackbar
 				open={showSnackbar}
 				autoHideDuration={1000}
@@ -245,7 +248,17 @@ export default function Invoices() {
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
-
+			{/* Export Invoice Snackbar */}
+			<Snackbar
+				open={showExportSnackbar}
+				autoHideDuration={1000}
+				onClose={() => setShowExportSnackbar(false)} // Close on click away
+			>
+				<SnackbarContent
+					message='Invoices exported successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 			{/* Invoice DataGrid */}
 			<div
 				style={{
@@ -253,7 +266,7 @@ export default function Invoices() {
 					padding: '.5rem',
 					marginTop: theme.spacing(2),
 					backgroundColor: '#fbfbfbf9',
-					borderRadius: '10px'
+					borderRadius: '10px',
 				}}
 			>
 				<DataGrid
