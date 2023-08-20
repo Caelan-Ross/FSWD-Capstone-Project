@@ -170,7 +170,7 @@ export default function Invoices() {
 				closeDeleteConfirmation();
 				setShowSnackbar(true); // Show the success Snackbar
 				setTimeout(() => {
-					setShowSnackbar(false); // Hide the Snackbar after 1 second
+					setShowSnackbar(false); 
 				}, 2000);
 			})
 			.catch((error) => {
@@ -187,7 +187,7 @@ export default function Invoices() {
 				setShowExportSnackbar(false);
 			}, 2000);
 		} catch (error) {
-			console.error('Error exporting invoice:', error);
+			console.error('Error exporting invoices:', error);
 		}
 	};
 
@@ -225,11 +225,11 @@ export default function Invoices() {
 					</Typography>
 				</Box>
 				<Box>
-					{/* Create Invoices */}
+					{/* Create Invoice Icon */}
 					<IconButton onClick={() => handleNavigation('/invoices/create')}>
 						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 					</IconButton>
-					{/* Export Invoices */}
+					{/* Export Invoices Icon */}
 					<IconButton onClick={handleExport}>
 						<SystemUpdateAltIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
@@ -237,22 +237,22 @@ export default function Invoices() {
 					</IconButton>
 				</Box>
 			</Box>
-			{/* Delete Invoice Snackbar */}
+			{/* Delete Invoice message */}
 			<Snackbar
 				open={showSnackbar}
-				autoHideDuration={1000}
-				onClose={() => setShowSnackbar(false)} // Close on click away
+				autoHideDuration={2000}
+				onClose={() => setShowSnackbar(false)}
 			>
 				<SnackbarContent
 					message='Invoice deleted successfully'
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
-			{/* Export Invoice Snackbar */}
+			{/* Export Invoice message */}
 			<Snackbar
 				open={showExportSnackbar}
-				autoHideDuration={1000}
-				onClose={() => setShowExportSnackbar(false)} // Close on click away
+				autoHideDuration={2000}
+				onClose={() => setShowExportSnackbar(false)}
 			>
 				<SnackbarContent
 					message='Invoices exported successfully'

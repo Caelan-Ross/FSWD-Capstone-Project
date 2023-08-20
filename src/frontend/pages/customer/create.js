@@ -42,7 +42,7 @@ export default function Home() {
 
 			await axios.post(url);
 			// Display success message
-			setShowSnackbar(true); // Show the success Snackbar
+			setShowSnackbar(true);
 			setTimeout(() => {
 				setShowSnackbar(false);
 				router.push('/customer');
@@ -155,7 +155,7 @@ export default function Home() {
 			</Box>
 			<Snackbar
 				open={showSnackbar}
-				autoHideDuration={1000} // 1 second
+				autoHideDuration={2000}
 				onClose={() => setShowSnackbar(false)} // Close on click away
 			>
 				<SnackbarContent

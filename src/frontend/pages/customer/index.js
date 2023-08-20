@@ -35,13 +35,18 @@ export default function Customer() {
 		customerId: null,
 	});
 	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
 	// Data Fields
 	const columns = [
 		{ field: 'id', headerName: <strong>Customer ID</strong>, width: 100 },
 		{ field: 'firstName', headerName: <strong>First Name</strong>, width: 300 },
 		{ field: 'lastName', headerName: <strong>Last Name</strong>, width: 300 },
-		{ field: 'phoneNumber', headerName: <strong>Phone No.</strong>, width: 300 },
+		{
+			field: 'phoneNumber',
+			headerName: <strong>Phone No.</strong>,
+			width: 300,
+		},
 		{ field: 'email', headerName: <strong>Email</strong>, width: 300 },
 		{
 			field: 'edit',
@@ -125,6 +130,19 @@ export default function Customer() {
 		router.push(`/customer/edit?id=${customerId}`);
 	};
 
+	// Function to export customers
+	const handleExport = async () => {
+		try {
+			await axios.post(`${API_BASE}/Export`);
+			setShowExportSnackbar(true);
+			setTimeout(() => {
+				setShowExportSnackbar(false);
+			}, 2000);
+		} catch (error) {
+			console.error('Error exporting customers:', error);
+		}
+	};
+
 	return (
 		<Box
 			display='flex'
@@ -159,23 +177,37 @@ export default function Customer() {
 					</Typography>
 				</Box>
 				<Box>
-					<IconButton
-						onClick={() => handleNavigation('/inventory/create')}
-					>
+					{/* Create Customer Icon */}
+					<IconButton onClick={() => handleNavigation('/inventory/create')}>
 						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 					</IconButton>
-					<IconButton onClick={() => handleNavigation('/customer/create')}>
-						<SystemUpdateAltIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					{/* Export Customers Icon */}
+					<IconButton onClick={handleExport}>
+						<SystemUpdateAltIcon
+							sx={{ fontSize: '2.5rem', color: '#000000' }}
+						/>
 					</IconButton>
 				</Box>
 			</Box>
+			{/* Delete Snackbar message */}
 			<Snackbar
 				open={showSnackbar}
-				autoHideDuration={1000} // 1 second
-				onClose={() => setShowSnackbar(false)} // Close on click away
+				autoHideDuration={2000} // 1 second
+				onClose={() => setShowSnackbar(false)}
 			>
 				<SnackbarContent
 					message='Customer deleted successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
+			{/* Export Snackbar message */}
+			<Snackbar
+				open={showExportSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowExportSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Customers exported successfully'
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
@@ -187,10 +219,15 @@ export default function Customer() {
 					padding: '.5rem',
 					marginTop: theme.spacing(2),
 					backgroundColor: '#fbfbfbf9',
-					borderRadius: '10px'
+					borderRadius: '10px',
 				}}
 			>
-				<DataGrid rows={customerData} columns={columns} pageSize={5} sx={{alignItems: 'center', margin: 'auto'}}/>
+				<DataGrid
+					rows={customerData}
+					columns={columns}
+					pageSize={5}
+					sx={{ alignItems: 'center', margin: 'auto' }}
+				/>
 			</div>
 
 			{/* Delete Confirmation Dialog */}

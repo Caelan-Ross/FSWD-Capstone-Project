@@ -35,6 +35,7 @@ export default function Home() {
 		batteryId: null,
 	});
 	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
 	// Data Fields
 	const columns = [
@@ -42,10 +43,14 @@ export default function Home() {
 		{ field: 'typeName', headerName: <strong>Type</strong>, width: 150 },
 		{ field: 'modelName', headerName: <strong>Model</strong>, width: 100 },
 		{ field: 'makeName', headerName: <strong>Make</strong>, width: 100 },
-		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 100},
-		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100},
-		{ field: 'price', headerName: <strong>Price</strong>, width: 100},
-		{ field: 'quantityOnHand', headerName: <strong>Qty on Hand</strong>, width: 100},
+		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 100 },
+		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100 },
+		{ field: 'price', headerName: <strong>Price</strong>, width: 100 },
+		{
+			field: 'quantityOnHand',
+			headerName: <strong>Qty on Hand</strong>,
+			width: 100,
+		},
 		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
 		{
 			field: 'edit', // Edit column
@@ -117,7 +122,7 @@ export default function Home() {
 				setShowSnackbar(true); // Show the success Snackbar
 				setTimeout(() => {
 					setShowSnackbar(false); // Hide the Snackbar after 1 second
-				}, 1000);
+				}, 2000);
 			})
 			.catch((error) => {
 				console.error('Error deleting battery:', error);
@@ -127,6 +132,19 @@ export default function Home() {
 	// Send user to edit
 	const handleEdit = (batteryId) => {
 		router.push(`/inventory/edit?id=${batteryId}`);
+	};
+
+	// Function to export customers
+	const handleExport = async () => {
+		try {
+			await axios.post(`${API_BASE}/Export`);
+			setShowExportSnackbar(true);
+			setTimeout(() => {
+				setShowExportSnackbar(false);
+			}, 2000);
+		} catch (error) {
+			console.error('Error exporting batteries:', error);
+		}
 	};
 
 	return (
@@ -163,25 +181,38 @@ export default function Home() {
 					</Typography>
 				</Box>
 				<Box>
-					<IconButton
-						onClick={() => handleNavigation('/inventory/create')}
-					>
+					{/* Create Battery Icon */}
+					<IconButton onClick={() => handleNavigation('/inventory/create')}>
 						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 					</IconButton>
-					<IconButton onClick={() => handleNavigation('/invoices/create')}>
-						<SystemUpdateAltIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					{/* Export Batteries Icon */}
+					<IconButton onClick={handleExport}>
+						<SystemUpdateAltIcon
+							sx={{ fontSize: '2.5rem', color: '#000000' }}
+						/>
 					</IconButton>
 				</Box>
 			</Box>
 
-			{/* Display create success */}
+			{/* Create Battery message */}
 			<Snackbar
 				open={showSnackbar}
-				autoHideDuration={1000} // 1 second
-				onClose={() => setShowSnackbar(false)} // Close on click away
+				autoHideDuration={2000}
+				onClose={() => setShowSnackbar(false)}
 			>
 				<SnackbarContent
 					message='Battery deleted successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
+			{/* Export Battery message */}
+			<Snackbar
+				open={showExportSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowExportSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Invoices exported successfully'
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
@@ -193,10 +224,15 @@ export default function Home() {
 					marginTop: theme.spacing(2),
 					backgroundColor: '#fbfbfbf9',
 					borderRadius: '10px',
-					padding: '.5rem'
+					padding: '.5rem',
 				}}
 			>
-				<DataGrid rows={inventoryData} columns={columns} pageSize={5} sx={{ alignItems: 'center', margin: 'auto' }} />
+				<DataGrid
+					rows={inventoryData}
+					columns={columns}
+					pageSize={5}
+					sx={{ alignItems: 'center', margin: 'auto' }}
+				/>
 			</div>
 
 			{/* Delete Confirmation Dialog */}
