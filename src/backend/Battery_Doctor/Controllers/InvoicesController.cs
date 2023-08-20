@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Battery_Doctor.Models;
 using Battery_Doctor.Data;
 using Battery_Doctor.DTOs;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
 
 namespace Battery_Doctor.Controllers
 {
@@ -176,6 +178,73 @@ namespace Battery_Doctor.Controllers
         private bool InvoiceExists(int id)
         {
             return _context.Invoices.Any(e => e.Id == id);
+        }
+
+        // EXPORT: api/Customers/Export
+        [HttpPost("Export")]
+        public async Task<IActionResult> Export()
+        {
+            List<Invoice> invoices = await _context.Invoices.ToListAsync();
+
+            using(var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Invoice Data");
+
+                // Headers
+                worksheet.Cells[1, 1].Value = "Invoice ID";
+                worksheet.Cells[1, 2].Value = "Customer ID";
+                worksheet.Cells[1, 3].Value = "Payment Method";
+                worksheet.Cells[1, 4].Value = "Date of Sale";
+                worksheet.Cells[1, 5].Value = "Total Price";
+                worksheet.Cells[1, 6].Value = "Created At";
+                worksheet.Cells[1, 7].Value = "Updated At";
+
+                int rowNumber = 2;
+
+                foreach(var invoice in invoices)
+                {
+                    worksheet.Cells[rowNumber, 1].Value = invoice.Id;
+                    worksheet.Cells[rowNumber, 2].Value = invoice.CustomerId;
+                    worksheet.Cells[rowNumber, 3].Value = _context.Payment_Methods.Find(invoice.PaymentMethodId).Method; // Assuming PaymentMethod has a 'Name' property
+                    worksheet.Cells[rowNumber, 4].Value = invoice.DateOfSale.ToString("yyyy-MM-dd");
+                    worksheet.Cells[rowNumber, 5].Value = invoice.TotalPrice;
+                    worksheet.Cells[rowNumber, 6].Value = invoice.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    worksheet.Cells[rowNumber, 7].Value = invoice.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    rowNumber++;
+                }
+
+                // Auto-Formatting
+                using(var range = worksheet.Cells[1, 1, rowNumber - 1, 7])
+                {
+                    // Setting border for all cells
+                    range.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    range.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    range.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                    // Setting font bold for header
+                    range[1, 1, 1, 7].Style.Font.Bold = true;
+
+                    // Setting background color for header
+                    range[1, 1, 1, 7].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range[1, 1, 1, 7].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                }
+
+                // AutoFit columns to content size for entire columns
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                // Save to desktop with filename "InvoiceData[Current Date].xlsx"
+                var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                var exportDirectory = Path.Combine(desktopPath, "Exports", "Invoice");
+                Directory.CreateDirectory(exportDirectory);
+                var now = DateTime.Now;
+                var currentDate = now.ToString("yyyyMMdd");
+                var filePath = Path.Combine(exportDirectory, $"InvoiceData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+
+                package.SaveAs(new FileInfo(filePath));
+            }
+
+            return NoContent();
         }
     }
 }

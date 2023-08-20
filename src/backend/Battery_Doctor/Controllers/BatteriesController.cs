@@ -4,6 +4,8 @@ using Battery_Doctor.Models;
 using Battery_Doctor.Data;
 using Battery_Doctor.DTOs;
 using System.Linq;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
 
 namespace Battery_Doctor.Controllers
 {
@@ -317,6 +319,80 @@ namespace Battery_Doctor.Controllers
         private bool BatteryExists(int id)
         {
             return _context.Batteries.Any(e => e.Id == id);
+        }
+
+        // EXPORT: api/Customers/Export
+        [HttpPost("Export")]
+        public async Task<IActionResult> Export()
+        {
+            List<Battery> batteries = await _context.Batteries.ToListAsync();
+
+            using(var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Battery Data");
+
+                // Headers
+                worksheet.Cells[1, 1].Value = "Battery ID";
+                worksheet.Cells[1, 2].Value = "Battery Type";
+                worksheet.Cells[1, 3].Value = "Battery Model";
+                worksheet.Cells[1, 4].Value = "Battery Make";
+                worksheet.Cells[1, 5].Value = "Voltage";
+                worksheet.Cells[1, 6].Value = "Capacity";
+                worksheet.Cells[1, 7].Value = "Price";
+                worksheet.Cells[1, 8].Value = "Quantity On Hand";
+                worksheet.Cells[1, 9].Value = "Created At";
+                worksheet.Cells[1, 10].Value = "Updated At";
+
+                int rowNumber = 2;
+
+                foreach(var battery in batteries)
+                {
+                    worksheet.Cells[rowNumber, 1].Value = battery.Id;
+                    worksheet.Cells[rowNumber, 2].Value = _context.Battery_Types.Find(battery.TypeId).TypeName;
+                    worksheet.Cells[rowNumber, 3].Value = _context.Battery_Models.Find(battery.ModelId).ModelName;
+                    worksheet.Cells[rowNumber, 4].Value = _context.Battery_Makes.Find(battery.MakeId).Name;
+                    worksheet.Cells[rowNumber, 5].Value = battery.Voltage;
+                    worksheet.Cells[rowNumber, 6].Value = battery.Capacity;
+                    worksheet.Cells[rowNumber, 7].Value = battery.Price;
+                    worksheet.Cells[rowNumber, 8].Value = battery.QuantityOnHand;
+                    worksheet.Cells[rowNumber, 9].Value = battery.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    worksheet.Cells[rowNumber, 10].Value = battery.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    rowNumber++;
+                }
+
+                // Auto-Formatting
+                using(var range = worksheet.Cells[1, 1, rowNumber - 1, 10])
+                {
+                    // Setting border for all cells
+                    range.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    range.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    range.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    range.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                    // Setting font bold for header
+                    range[1, 1, 1, 10].Style.Font.Bold = true;
+
+                    // Setting background color for header
+                    range[1, 1, 1, 10].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range[1, 1, 1, 10].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                }
+
+                // AutoFit columns to content size for entire columns
+                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                // Save to "Exports" subdirectory on the Desktop
+                var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                var exportDirectory = Path.Combine(desktopPath, "Exports", "Battery");
+                Directory.CreateDirectory(exportDirectory);
+
+                var now = DateTime.Now;
+                var currentDate = now.ToString("yyyyMMdd");
+                var filePath = Path.Combine(exportDirectory, $"BatteryData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+
+                package.SaveAs(new FileInfo(filePath));
+            }
+
+            return NoContent();
         }
     }
 }
