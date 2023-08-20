@@ -92,8 +92,9 @@ export default function Invoices() {
 			headerName: 'Total Price',
 			width: 200,
 		},
+		// Delete and Edit Icons
 		{
-			field: 'edit', // Edit column
+			field: 'edit', 
 			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
@@ -176,6 +177,19 @@ export default function Invoices() {
 			});
 	};
 
+	// Function to export an invoices
+	const handleExport = async () => {
+		try {
+			await axios.post(`${API_BASE}/Export`);
+			setShowSnackbar(true);
+			setTimeout(() => {
+				setShowSnackbar(false);
+			}, 1000);
+		} catch (error) {
+			console.error('Error exporting invoice:', error);
+		}
+	}
+
 	return (
 		<Box
 			display='flex'
@@ -211,17 +225,19 @@ export default function Invoices() {
 					</Typography>
 				</Box>
 				<Box>
+					{/* Create Invoices */}
 					<IconButton onClick={() => handleNavigation('/invoices/create')}>
 						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 					</IconButton>
-					<IconButton onClick={() => handleNavigation('/invoices/create')}>
+					{/* Export Invoices */}
+					<IconButton onClick={handleExport}>
 						<SystemUpdateAltIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 					</IconButton>
 				</Box>
 			</Box>
 			<Snackbar
 				open={showSnackbar}
-				autoHideDuration={1000} // 1 second
+				autoHideDuration={1000}
 				onClose={() => setShowSnackbar(false)} // Close on click away
 			>
 				<SnackbarContent
