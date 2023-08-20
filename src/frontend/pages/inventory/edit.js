@@ -269,7 +269,6 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.modelName}
-							// onChange={(e) => handleFieldChange('modelName', e.target.value)}
 							onChange={(e) => handleBatteryModelTypeSelection(e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
@@ -289,7 +288,6 @@ export default function Home() {
 							fullWidth
 							value={batteryDetails.makeName}
 							onChange={(e) => handleBatteryMakeTypeSelection(e.target.value)}
-							// onChange={(e) => handleFieldChange('makeName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{makeOptions.map((option) => (
@@ -309,7 +307,6 @@ export default function Home() {
 							fullWidth
 							value={batteryDetails.groupName}
 							onChange={(e) => handleBatteryGroupTypeSelection(e.target.value)}
-							// onChange={(e) => handleFieldChange('groupName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{groupOptions.map((option) => (
