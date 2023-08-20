@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, useTheme, IconButton } from '@mui/material';
+import {
+	Typography,
+	Box,
+	useTheme,
+	IconButton,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+	Button,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+
+function toShortDate(dateString) {
+	const date = new Date(dateString);
+	return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+}
 
 export default function Invoices() {
 	const theme = useTheme();
@@ -14,41 +33,69 @@ export default function Invoices() {
 		router.push(path);
 	};
 
+	const API_BASE = 'http://localhost:7166/api/Invoices';
+	const [invoiceData, setInvoiceData] = useState([]);
+	const [deleteConfirmation, setDeleteConfirmation] = useState({
+		open: false,
+		customerId: null,
+	});
+	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
-	// Temporary invoice edit function
-	// WILL BE REDIRECTING TO CUSTOMER, THIS IS FOR PROTOTYPE/TESTING PURPOSES**
-	
-	const handleEdit = (customerId) => {
-		router.push(`/customer/editCustomer?id=${customerId}`);
+	// Get customer details by ID
+	const fetchCustomer = async (customerId) => {
+		try {
+			const response = await axios.get(
+				`http://localhost:7166/api/Customers/${customerId}`
+			);
+			return response.data;
+		} catch (error) {
+			console.error('Error fetching customer details:', error);
+			return null;
+		}
 	};
 
-	// Dummy invoice data
-	const invoiceData = [
-		{
-			id: 100000,
-			invoiceDate: '01/01/2000',
-			customerName: 'Doe',
-			batteryAmt: 10,
-			saleAmount: '$100.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		// Add more dummy data rows here
-	];
+	// Send user to edit
+	const handleEdit = (invoiceId) => {
+		router.push(`/invoices/edit?id=${invoiceId}`);
+	};
 
+	// Display Headings
 	const columns = [
-		{ field: 'id', headerName: 'Invoice No.', width: 150 },
-		{ field: 'invoiceDate', headerName: 'Date', width: 150 },
-		{ field: 'customerName', headerName: 'Name', width: 150 },
-		{ field: 'batteryAmt', headerName: '# Of Batteries', width: 150 },
-		{ field: 'saleAmount', headerName: 'Sale Amount', width: 250 },
 		{
-			field: 'edit', // Edit column
+			field: 'id',
+			headerName: 'Invoice ID',
+			width: 100,
+		},
+		{
+			field: 'customerFirstName',
+			headerName: 'First Name',
+			width: 150,
+		},
+		{
+			field: 'customerLastName',
+			headerName: 'Last Name',
+			width: 150,
+		},
+		{
+			field: 'paymentMethodR',
+			headerName: 'Payment Method',
+			width: 200,
+		},
+		{
+			field: 'dateOfSale',
+			headerName: 'Date of Invoice',
+			width: 200,
+			valueGetter: (params) => toShortDate(params.row.dateOfSale),
+		},
+		{
+			field: 'totalPrice',
+			headerName: 'Total Price',
+			width: 200,
+		},
+		// Delete and Edit Icons
+		{
+			field: 'edit',
 			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
@@ -62,12 +109,87 @@ export default function Invoices() {
 			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => handleDelete(params.row.id)}>
+				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
 					<DeleteIcon />
 				</IconButton>
 			),
 		},
 	];
+
+	useEffect(() => {
+		axios
+			.get(API_BASE)
+			.then(async (response) => {
+				const invoices = response.data;
+
+				// Fetch customer names for each invoice
+				const invoicesWithCustomerNames = await Promise.all(
+					invoices.map(async (invoice) => {
+						const customer = await fetchCustomer(invoice.customerId);
+						return {
+							...invoice,
+							customerFirstName: customer.firstName,
+							customerLastName: customer.lastName,
+						};
+					})
+				);
+
+				setInvoiceData(invoicesWithCustomerNames);
+			})
+			.catch((error) => {
+				console.error('Error fetching invoice data:', error);
+			});
+	}, []);
+
+	// Function to open the delete confirmation dialog
+	const openDeleteConfirmation = (invoiceId) => {
+		setDeleteConfirmation({
+			open: true,
+			invoiceId: invoiceId,
+		});
+	};
+
+	// Function to close the delete confirmation dialog
+	const closeDeleteConfirmation = () => {
+		setDeleteConfirmation({
+			open: false,
+			invoiceId: null,
+		});
+	};
+
+	// Function to delete an invoice
+	const handleDelete = (invoiceId) => {
+		axios
+			.delete(`${API_BASE}/${invoiceId}`)
+			.then((response) => {
+				console.log('Invoice deleted:', response.data);
+				// Remove the deleted invoice from invoiceData state
+				setInvoiceData((prevData) =>
+					prevData.filter((invoice) => invoice.id !== invoiceId)
+				);
+				closeDeleteConfirmation();
+				setShowSnackbar(true); // Show the success Snackbar
+				setTimeout(() => {
+					setShowSnackbar(false); 
+				}, 2000);
+			})
+			.catch((error) => {
+				console.error('Error deleting invoice:', error);
+			});
+	};
+
+	// Function to export an invoices
+	const handleExport = async () => {
+		try {
+			await axios.post(`${API_BASE}/Export`);
+			setShowExportSnackbar(true);
+			setTimeout(() => {
+				setShowExportSnackbar(false);
+			}, 2000);
+		} catch (error) {
+			console.error('Error exporting invoices:', error);
+		}
+	};
 
 	return (
 		<Box
@@ -76,54 +198,102 @@ export default function Invoices() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '94%',
-				overflow: 'auto',
+				height: '90%',
+				overflow: 'none',
 			}}
 		>
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'flex-start',
+					justifyContent: 'space-between',
+					flexDirection: 'row',
 					alignItems: 'center',
 					width: '100%',
 				}}
 			>
-				<Typography
-					variant='h3'
-					align='center'
-					component='h2'
-					sx={{ marginRight: '1rem' }}
-				>
-					Invoices
-				</Typography>
-				<IconButton onClick={() => handleNavigation('/invoices/createInvoice')}>
-					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
-				</IconButton>
+				<Box>
+					<Typography
+						variant='h3'
+						align='center'
+						component='h2'
+						sx={{ marginRight: '1rem' }}
+					>
+						Invoices
+					</Typography>
+				</Box>
+				<Box>
+					{/* Create Invoice Icon */}
+					<IconButton onClick={() => handleNavigation('/invoices/create')}>
+						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					</IconButton>
+					{/* Export Invoices Icon */}
+					<IconButton onClick={handleExport}>
+						<SystemUpdateAltIcon
+							sx={{ fontSize: '2.5rem', color: '#000000' }}
+						/>
+					</IconButton>
+				</Box>
 			</Box>
-			<Box textAlign='left' mt={2}>
-				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-					neque consequuntur in tempora, placeat ullam nihil praesentium
-					reprehenderit quaerat, numquam quibusdam repellendus quidem tempore
-					temporibus quas est? Nesciunt, recusandae et.
-				</Typography>
-			</Box>
-
+			{/* Delete Invoice message */}
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Invoice deleted successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
+			{/* Export Invoice message */}
+			<Snackbar
+				open={showExportSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowExportSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Invoices exported successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 			{/* Invoice DataGrid */}
 			<div
 				style={{
-					height: '80%',
-					width: '100%',
+					height: '90%',
+					padding: '.5rem',
 					marginTop: theme.spacing(2),
-					backgroundColor: 'white',
+					backgroundColor: '#fbfbfbf9',
+					borderRadius: '10px',
 				}}
 			>
-				<DataGrid rows={invoiceData} columns={columns} pageSize={5} />
+				<DataGrid
+					rows={invoiceData}
+					columns={columns}
+					pageSize={5}
+					sx={{ alignItems: 'center', margin: 'auto' }}
+				/>
 			</div>
+			{/* Delete Confirmation Dialog */}
+			<Dialog open={deleteConfirmation.open} onClose={closeDeleteConfirmation}>
+				<DialogTitle>Delete Invoice</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Are you sure you want to delete this invoice?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
+					<Button
+						onClick={() => handleDelete(deleteConfirmation.invoiceId)}
+						color='primary'
+					>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 }

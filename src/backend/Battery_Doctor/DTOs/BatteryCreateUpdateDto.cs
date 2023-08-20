@@ -3,11 +3,13 @@ namespace Battery_Doctor.DTOs
 {
     public class BatteryCreateUpdateDto
     {
-        public int TypeId { get; set; }
+        public string TypeName { get; set; }
 
-        public int ModelId { get; set; }
+        public string ModelName { get; set; }
 
-        public int MakeId { get; set; }
+        public string MakeName { get; set; }
+
+        //public int GroupId { get; set; }
 
         public float Voltage { get; set; }
 
@@ -17,7 +19,6 @@ namespace Battery_Doctor.DTOs
 
         public int QuantityOnHand { get; set; }
 
-        public int GroupId { get; set; }
     }
 }
 

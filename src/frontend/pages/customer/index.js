@@ -15,6 +15,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -25,22 +28,29 @@ export default function Customer() {
 		router.push(path);
 	};
 
-	const [customerData, setCustomerData] = useState([]);
 	const API_BASE = 'http://localhost:7166/api/Customers';
+	const [customerData, setCustomerData] = useState([]);
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
 		open: false,
 		customerId: null,
 	});
+	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
+	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: 'Customer ID', width: 150 },
-		{ field: 'firstName', headerName: 'First Name', width: 150 },
-		{ field: 'lastName', headerName: 'Last Name', width: 150 },
-		{ field: 'phoneNumber', headerName: 'Phone No.', width: 150 },
-		{ field: 'email', headerName: 'Email', width: 250 },
+		{ field: 'id', headerName: <strong>Customer ID</strong>, width: 100 },
+		{ field: 'firstName', headerName: <strong>First Name</strong>, width: 300 },
+		{ field: 'lastName', headerName: <strong>Last Name</strong>, width: 300 },
+		{
+			field: 'phoneNumber',
+			headerName: <strong>Phone No.</strong>,
+			width: 300,
+		},
+		{ field: 'email', headerName: <strong>Email</strong>, width: 300 },
 		{
 			field: 'edit',
-			headerName: 'Edit',
+			headerName: <strong>Edit</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -50,7 +60,7 @@ export default function Customer() {
 		},
 		{
 			field: 'delete',
-			headerName: 'Delete',
+			headerName: <strong>Delete</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
@@ -60,8 +70,8 @@ export default function Customer() {
 		},
 	];
 
+	// Fetch Customer Data
 	useEffect(() => {
-		// Fetch data from API using axios
 		axios
 			.get(API_BASE, {
 				headers: {
@@ -105,16 +115,32 @@ export default function Customer() {
 					prevData.filter((customer) => customer.id !== customerId)
 				);
 				closeDeleteConfirmation();
+				setShowSnackbar(true); // Show the success Snackbar
+				setTimeout(() => {
+					setShowSnackbar(false); // Hide the Snackbar after 1 second
+				}, 2000);
 			})
 			.catch((error) => {
 				console.error('Error deleting customer:', error);
 			});
 	};
 
-
 	// Send user to editCustomer.js
 	const handleEdit = (customerId) => {
-		router.push(`/customer/editCustomer?id=${customerId}`);
+		router.push(`/customer/edit?id=${customerId}`);
+	};
+
+	// Function to export customers
+	const handleExport = async () => {
+		try {
+			await axios.post(`${API_BASE}/Export`);
+			setShowExportSnackbar(true);
+			setTimeout(() => {
+				setShowExportSnackbar(false);
+			}, 2000);
+		} catch (error) {
+			console.error('Error exporting customers:', error);
+		}
 	};
 
 	return (
@@ -124,55 +150,84 @@ export default function Customer() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '94%',
-				overflow: 'auto',
+				height: '90%',
+				overflow: 'none',
 			}}
 		>
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'flex-start',
+					justifyContent: 'space-between',
+					flexDirection: 'row',
 					alignItems: 'center',
 					width: '100%',
 				}}
 			>
-				<Typography
-					variant='h3'
-					align='center'
-					component='h2'
-					sx={{ marginRight: '1rem' }}
-				>
-					Customer
-				</Typography>
-				<IconButton
-					onClick={() => handleNavigation('/customer/createCustomer')}
-				>
-					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
-				</IconButton>
+				<Box>
+					<Typography
+						variant='h3'
+						align='center'
+						component='h2'
+						sx={{ marginRight: '1rem' }}
+					>
+						Customers
+					</Typography>
+				</Box>
+				<Box>
+					{/* Create Customer Icon */}
+					<IconButton onClick={() => handleNavigation('/inventory/create')}>
+						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					</IconButton>
+					{/* Export Customers Icon */}
+					<IconButton onClick={handleExport}>
+						<SystemUpdateAltIcon
+							sx={{ fontSize: '2.5rem', color: '#000000' }}
+						/>
+					</IconButton>
+				</Box>
 			</Box>
-			<Box textAlign='left' mt={2}>
-				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-					neque consequuntur in tempora, placeat ullam nihil praesentium
-					reprehenderit quaerat, numquam quibusdam repellendus quidem tempore
-					temporibus quas est? Nesciunt, recusandae et.
-				</Typography>
-			</Box>
+			{/* Delete Snackbar message */}
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={2000} // 1 second
+				onClose={() => setShowSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Customer deleted successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
+			{/* Export Snackbar message */}
+			<Snackbar
+				open={showExportSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowExportSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Customers exported successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 
 			{/* Customer DataGrid */}
 			<div
 				style={{
-					height: '80%',
-					width: '100%',
+					height: '90%',
+					padding: '.5rem',
 					marginTop: theme.spacing(2),
-					backgroundColor: 'white',
+					backgroundColor: '#fbfbfbf9',
+					borderRadius: '10px',
 				}}
 			>
-				<DataGrid rows={customerData} columns={columns} pageSize={5} />
+				<DataGrid
+					rows={customerData}
+					columns={columns}
+					pageSize={5}
+					sx={{ alignItems: 'center', margin: 'auto' }}
+				/>
 			</div>
 
 			{/* Delete Confirmation Dialog */}

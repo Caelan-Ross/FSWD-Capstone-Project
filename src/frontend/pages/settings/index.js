@@ -15,11 +15,10 @@ export default function Setting() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
 			}}
 		>
@@ -44,29 +43,60 @@ export default function Setting() {
 				</Box>
 			</Box>
 			<Box
-				mt={12}
+				mt={8}
 				sx={{
 					display: 'flex',
 					flexDirection: 'row',
+					backgroundColor: '#fbfbfbf9',
+					padding: '2rem',
+					borderRadius: '10px',
+					outline: '1px solid black',
+					justifyContent: 'space-evenly',
 				}}
 			>
 				{/* Column 1: Edit Profile */}
-				<Box sx={{ flex: 1, marginRight: '20px' }}>
-					<Typography variant='h4' align='center' component='h3'>
-						Edit Profile
-					</Typography>
-					<TextField label='Name' fullWidth variant='outlined' sx={{ mt: 2, backgroundColor: 'white' }} />
-					<TextField
-						label='Email'
-						fullWidth
-						variant='outlined'
-						sx={{ mt: 2, backgroundColor: 'white' }}
-					/>
+				<Box sx={{
+					flex: 1, marginRight: '20px', backgroundColor: '#fbfbfbf9', padding: '2rem', borderRight: '1px solid lightgray',
+					borderLeft: '1px solid lightgray',
+					borderBottom: '1px solid #ecececf9',
+					borderTop: '1px solid #ecececf9',
+					padding: '10px',
+					borderRadius: '10px',
+					textAlign: 'center',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'space-between'
+				}}>
+					<Box>
+						<Typography variant='h4' align='left' component='h3'>
+							Edit Profile
+						</Typography>
+						<TextField label='Name' fullWidth variant='outlined' sx={{ mt: 2, backgroundColor: 'white' }} />
+						<TextField
+							label='Email'
+							fullWidth
+							variant='outlined'
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						/>
+					</Box>
+					<Box>
+						<Button variant='contained' color='primary' className='btn-primary' sx={{ margin: '1rem auto' }}>
+							Submit
+						</Button>
+					</Box>
 				</Box>
 
 				{/* Column 2: Change Password */}
-				<Box sx={{ flex: 1 }}>
-					<Typography variant='h4' align='center' component='h3'>
+				<Box sx={{
+					flex: 1, backgroundColor: '#fbfbfbf9', padding: '2rem', borderRight: '1px solid lightgray',
+					borderLeft: '1px solid lightgray',
+					borderBottom: '1px solid #ecececf9',
+					borderTop: '1px solid #ecececf9',
+					padding: '10px',
+					borderRadius: '10px',
+					textAlign: 'center'
+				}}>
+					<Typography variant='h4' align='left' component='h3'>
 						Change Password
 					</Typography>
 					<TextField
@@ -90,7 +120,7 @@ export default function Setting() {
 						type='password'
 						sx={{ mt: 2, backgroundColor: 'white' }}
 					/>
-					<Button variant='contained' color='primary' sx={{ mt: 3 }}>
+					<Button variant='contained' color='primary' className='btn-primary' sx={{ margin: '1rem auto' }}>
 						Submit
 					</Button>
 				</Box>

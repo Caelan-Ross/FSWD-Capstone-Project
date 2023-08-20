@@ -1,4 +1,6 @@
 import { Typography, Box, useTheme } from '@mui/material';
+import Icon from '@mui/material';
+import BatterySaverIcon from '@mui/icons-material/BatterySaver';
 import Link from '@mui/material/Link';
 
 export default function Home() {
@@ -11,31 +13,30 @@ export default function Home() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem auto',
 				padding: '2rem',
-				height: '94%',
+				height: '38vw',
 				overflow: 'auto',
+				width: '90vw'
 			}}
 		>
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'space-between',
+					alignItems: 'center',
 					width: '100%',
 				}}
 			>
 				<Typography variant='h3' align='center' component='h2'>
-					Home
+					The Battery Doctor 
 				</Typography>
+				<BatterySaverIcon sx={{fontSize: '4rem', color: 'red', transform: 'rotate(90deg)', marginLeft: '.5rem', backgroundColor: 'lavenderblush', borderRadius: '50%', padding: '.5rem', outline: '1px solid #939393f9'}}></BatterySaverIcon>
 			</Box>
-			<Box textAlign='left' mt={2}>
+			<Box textAlign='left' mt={2} sx={{height: '90%', width: '85vw', backgroundColor: '#fbfbfbf9',
+					borderRadius: '10px', margin: '0 auto'}}>
 				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-					neque consequuntur in tempora, placeat ullam nihil praesentium
-					reprehenderit quaerat, numquam quibusdam repellendus quidem tempore
-					temporibus quas est? Nesciunt, recusandae et.
+					PLACEHOLDER CONTENT FOR TWO DASHBOARDS
 				</Typography>
 			</Box>
 		</Box>

@@ -17,16 +17,18 @@ export default function App({ Component, pageProps }) {
     setOpen(!open);
   };
 
-  const user = 'John Doe';
+  const user = 'Nathan Reiman';
 
   return (
     <CssBaseline>
       <Box
         sx={{
           color: 'black',
+          backgroundColor: '#fbfbfbf9',
           display: 'flex',
           flexDirection: 'row',
           height: '100vh',
+          width: '100vw',
         }}
       >
         <Navbar
@@ -39,20 +41,19 @@ export default function App({ Component, pageProps }) {
             display: 'flex',
             flexDirection: 'column',
             padding: '0px 20px',
-            width: '100%',
-            margin: '0 auto',
+            width: '100vw',
+            margin: '0 auto 0 0',
           }}
         >
           <Box
             sx={{
-              flex: '0 0 auto',
-              backgroundColor: '#ffffff',
+              backgroundColor: '#fbfbfbf9',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               height: '6rem',
-              width: '100%',
-              margin: '0 auto',
+              width: '95vw',
+              margin: '0 auto 0 0',
             }}
           >
             <Box
@@ -62,10 +63,10 @@ export default function App({ Component, pageProps }) {
                 flexGrow: 1,
               }}
             >
-              <Avatar src='/path/to/avatar-image.jpg' alt='User Avatar' />
+              {/* <Avatar src='/path/to/avatar-image.jpg' alt='User Avatar' /> */}
               <Box sx={{ marginLeft: '0.625rem' }}>
                 <Typography variant='body1'>
-                  The Battery Doctor - Welcome '{user}'!
+                  The Battery Doctor - Welcome {user}!
                 </Typography>
                 <Typography variant='caption' color='textSecondary'>
                   2023-08-04
@@ -74,7 +75,7 @@ export default function App({ Component, pageProps }) {
             </Box>
             <Box>
               <Button
-                onClick={() => handleNavigation('/')}
+                onClick={() => handleNavigation('/invoices/create')}
                 startIcon={<AddIcon />}
                 className='btn-primary'
                 sx={{
@@ -89,14 +90,13 @@ export default function App({ Component, pageProps }) {
           </Box>
           <Box
             sx={{
-              backgroundColor: '#959595',
-              outline: '1px solid #E6E8E7',
               borderRadius: '8px',
               flex: '1',
               overflow: 'auto',
-              margin: '.25rem auto',
+              margin: '.25rem auto 0 0',
               maxHeight: 'calc(100vh - 8.25rem)',
-              width: '100%',
+              width: '95vw',
+              backgroundColor: '#E6E8E7',
             }}
           >
             <Component {...pageProps} />

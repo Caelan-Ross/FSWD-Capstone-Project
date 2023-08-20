@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Box, useTheme, IconButton } from '@mui/material';
+import {
+	Typography,
+	Box,
+	useTheme,
+	IconButton,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+	Button,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -14,107 +28,33 @@ export default function Home() {
 		router.push(path);
 	};
 
-	const [batteryData, setBatteryData] = useState([]);
-	const API_BASE = 'http://localhost.7166/api/Batteries';
+	const API_BASE = 'http://localhost:7166/api/Batteries';
+	const [inventoryData, setInventoryData] = useState([]);
+	const [deleteConfirmation, setDeleteConfirmation] = useState({
+		open: false,
+		batteryId: null,
+	});
+	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
-	// Dummy inventory data
-	const inventoryData = [
-		{
-			id: 100000,
-			invoiceDate: '01/01/2000',
-			customerName: 'Doe',
-			batteryAmt: 10,
-			saleAmount: '$100.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		{
-			id: 100001,
-			invoiceDate: '02/02/2000',
-			customerName: 'John Smith',
-			batteryAmt: 2,
-			saleAmt: '$30.00',
-		},
-		// Add more dummy data rows here
-	];
-
+	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: 'Invoice No.', width: 150 },
-		{ field: 'invoiceDate', headerName: 'Date', width: 150 },
-		{ field: 'customerName', headerName: 'Name', width: 150 },
-		{ field: 'batteryAmt', headerName: '# Of Batteries', width: 150 },
-		{ field: 'saleAmount', headerName: 'Sale Amount', width: 250 },
+		{ field: 'id', headerName: <strong>Battery ID</strong>, width: 100 },
+		{ field: 'typeName', headerName: <strong>Type</strong>, width: 150 },
+		{ field: 'modelName', headerName: <strong>Model</strong>, width: 100 },
+		{ field: 'makeName', headerName: <strong>Make</strong>, width: 100 },
+		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 100 },
+		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100 },
+		{ field: 'price', headerName: <strong>Price</strong>, width: 100 },
+		{
+			field: 'quantityOnHand',
+			headerName: <strong>Qty on Hand</strong>,
+			width: 100,
+		},
+		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
 		{
 			field: 'edit', // Edit column
-			headerName: 'Edit',
+			headerName: <strong>Edit</strong>,
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -124,15 +64,88 @@ export default function Home() {
 		},
 		{
 			field: 'delete',
-			headerName: 'Delete',
+			headerName: <strong>Delete</strong>,
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => handleDelete(params.row.id)}>
+				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
 					<DeleteIcon />
 				</IconButton>
 			),
 		},
 	];
+
+	// Fetch Inventory Data
+	useEffect(() => {
+		axios
+			.get(API_BASE, {
+				headers: {
+					accept: 'text/plain',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+				// Update inventoryData state with fetched data
+				setInventoryData(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customer data:', error);
+			});
+	}, []);
+
+	// Function to open the delete confirmation dialog
+	const openDeleteConfirmation = (batteryId) => {
+		setDeleteConfirmation({
+			open: true,
+			batteryId: batteryId,
+		});
+	};
+
+	// Function to close the delete confirmation dialog
+	const closeDeleteConfirmation = () => {
+		setDeleteConfirmation({
+			open: false,
+			batteryId: null,
+		});
+	};
+
+	// Function to delete a battery
+	const handleDelete = (batteryId) => {
+		axios
+			.delete(`${API_BASE}/${batteryId}`)
+			.then((response) => {
+				console.log('Battery deleted:', response.data);
+				// Remove the deleted battery from inventoryData state
+				setInventoryData((prevData) =>
+					prevData.filter((battery) => battery.id !== batteryId)
+				);
+				closeDeleteConfirmation();
+				setShowSnackbar(true); // Show the success Snackbar
+				setTimeout(() => {
+					setShowSnackbar(false); // Hide the Snackbar after 1 second
+				}, 2000);
+			})
+			.catch((error) => {
+				console.error('Error deleting battery:', error);
+			});
+	};
+
+	// Send user to edit
+	const handleEdit = (batteryId) => {
+		router.push(`/inventory/edit?id=${batteryId}`);
+	};
+
+	// Function to export customers
+	const handleExport = async () => {
+		try {
+			await axios.post(`${API_BASE}/Export`);
+			setShowExportSnackbar(true);
+			setTimeout(() => {
+				setShowExportSnackbar(false);
+			}, 2000);
+		} catch (error) {
+			console.error('Error exporting batteries:', error);
+		}
+	};
 
 	return (
 		<Box
@@ -141,54 +154,105 @@ export default function Home() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
 			}}
 		>
 			<Box
 				sx={{
 					display: 'flex',
-					justifyContent: 'flex-start',
+					justifyContent: 'space-between',
+					flexDirection: 'row',
 					alignItems: 'center',
 					width: '100%',
 				}}
 			>
-				<Typography
-					variant='h3'
-					align='center'
-					component='h2'
-					sx={{ marginRight: '1rem' }}
-				>
-					Inventory
-				</Typography>
-				<IconButton>
-					<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
-				</IconButton>
+				<Box>
+					<Typography
+						variant='h3'
+						align='center'
+						component='h2'
+						sx={{ marginRight: '1rem' }}
+					>
+						Inventory
+					</Typography>
+				</Box>
+				<Box>
+					{/* Create Battery Icon */}
+					<IconButton onClick={() => handleNavigation('/inventory/create')}>
+						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
+					</IconButton>
+					{/* Export Batteries Icon */}
+					<IconButton onClick={handleExport}>
+						<SystemUpdateAltIcon
+							sx={{ fontSize: '2.5rem', color: '#000000' }}
+						/>
+					</IconButton>
+				</Box>
 			</Box>
-			<Box textAlign='left' mt={2}>
-				<Typography variant='body1' component='p'>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis
-					neque consequuntur in tempora, placeat ullam nihil praesentium
-					reprehenderit quaerat, numquam quibusdam repellendus quidem tempore
-					temporibus quas est? Nesciunt, recusandae et.
-				</Typography>
-			</Box>
+
+			{/* Create Battery message */}
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Battery deleted successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
+			{/* Export Battery message */}
+			<Snackbar
+				open={showExportSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowExportSnackbar(false)}
+			>
+				<SnackbarContent
+					message='Batteries exported successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 
 			{/* Inventory DataGrid */}
 			<div
 				style={{
-					height: '80%',
-					width: '100%',
+					height: '90%',
 					marginTop: theme.spacing(2),
-					backgroundColor: 'white',
+					backgroundColor: '#fbfbfbf9',
+					borderRadius: '10px',
+					padding: '.5rem',
 				}}
 			>
-				<DataGrid rows={inventoryData} columns={columns} pageSize={5} />
+				<DataGrid
+					rows={inventoryData}
+					columns={columns}
+					pageSize={5}
+					sx={{ alignItems: 'center', margin: 'auto' }}
+				/>
 			</div>
+
+			{/* Delete Confirmation Dialog */}
+			<Dialog open={deleteConfirmation.open} onClose={closeDeleteConfirmation}>
+				<DialogTitle>Delete Battery</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Are you sure you want to delete this battery?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
+					<Button
+						onClick={() => handleDelete(deleteConfirmation.batteryId)}
+						color='primary'
+					>
+						Delete
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 }

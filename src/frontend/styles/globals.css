@@ -15,7 +15,7 @@
     #0885ff33 55deg,
     #54d6ff33 120deg,
     #0071ff33 160deg,
-    transparent 360deg
+    transparent 360deg,
   );
   --secondary-glow: radial-gradient(
     rgba(255, 255, 255, 1),

@@ -3,6 +3,7 @@ using System;
 using Battery_Doctor.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Battery_Doctor.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230818013431_initialCreate")]
+    partial class initialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,7 +310,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("battery_type_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -505,7 +508,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("purchase_order_details_id");
 
                     b.Property<int>("BatteryId")
                         .HasColumnType("int(10)")
@@ -596,7 +599,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
+                        .HasColumnName("unit_id");
 
                     b.Property<string>("UnitType")
                         .IsRequired()

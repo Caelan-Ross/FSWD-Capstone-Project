@@ -64,7 +64,7 @@ export default function EditCustomer() {
 			setTimeout(() => {
 				setIsSuccess(false); // Hide success after delay
 				router.push('/customer'); // Navigate back to the customer list page
-			}, 1500);
+			}, 1000);
 		} catch (error) {
 			console.error('Error updating customer details:', error);
 		}
@@ -77,11 +77,10 @@ export default function EditCustomer() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
 			}}
 		>
@@ -108,12 +107,12 @@ export default function EditCustomer() {
 			<Box
 				component='form'
 				onSubmit={handleSubmit}
-				mt={12}
+				mt={8}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
 					width: '30%',
-					backgroundColor: '#ffffff80',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',

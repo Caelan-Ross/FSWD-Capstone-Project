@@ -9,6 +9,8 @@ import {
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 
 export default function Home() {
@@ -19,7 +21,8 @@ export default function Home() {
 
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
-	const API_BASE = 'http://localhost:3000/api/invoices/create';
+	const [showSnackbar, setShowSnackbar] = useState(false);
+	const API_BASE = 'http://localhost:3000/api/customer/create';
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -39,7 +42,11 @@ export default function Home() {
 
 			await axios.post(url);
 			// Display success message
-			alert('Customer created successfully');
+			setShowSnackbar(true);
+			setTimeout(() => {
+				setShowSnackbar(false);
+				router.push('/customer');
+			}, 2000);
 			// Reset form fields
 			form.reset();
 		} catch (error) {
@@ -56,11 +63,10 @@ export default function Home() {
 			alignItems='center'
 			sx={{
 				backgroundColor: '#E6E8E7',
-				outline: '1px solid lightgrey',
 				borderRadius: '8px',
-				margin: '2rem',
+				margin: '1rem',
 				padding: '2rem',
-				height: '94%',
+				height: '92%',
 				overflow: 'auto',
 			}}
 		>
@@ -74,10 +80,10 @@ export default function Home() {
 			>
 				{error && <Alert severity='error'>{error}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
-					Create Invoice
+					Create Customer
 				</Typography>
 
-				<Box display='flex' onClick={() => handleNavigation('/invoices')}>
+				<Box display='flex' onClick={() => handleNavigation('/customer')}>
 					<IconButton>
 						<ArrowCircleLeftIcon
 							sx={{ fontSize: '2.5rem', color: '#000000' }}
@@ -85,15 +91,16 @@ export default function Home() {
 					</IconButton>
 				</Box>
 			</Box>
+			{/* Entry form */}
 			<Box
 				component='form'
 				onSubmit={handleSubmit}
-				mt={12}
+				mt={8}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
 					width: '30%',
-					backgroundColor: '#ffffff80',
+					backgroundColor: '#fbfbfbf9',
 					borderRadius: '8px',
 					outline: '1px solid black',
 					padding: '2rem',
@@ -146,6 +153,16 @@ export default function Home() {
 					{loading ? 'Creating...' : 'Create'}
 				</Button>
 			</Box>
+			<Snackbar
+				open={showSnackbar}
+				autoHideDuration={2000}
+				onClose={() => setShowSnackbar(false)} // Close on click away
+			>
+				<SnackbarContent
+					message='Customer created successfully'
+					action={<CheckCircleOutline />}
+				/>
+			</Snackbar>
 		</Box>
 	);
 }
