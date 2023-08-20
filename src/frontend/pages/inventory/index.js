@@ -212,7 +212,7 @@ export default function Home() {
 				onClose={() => setShowExportSnackbar(false)}
 			>
 				<SnackbarContent
-					message='Invoices exported successfully'
+					message='Batteries exported successfully'
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
