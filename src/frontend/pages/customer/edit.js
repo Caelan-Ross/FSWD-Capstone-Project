@@ -64,7 +64,7 @@ export default function EditCustomer() {
 			setTimeout(() => {
 				setIsSuccess(false); // Hide success after delay
 				router.push('/customer'); // Navigate back to the customer list page
-			}, 1500);
+			}, 1000);
 		} catch (error) {
 			console.error('Error updating customer details:', error);
 		}

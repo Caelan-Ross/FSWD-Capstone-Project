@@ -120,7 +120,7 @@ export default function Home() {
 			setTimeout(() => {
 				setIsSuccess(false); // Hide success after delay
 				router.push('/invoices'); // Navigate back to the customer list page
-			}, 1500);
+			}, 1000);
 		} catch (error) {
 			console.error('Error updating invoice details:', error);
 		}
