@@ -10,8 +10,6 @@ import {
 	MenuItem,
 } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import { Snackbar, SnackbarContent } from '@mui/material';
-import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 
 export default function Home() {
@@ -48,7 +46,6 @@ export default function Home() {
 			.then((response) => {
 				console.log(response);
 				const batteryData = response.data;
-				// Update batteryDetails state with fetched data
 				setBatteryDetails(response.data);
 				setBatteryDetails((prevDetails) => ({
 					...prevDetails,
