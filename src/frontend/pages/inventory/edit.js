@@ -110,6 +110,34 @@ export default function Home() {
 		}));
 	};
 
+	const handleBatteryTypeSelection = (selectedTypeName) => {
+		setBatteryDetails((prevDetails) => ({
+			...prevDetails,
+			typeName: selectedTypeName,
+		}));
+	};
+
+	const handleBatteryModelTypeSelection = (selectedModelName) => {
+		setBatteryDetails((prevDetails) => ({
+			...prevDetails,
+			modelName: selectedModelName,
+		}));
+	};
+
+	const handleBatteryMakeTypeSelection = (selectedMakeName) => {
+		setBatteryDetails((prevDetails) => ({
+			...prevDetails,
+			makeName: selectedMakeName,
+		}));
+	};
+
+	const handleBatteryGroupTypeSelection = (selectedGroupName) => {
+		setBatteryDetails((prevDetails) => ({
+			...prevDetails,
+			groupName: selectedGroupName,
+		}));
+	};
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const updatedBattery = {
@@ -120,7 +148,7 @@ export default function Home() {
 			capacity: parseFloat(batteryDetails.capacity),
 			voltage: parseFloat(batteryDetails.voltage),
 			quantityOnHand: parseFloat(batteryDetails.quantityOnHand),
-			price: parseFloat(batteryDetails.price)
+			price: parseFloat(batteryDetails.price),
 		};
 
 		console.log('Update battery details:', updatedBattery);
@@ -223,11 +251,11 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.typeName}
-							onChange={(e) => handleFieldChange('typeName', e.target.value)}
+							onChange={(e) => handleBatteryTypeSelection(e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{typeOptions.map((option) => (
-								<MenuItem key={option.id} value={option.id}>
+								<MenuItem key={option.id} value={option.typeName}>
 									{option.typeName}
 								</MenuItem>
 							))}
@@ -241,11 +269,12 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.modelName}
-							onChange={(e) => handleFieldChange('modelName', e.target.value)}
+							// onChange={(e) => handleFieldChange('modelName', e.target.value)}
+							onChange={(e) => handleBatteryModelTypeSelection(e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{modelOptions.map((option) => (
-								<MenuItem key={option.id} value={option.id}>
+								<MenuItem key={option.id} value={option.modelName}>
 									{option.modelName}
 								</MenuItem>
 							))}
@@ -259,26 +288,36 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.makeName}
-							onChange={(e) => handleFieldChange('makeName', e.target.value)}
+							onChange={(e) => handleBatteryMakeTypeSelection(e.target.value)}
+							// onChange={(e) => handleFieldChange('makeName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{makeOptions.map((option) => (
-								<MenuItem key={option.id} value={option.id}>
+								<MenuItem key={option.id} value={option.name}>
 									{option.name}
 								</MenuItem>
 							))}
 						</TextField>
+						{/* Dropdown for Battery Group */}
 						<TextField
-							id='voltage'
-							name='voltage'
-							label='Voltage'
+							select
+							id='groupName'
+							name='groupName'
+							label='Group'
 							type='text'
 							variant='outlined'
 							fullWidth
-							value={batteryDetails.voltage}
-							onChange={(e) => handleFieldChange('voltage', e.target.value)}
+							value={batteryDetails.groupName}
+							onChange={(e) => handleBatteryGroupTypeSelection(e.target.value)}
+							// onChange={(e) => handleFieldChange('groupName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
-						/>
+						>
+							{groupOptions.map((option) => (
+								<MenuItem key={option.id} value={option.groupName}>
+									{option.groupName}
+								</MenuItem>
+							))}
+						</TextField>
 					</Box>
 					<Box
 						sx={{
@@ -298,6 +337,17 @@ export default function Home() {
 							fullWidth
 							value={batteryDetails.capacity}
 							onChange={(e) => handleFieldChange('capacity', e.target.value)}
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						/>
+						<TextField
+							id='voltage'
+							name='voltage'
+							label='Voltage'
+							type='text'
+							variant='outlined'
+							fullWidth
+							value={batteryDetails.voltage}
+							onChange={(e) => handleFieldChange('voltage', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						/>
 						<TextField
@@ -324,25 +374,6 @@ export default function Home() {
 							}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						/>
-						{/* Dropdown for Battery Group */}
-						<TextField
-							select
-							id='groupName'
-							name='groupName'
-							label='Group'
-							type='text'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.groupName}
-							onChange={(e) => handleFieldChange('groupName', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						>
-							{groupOptions.map((option) => (
-								<MenuItem key={option.id} value={option.id}>
-									{option.groupName}
-								</MenuItem>
-							))}
-						</TextField>
 					</Box>
 				</Box>
 				{/* Edit Button */}
