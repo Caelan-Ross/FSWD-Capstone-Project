@@ -103,38 +103,11 @@ export default function Home() {
 			});
 	}, [batteryId]);
 
+	// Handle the user selection or edits
 	const handleFieldChange = (field, value) => {
 		setBatteryDetails((prevDetails) => ({
 			...prevDetails,
 			[field]: value,
-		}));
-	};
-
-	const handleBatteryTypeSelection = (selectedTypeName) => {
-		setBatteryDetails((prevDetails) => ({
-			...prevDetails,
-			typeName: selectedTypeName,
-		}));
-	};
-
-	const handleBatteryModelTypeSelection = (selectedModelName) => {
-		setBatteryDetails((prevDetails) => ({
-			...prevDetails,
-			modelName: selectedModelName,
-		}));
-	};
-
-	const handleBatteryMakeTypeSelection = (selectedMakeName) => {
-		setBatteryDetails((prevDetails) => ({
-			...prevDetails,
-			makeName: selectedMakeName,
-		}));
-	};
-
-	const handleBatteryGroupTypeSelection = (selectedGroupName) => {
-		setBatteryDetails((prevDetails) => ({
-			...prevDetails,
-			groupName: selectedGroupName,
 		}));
 	};
 
@@ -151,7 +124,6 @@ export default function Home() {
 			price: parseFloat(batteryDetails.price),
 		};
 
-		console.log('Update battery details:', updatedBattery);
 		try {
 			// Send updated battery details to API
 			await axios.put(`${API_BASE}/Batteries/${batteryId}`, updatedBattery);
@@ -251,7 +223,7 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.typeName}
-							onChange={(e) => handleBatteryTypeSelection(e.target.value)}
+							onChange={(e) => handleFieldChange('typeName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{typeOptions.map((option) => (
@@ -269,7 +241,7 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.modelName}
-							onChange={(e) => handleBatteryModelTypeSelection(e.target.value)}
+							onChange={(e) => handleFieldChange('modelName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{modelOptions.map((option) => (
@@ -287,7 +259,7 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.makeName}
-							onChange={(e) => handleBatteryMakeTypeSelection(e.target.value)}
+							onChange={(e) => handleFieldChange('makeName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{makeOptions.map((option) => (
@@ -306,7 +278,7 @@ export default function Home() {
 							variant='outlined'
 							fullWidth
 							value={batteryDetails.groupName}
-							onChange={(e) => handleBatteryGroupTypeSelection(e.target.value)}
+							onChange={(e) => handleFieldChange('groupName', e.target.value)}
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						>
 							{groupOptions.map((option) => (
