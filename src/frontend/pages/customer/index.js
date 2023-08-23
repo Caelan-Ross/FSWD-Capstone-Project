@@ -110,14 +110,13 @@ export default function Customer() {
 			.delete(`${API_BASE}/${customerId}`)
 			.then((response) => {
 				console.log('Customer deleted:', response.data);
-				// Remove the deleted customer from customerData state
 				setCustomerData((prevData) =>
 					prevData.filter((customer) => customer.id !== customerId)
 				);
 				closeDeleteConfirmation();
-				setShowSnackbar(true); // Show the success Snackbar
+				setShowSnackbar(true);
 				setTimeout(() => {
-					setShowSnackbar(false); // Hide the Snackbar after 1 second
+					setShowSnackbar(false);
 				}, 2000);
 			})
 			.catch((error) => {
@@ -178,7 +177,7 @@ export default function Customer() {
 				</Box>
 				<Box>
 					{/* Create Customer Icon */}
-					<IconButton onClick={() => handleNavigation('/inventory/create')}>
+					<IconButton onClick={() => handleNavigation('/customer/create')}>
 						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 					</IconButton>
 					{/* Export Customers Icon */}
@@ -192,7 +191,7 @@ export default function Customer() {
 			{/* Delete Snackbar message */}
 			<Snackbar
 				open={showSnackbar}
-				autoHideDuration={2000} // 1 second
+				autoHideDuration={2000}
 				onClose={() => setShowSnackbar(false)}
 			>
 				<SnackbarContent

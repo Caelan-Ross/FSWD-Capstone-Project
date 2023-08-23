@@ -41,7 +41,6 @@ export default function Home() {
 			setError(null);
 
 			await axios.post(url);
-			// Display success message
 			setShowSnackbar(true);
 			setTimeout(() => {
 				setShowSnackbar(false);
@@ -82,7 +81,6 @@ export default function Home() {
 				<Typography variant='h3' align='center' component='h2'>
 					Create Customer
 				</Typography>
-
 				<Box display='flex' onClick={() => handleNavigation('/customer')}>
 					<IconButton>
 						<ArrowCircleLeftIcon

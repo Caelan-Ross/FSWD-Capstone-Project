@@ -53,7 +53,7 @@ export default function Home() {
 		},
 		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
 		{
-			field: 'edit', // Edit column
+			field: 'edit',
 			headerName: <strong>Edit</strong>,
 			width: 100,
 			renderCell: (params) => (
@@ -88,7 +88,7 @@ export default function Home() {
 				setInventoryData(response.data);
 			})
 			.catch((error) => {
-				console.error('Error fetching customer data:', error);
+				console.error('Error fetching battery data:', error);
 			});
 	}, []);
 
@@ -119,9 +119,9 @@ export default function Home() {
 					prevData.filter((battery) => battery.id !== batteryId)
 				);
 				closeDeleteConfirmation();
-				setShowSnackbar(true); // Show the success Snackbar
+				setShowSnackbar(true);
 				setTimeout(() => {
-					setShowSnackbar(false); // Hide the Snackbar after 1 second
+					setShowSnackbar(false);
 				}, 2000);
 			})
 			.catch((error) => {

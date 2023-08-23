@@ -120,7 +120,6 @@ export default function Home() {
 					'Content-Type': 'application/json',
 				},
 			});
-			// Display success message
 			setShowSnackbar(true);
 			setTimeout(() => {
 				setShowSnackbar(false);
