@@ -21,6 +21,11 @@ namespace Battery_Doctor.Models
         public int ModelId { get; set; }
 
         [Required]
+        [ForeignKey("BatteryCondition")]
+        [Column("condition_id", TypeName = "int(10)")]
+        public int ConditionId { get; set; }
+
+        [Required]
         [ForeignKey("BatteryMake")]
         [Column("make_id", TypeName = "int(10)")]
         public int MakeId { get; set; }
@@ -37,9 +42,13 @@ namespace Battery_Doctor.Models
         [Column("price")]
         public float Price { get; set; }
 
-        [Required, Range(0, int.MaxValue, ErrorMessage = "Please enter a valid quantity")]
         [Column("quantity_on_hand")]
-        public int QuantityOnHand { get; set; }
+        public int QuantityOnHand 
+        { 
+            get { 
+                return Handlers.AssetHandler.GetAssetAmount(Id); 
+            } 
+        }
 
         [Required]
         [ForeignKey("BatteryGroup")]
@@ -59,6 +68,8 @@ namespace Battery_Doctor.Models
         public virtual BatteryMake BatteryMake { get; set; }
 
         public virtual BatteryGroup BatteryGroup { get; set; }
+
+        public virtual BatteryCondition BatteryCondition { get; set; }
     }
 }
 

@@ -240,8 +240,11 @@ namespace Battery_Doctor.Controllers
                 var now = DateTime.Now;
                 var currentDate = now.ToString("yyyyMMdd");
                 var filePath = Path.Combine(exportDirectory, $"InvoiceData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePathCsv = Path.Combine(exportDirectory, $"InvoiceData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.csv");
 
                 package.SaveAs(new FileInfo(filePath));
+                package.SaveAs(new FileInfo(filePathCsv));
+
             }
 
             return NoContent();

@@ -275,7 +275,6 @@ namespace Battery_Doctor.Controllers
             battery.Voltage = batteryUpdateDto.Voltage;
             battery.Capacity = batteryUpdateDto.Capacity;
             battery.Price = batteryUpdateDto.Price;
-            battery.QuantityOnHand = batteryUpdateDto.QuantityOnHand;
             battery.GroupId = group.Id;
             battery.UpdatedAt = DateTime.UtcNow;
 
@@ -388,6 +387,7 @@ namespace Battery_Doctor.Controllers
                 var now = DateTime.Now;
                 var currentDate = now.ToString("yyyyMMdd");
                 var filePath = Path.Combine(exportDirectory, $"BatteryData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePathCsv = Path.Combine(exportDirectory, $"BatteryData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.csv");
 
                 package.SaveAs(new FileInfo(filePath));
             }
