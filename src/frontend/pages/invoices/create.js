@@ -632,7 +632,7 @@ export default function Home() {
 							/>
 							<TextField
 								id={'customerCreditAmount'}
-								name={'customerCreditAmout'}
+								name={'customerCreditAmount'}
 								label='$'
 								type='text'
 								variant='outlined'
@@ -719,7 +719,7 @@ export default function Home() {
 								label='CX Credit'
 								variant='outlined'
 								type='text'
-								value={calculatePaymentTotal('cash')}
+								value={customerCreditAmount}
 								InputProps={{
 									readOnly: true,
 								}}
