@@ -108,7 +108,7 @@ export default function Home() {
 			form.reset();
 			// Redirect to the inventory page
 		} catch (error) {
-			setError('Failed to create customer');
+			setIsError('Failed to create customer');
 		} finally {
 			setLoading(false);
 		}
@@ -136,7 +136,7 @@ export default function Home() {
 					width: '100%',
 				}}
 			>
-				{error && <Alert severity='error'>{error}</Alert>}
+				{isError && <Alert severity='error'>{error}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
 					Create Battery
 				</Typography>
