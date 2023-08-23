@@ -30,9 +30,10 @@ export default function Home() {
 	const [showSnackbar, setShowSnackbar] = useState(false);
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
-	const [taxAmount, setTaxAmount] = useState(0); // Initialize with 0, the value will be calculated
-	const [subtotal, setSubtotal] = useState(0); // Initialize with 0, the value will be calculated
-	const [totalAmount, setTotalAmount] = useState(0); // Initialize with 0, the value will be calculated
+	const [taxAmount, setTaxAmount] = useState(0);
+	const [subtotal, setSubtotal] = useState(0);
+	const [totalAmount, setTotalAmount] = useState(0);
+	const [customerCreditAmount, setCustomerCreditAmount] = useState(0);
 
 	// State for Line Items form
 	const [rows, setRows] = useState([
@@ -90,16 +91,17 @@ export default function Home() {
 		const debitTotal = parseFloat(calculatePaymentTotal('debit'));
 		const creditTotal = parseFloat(calculatePaymentTotal('credit'));
 		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
-		const customerCreditAmount =
+		const customerCreditTotal =
 			parseFloat(-1 * parseFloat(document.getElementById('customerCreditAmount').value)) ||
 			0;
 
 		const newSubtotal =
-			cashTotal + creditTotal + debitTotal + customerCreditAmount;
+			cashTotal + creditTotal + debitTotal + customerCreditTotal;
 		const newTaxAmount = newSubtotal * 0.05; // Calculate tax as 5% of the subtotal
 		const newTotalAmount = newSubtotal + newTaxAmount;
 
 		// Update state variables
+		setCustomerCreditAmount(customerCreditTotal);
 		setSubtotal(newSubtotal);
 		setTaxAmount(newTaxAmount);
 		setTotalAmount(newTotalAmount);
@@ -182,7 +184,6 @@ export default function Home() {
 			}, 2000);
 			// Reset form fields
 			form.reset();
-			// Redirect to the inventory page
 		} catch (error) {
 			console.log(error);
 			setError('Failed to create invoice');
@@ -614,8 +615,8 @@ export default function Home() {
 							}}
 						>
 							<TextField
-								id='customerCreditAmount'
-								name='customerCreditAmount'
+								id='customerCreditLabel'
+								name='customerCreditLabel'
 								type='text'
 								variant='outlined'
 								fullWidth
@@ -630,8 +631,8 @@ export default function Home() {
 								}}
 							/>
 							<TextField
-								id={`amount`}
-								name={`amount`}
+								id={'customerCreditAmount'}
+								name={'customerCreditAmout'}
 								label='$'
 								type='text'
 								variant='outlined'
