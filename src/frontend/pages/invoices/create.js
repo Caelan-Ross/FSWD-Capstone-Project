@@ -5,7 +5,6 @@ import {
 	TextField,
 	Button,
 	Alert,
-	MenuItem,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -13,6 +12,8 @@ import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Autocomplete from '@mui/material/Autocomplete';
 
 export default function Home() {
@@ -30,6 +31,23 @@ export default function Home() {
 	const [subtotal, setSubtotal] = useState(0);
 	const [taxAmount, setTaxAmount] = useState(0.05);
 	const [totalAmount, setTotalAmount] = useState(0);
+
+	const [rows, setRows] = useState([
+		{
+			item: '',
+			quantity: '',
+		},
+	]);
+
+	const addRow = () => {
+		setRows([...rows, { item: '', quantity: '' }]);
+	};
+
+	const removeRow = (index) => {
+		const updatedRows = [...rows];
+		updatedRows.splice(index, 1);
+		setRows(updatedRows);
+	};
 
 	const API_BASE = 'http://localhost:3000/api/invoices/create';
 
@@ -208,7 +226,7 @@ export default function Home() {
 							flexDirection: 'column',
 							alignItems: 'left',
 							margin: '0 auto',
-							width: '90%',
+							width: '40rem',
 							backgroundColor: '#fbfbfbf9',
 							borderRight: '1px solid lightgray',
 							borderLeft: '1px solid lightgray',
@@ -216,6 +234,7 @@ export default function Home() {
 							borderTop: '1px solid #ecececf9',
 							padding: '10px',
 							borderRadius: '10px',
+							height: '45rem',
 						}}
 					>
 						{/* Customer Section */}
@@ -342,165 +361,13 @@ export default function Home() {
 						/>
 					</Box>
 					{/* Line Items Section */}
-					<Box>
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								margin: '0 auto 1rem auto',
-								width: '90%',
-								backgroundColor: '#fbfbfbf9',
-								borderRight: '1px solid lightgray',
-								borderLeft: '1px solid lightgray',
-								borderBottom: '1px solid #ecececf9',
-								borderTop: '1px solid #ecececf9',
-								padding: '10px',
-								borderRadius: '10px',
-							}}
-						>
-							<Box sx={{ width: '32rem' }}>
-								<Typography variant='h6'>Line Items</Typography>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ mt: 1, backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='item'
-									name='item'
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-							</Box>
-							<Box sx={{ width: '5rem' }}>
-								<Typography variant='h6'>Quantity</Typography>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ mt: 1, backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-								<TextField
-									id='quantity'
-									name='quantity'
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-								/>
-							</Box>
-						</Box>
-					</Box>
-					{/* Payment Section */}
 					<Box
 						sx={{
 							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'flex-start',
+							flexDirection: 'column',
+							alignItems: 'center',
 							margin: '0 auto',
-							width: '90%',
+							width: '40rem',
 							backgroundColor: '#fbfbfbf9',
 							borderRight: '1px solid lightgray',
 							borderLeft: '1px solid lightgray',
@@ -508,6 +375,93 @@ export default function Home() {
 							borderTop: '1px solid #ecececf9',
 							padding: '10px',
 							borderRadius: '10px',
+							overflow: 'auto',
+							height: '45rem'
+						}}
+					>
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'space-between',
+								margin: '0 auto',
+								backgroundColor: '#fbfbfbf9',
+								width: '24rem'
+							}}
+						>
+							<Typography variant='h6'>Line Items</Typography>
+							<Typography variant='h6'>Quantity</Typography>
+						</Box>
+						{rows.map((row, index) => (
+							<Box
+								key={index}
+								sx={{
+									display: 'flex',
+									flexDirection: 'row',
+									alignItems: 'center',
+									justifyContent: 'center',
+									margin: '0 auto',
+									backgroundColor: '#fbfbfbf9',
+								}}
+							>
+								<TextField
+									id={`item-${index}`}
+									name={`item-${index}`}
+									label='Item'
+									type='text'
+									variant='outlined'
+									fullWidth
+									value={row.item}
+									sx={{ backgroundColor: 'white', width: '24rem', }}
+								/>
+								<TextField
+									id={`quantity-${index}`}
+									name={`quantity-${index}`}
+									label='Qty'
+									type='text'
+									variant='outlined'
+									fullWidth
+									value={row.quantity}
+									sx={{ backgroundColor: 'white', width: '4rem' }}
+								/>
+								<IconButton onClick={addRow}>
+									<AddCircleIcon sx={{ fontSize: '1.25rem', color: '#000000' }} />
+								</IconButton>
+								{index > 0 && (
+									<IconButton onClick={() => removeRow(index)}>
+										<RemoveCircleOutlineIcon
+											sx={{ fontSize: '1.25rem', color: '#000000' }}
+										/>
+									</IconButton>
+								)}
+								{index === 0 && (
+									<IconButton disabled>
+										<RemoveCircleOutlineIcon
+											sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
+										/>
+									</IconButton>
+								)}
+							</Box>
+						))}
+					</Box>
+
+					{/* Payment Section */}
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'flex-start',
+							margin: '0 auto',
+							width: '40rem',
+							backgroundColor: '#fbfbfbf9',
+							borderRight: '1px solid lightgray',
+							borderLeft: '1px solid lightgray',
+							borderBottom: '1px solid #ecececf9',
+							borderTop: '1px solid #ecececf9',
+							padding: '10px',
+							borderRadius: '10px',
+							height: '45rem'
 						}}
 					>
 						{/* Amount Total Labels */}
