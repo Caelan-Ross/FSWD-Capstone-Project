@@ -99,7 +99,7 @@ export default function Home() {
 				},
 			});
 			// Display success message
-			setShowSnackbar(true); 
+			setShowSnackbar(true);
 			setTimeout(() => {
 				setShowSnackbar(false);
 				router.push('/inventory');
@@ -180,7 +180,15 @@ export default function Home() {
 						borderRadius: '10px',
 					}}
 				>
-					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '48%' }}>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+							width: '48%',
+						}}
+					>
 						{/* Dropdown for Battery Type */}
 						<TextField
 							select
@@ -229,21 +237,45 @@ export default function Home() {
 								</MenuItem>
 							))}
 						</TextField>
+						{/* Dropdown for Battery Group */}
 						<TextField
-							id='voltage'
-							name='voltage'
-							label='Voltage'
+							select
+							id='groupName'
+							name='groupName'
+							label='Group'
+							variant='outlined'
+							fullWidth
+							sx={{ mt: 2, backgroundColor: 'white' }}
+						>
+							{groupOptions.map((option) => (
+								<MenuItem key={option.id} value={option.id}>
+									{option.groupName}
+								</MenuItem>
+							))}
+						</TextField>
+					</Box>
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+							width: '48%',
+						}}
+					>
+						<TextField
+							id='capacity'
+							name='capacity'
+							label='Capacity'
 							type='text'
 							variant='outlined'
 							fullWidth
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						/>
-					</Box>
-					<Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '48%' }}>
 						<TextField
-							id='capacity'
-							name='capacity'
-							label='Capacity'
+							id='voltage'
+							name='voltage'
+							label='Voltage'
 							type='text'
 							variant='outlined'
 							fullWidth
@@ -267,23 +299,8 @@ export default function Home() {
 							type='text'
 							sx={{ mt: 2, backgroundColor: 'white' }}
 						/>
-						{/* Dropdown for Battery Group */}
-						<TextField
-							select
-							id='groupName'
-							name='groupName'
-							label='Group'
-							variant='outlined'
-							fullWidth
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						>
-							{groupOptions.map((option) => (
-								<MenuItem key={option.id} value={option.id}>
-									{option.groupName}
-								</MenuItem>
-							))}
-						</TextField>
-					</Box></Box>
+					</Box>
+				</Box>
 				{/* Create Button */}
 				<Button
 					className='btn-primary'
