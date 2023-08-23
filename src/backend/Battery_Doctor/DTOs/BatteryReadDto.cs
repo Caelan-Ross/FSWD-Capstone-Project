@@ -21,6 +21,8 @@ namespace Battery_Doctor.DTOs
 
         public string GroupName { get; set; }
 
+        public string ConditionName { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }

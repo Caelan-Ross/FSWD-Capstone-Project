@@ -26,18 +26,14 @@ namespace Battery_Doctor.Models
         public DateTime WarrantyDate { get; set; }
 
         [Required]
-        [Column("status", TypeName = "varchar(50)")]
-        [StringLength(50)]
-        public string Status { get; set; }
-
-        [Required]
         [Column("stamped_serial", TypeName = "varchar(50)")]
         [StringLength(7)]
         public string StampedSerial { get; set; }
 
         [ForeignKey("Customer")]
+        [Required]
         [Column("customer_id", TypeName = "int(10)")]
-        public int? CustomerId { get; set; }  
+        public int CustomerId { get; set; }  
 
         [Required]
         [Column("created_at")]
@@ -49,7 +45,7 @@ namespace Battery_Doctor.Models
 
         public virtual Battery Battery { get; set; }
 
-        public virtual Customer? Customer { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }
 
