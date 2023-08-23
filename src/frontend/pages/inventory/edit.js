@@ -127,7 +127,7 @@ export default function Home() {
 
 			setIsSuccess(true);
 			setTimeout(() => {
-				setIsSuccess(false); // Hide success after delay
+				setIsSuccess(false);
 				router.push('/inventory'); // Navigate back to the inventory list page
 			}, 1000);
 		} catch (error) {

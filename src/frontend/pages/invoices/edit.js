@@ -215,7 +215,8 @@ export default function Home() {
 							label='Customer'
 							variant='outlined'
 							fullWidth
-							value={selectedCustomer}
+							// value={selectedCustomer}
+							value={selectedCustomer ? selectedCustomer.id : ''}
 							onChange={handleCustomerSelection}
 							sx={{ mt: 1, backgroundColor: 'white' }}
 						>
