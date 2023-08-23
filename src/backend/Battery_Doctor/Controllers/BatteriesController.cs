@@ -30,6 +30,7 @@ namespace Battery_Doctor.Controllers
                 .Include(b => b.BatteryMake)
                 .Include(b => b.BatteryGroup)
                 .Include(b => b.BatteryCondition)
+                .Include(b => b.BatteryGroup.Unit)
                 .ToListAsync();
 
             var batteryReadDtos = batteries.Select(b => new BatteryReadDto
@@ -44,6 +45,10 @@ namespace Battery_Doctor.Controllers
                 Price = b.Price,
                 QuantityOnHand = b.QuantityOnHand,
                 GroupName = b.BatteryGroup.GroupName,
+                Length = b.BatteryGroup.Length,
+                Height = b.BatteryGroup.Height,
+                Width = b.BatteryGroup.Width,
+                UnitType = b.BatteryGroup.Unit.UnitType,
                 CreatedAt = b.CreatedAt,
                 UpdatedAt = b.UpdatedAt
             }).ToList();
@@ -80,6 +85,10 @@ namespace Battery_Doctor.Controllers
                 Price = battery.Price,
                 QuantityOnHand = battery.QuantityOnHand,
                 GroupName = battery.BatteryGroup.GroupName,
+                Length = battery.BatteryGroup.Length,
+                Height = battery.BatteryGroup.Height,
+                Width = battery.BatteryGroup.Width,
+                UnitType = battery.BatteryGroup.Unit.UnitType,
                 CreatedAt = battery.CreatedAt,
                 UpdatedAt = battery.UpdatedAt
             };
@@ -215,7 +224,6 @@ namespace Battery_Doctor.Controllers
                 BatteryId = battery.Id,
                 WarrantyDate = DateTime.Now,
                 StampedSerial = batteryCreateDto.StampedSerial,
-                CustomerId = batteryCreateDto.CustomerId,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

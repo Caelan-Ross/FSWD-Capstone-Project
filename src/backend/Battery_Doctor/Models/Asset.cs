@@ -30,11 +30,6 @@ namespace Battery_Doctor.Models
         [StringLength(7)]
         public string StampedSerial { get; set; }
 
-        [ForeignKey("Customer")]
-        [Required]
-        [Column("customer_id", TypeName = "int(10)")]
-        public int CustomerId { get; set; }  
-
         [Required]
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -44,8 +39,6 @@ namespace Battery_Doctor.Models
         public DateTime UpdatedAt { get; set; }
 
         public virtual Battery Battery { get; set; }
-
-        public virtual Customer Customer { get; set; }
     }
 }
 

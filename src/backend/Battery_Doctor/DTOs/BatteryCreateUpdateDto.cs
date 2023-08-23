@@ -17,8 +17,6 @@ namespace Battery_Doctor.DTOs
 
         public float Price { get; set; }
 
-        public int QuantityOnHand { get; set; }
-
         public string GroupName { get; set; }
 
         public float Length { get; set; }
@@ -28,8 +26,6 @@ namespace Battery_Doctor.DTOs
         public float Height { get; set; }
 
         public string UnitType { get; set; }
-
-        public int CustomerId { get; set; }
 
         public string StampedSerial { get; set; }
     }

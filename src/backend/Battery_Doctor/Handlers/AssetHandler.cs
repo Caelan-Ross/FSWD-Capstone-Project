@@ -1,4 +1,5 @@
 ﻿using Battery_Doctor.Data;
+using Battery_Doctor.Models;
 
 namespace Battery_Doctor.Handlers
 {
@@ -9,7 +10,12 @@ namespace Battery_Doctor.Handlers
             int amount = 0;
             using(ApplicationContext db = new())
             {
-               amount = db.Assets.Where(a => a.BatteryId == id).Count(); 
+                List<Asset> assets = db.Assets.Where(a => a.BatteryId == id).ToList();
+                
+                foreach(Asset asset in assets) 
+                {
+                    amount = amount + db.Invoice_Details.Where(i => i.AssetId == asset.Id).Count();
+                }
             }
 
             return amount;

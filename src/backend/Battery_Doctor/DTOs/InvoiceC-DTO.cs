@@ -1,5 +1,4 @@
-﻿using Battery_Doctor.Models;
-
+﻿
 namespace Battery_Doctor.DTOs
 {
     public class InvoiceC_DTO
