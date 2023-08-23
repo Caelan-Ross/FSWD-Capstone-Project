@@ -6,7 +6,7 @@ import {
 	Button,
 	Alert,
 	Select,
-	MenuItem
+	MenuItem,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -24,16 +24,17 @@ export default function Home() {
 		router.push(path);
 	};
 
+	const API_BASE = 'http://localhost:3000/api/invoices/create';
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
-
-
+	const [taxAmount, setTaxAmount] = useState(0); // Initialize with 0, the value will be calculated
+	const [subtotal, setSubtotal] = useState(0); // Initialize with 0, the value will be calculated
+	const [totalAmount, setTotalAmount] = useState(0); // Initialize with 0, the value will be calculated
 
 	// State for Line Items form
-
 	const [rows, setRows] = useState([
 		{
 			item: '',
@@ -69,12 +70,14 @@ export default function Home() {
 		const updatedPaymentLines = [...paymentLines];
 		updatedPaymentLines[index][field] = value;
 		setPaymentLines(updatedPaymentLines);
+
+		// Call handleInputChange to update the overall totals
+		handleInputChange();
 	};
 
 	const addPaymentLine = () => {
 		setPaymentLines([...paymentLines, { paymentType: '', amount: '' }]);
 	};
-
 
 	const removePaymentLine = (index) => {
 		const updatedPaymentLines = [...paymentLines];
@@ -82,32 +85,17 @@ export default function Home() {
 		setPaymentLines(updatedPaymentLines);
 	};
 
-	const API_BASE = 'http://localhost:3000/api/invoices/create';
-
-	useEffect(() => {
-		// Fetch data for customers dropdown
-		axios
-			.get('http://localhost:7166/api/Customers')
-			.then((response) => {
-				setCustomerOptions(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching customers:', error);
-			});
-	}, []);
-
-	// const [taxAmount, setTaxAmount] = useState(0); // Initialize with 0, the value will be calculated
-	// const [subtotal, setSubtotal] = useState(0); // Initialize with 0, the value will be calculated
-	// const [totalAmount, setTotalAmount] = useState(0); // Initialize with 0, the value will be calculated
-
-	// Calculate totals
+	// Calculate totals of all types of payment
 	const handleInputChange = () => {
-		const debitTotal = calculatePaymentTotal('debit');
-		const creditTotal = calculatePaymentTotal('credit');
-		const cashTotal = calculatePaymentTotal('cash');
-		const customerCreditAmount = -1 * parseFloat(document.getElementById('customerCreditAmount').value) || 0;
+		const debitTotal = parseFloat(calculatePaymentTotal('debit'));
+		const creditTotal = parseFloat(calculatePaymentTotal('credit'));
+		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
+		const customerCreditAmount =
+			parseFloat(-1 * parseFloat(document.getElementById('customerCreditAmount').value)) ||
+			0;
 
-		const newSubtotal = cashTotal + creditTotal + debitTotal + customerCreditAmount;
+		const newSubtotal =
+			cashTotal + creditTotal + debitTotal + customerCreditAmount;
 		const newTaxAmount = newSubtotal * 0.05; // Calculate tax as 5% of the subtotal
 		const newTotalAmount = newSubtotal + newTaxAmount;
 
@@ -117,7 +105,7 @@ export default function Home() {
 		setTotalAmount(newTotalAmount);
 	};
 
-
+	// Sum total of each type of payment (cash OR debit OR credit)
 	const calculatePaymentTotal = (paymentType, currentAmount = 0) => {
 		let total = 0;
 
@@ -202,6 +190,18 @@ export default function Home() {
 			setLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		// Fetch data for customers dropdown
+		axios
+			.get('http://localhost:7166/api/Customers')
+			.then((response) => {
+				setCustomerOptions(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customers:', error);
+			});
+	}, []);
 
 	return (
 		<Box
@@ -424,7 +424,7 @@ export default function Home() {
 							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
-							height: '45rem'
+							height: '45rem',
 						}}
 					>
 						<Box
@@ -435,7 +435,7 @@ export default function Home() {
 								justifyContent: 'space-between',
 								margin: '0 auto',
 								backgroundColor: '#fbfbfbf9',
-								width: '24rem'
+								width: '24rem',
 							}}
 						>
 							<Typography variant='h6'>Line Items</Typography>
@@ -461,7 +461,9 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.item}
-									onChange={(e) => handleInputChangeLines(index, 'item', e.target.value)}
+									onChange={(e) =>
+										handleInputChangeLines(index, 'item', e.target.value)
+									}
 									sx={{ backgroundColor: 'white', width: '24rem' }}
 								/>
 								<TextField
@@ -472,11 +474,15 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.quantity}
-									onChange={(e) => handleInputChangeLines(index, 'quantity', e.target.value)}
+									onChange={(e) =>
+										handleInputChangeLines(index, 'quantity', e.target.value)
+									}
 									sx={{ backgroundColor: 'white', width: '4rem' }}
 								/>
 								<IconButton onClick={addRow}>
-									<AddCircleIcon sx={{ fontSize: '1.25rem', color: '#000000' }} />
+									<AddCircleIcon
+										sx={{ fontSize: '1.25rem', color: '#000000' }}
+									/>
 								</IconButton>
 								{index > 0 && (
 									<IconButton onClick={() => removeRow(index)}>
@@ -512,7 +518,7 @@ export default function Home() {
 							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
-							height: '45rem'
+							height: '45rem',
 						}}
 					>
 						<Box
@@ -523,12 +529,13 @@ export default function Home() {
 								justifyContent: 'space-between',
 								margin: '0 auto',
 								backgroundColor: '#fbfbfbf9',
-								width: '24rem'
+								width: '24rem',
 							}}
 						>
 							<Typography variant='h6'>Payment Type</Typography>
 							<Typography variant='h6'>Amount</Typography>
 						</Box>
+						{/* User Select Payment Type */}
 						{paymentLines.map((row, index) => (
 							<Box
 								key={index}
@@ -548,7 +555,13 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.paymentType}
-									onChange={(e) => handleInputChangePayment(index, 'paymentType', e.target.value)}
+									onChange={(e) =>
+										handleInputChangePayment(
+											index,
+											'paymentType',
+											e.target.value
+										)
+									}
 									sx={{ backgroundColor: 'white', width: '14rem' }}
 								>
 									<MenuItem value='debit'>Debit</MenuItem>
@@ -563,11 +576,15 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.amount}
-									onChange={(e) => handleInputChangePayment(index, 'amount', e.target.value)}
+									onChange={(e) =>
+										handleInputChangePayment(index, 'amount', e.target.value)
+									}
 									sx={{ backgroundColor: 'white', width: '8rem' }}
 								/>
 								<IconButton onClick={addPaymentLine}>
-									<AddCircleIcon sx={{ fontSize: '1.25rem', color: '#000000' }} />
+									<AddCircleIcon
+										sx={{ fontSize: '1.25rem', color: '#000000' }}
+									/>
 								</IconButton>
 								{index > 0 && (
 									<IconButton onClick={() => removePaymentLine(index)}>
@@ -584,7 +601,9 @@ export default function Home() {
 									</IconButton>
 								)}
 							</Box>
-						))}<Box
+						))}
+						{/* Customer Credit */}
+						<Box
 							sx={{
 								display: 'flex',
 								flexDirection: 'row',
@@ -593,7 +612,8 @@ export default function Home() {
 								margin: '0 10.5rem 0 auto',
 								backgroundColor: '#fbfbfbf9',
 							}}
-						><TextField
+						>
+							<TextField
 								id='customerCreditAmount'
 								name='customerCreditAmount'
 								type='text'
@@ -603,7 +623,11 @@ export default function Home() {
 								InputProps={{
 									readOnly: true,
 								}}
-								sx={{ marginTop: '.25rem', backgroundColor: 'lightgreen', width: '14rem' }}
+								sx={{
+									marginTop: '.25rem',
+									backgroundColor: 'lightgreen',
+									width: '14rem',
+								}}
 							/>
 							<TextField
 								id={`amount`}
@@ -613,15 +637,23 @@ export default function Home() {
 								variant='outlined'
 								fullWidth
 								onChange={handleInputChange}
-								sx={{ marginTop: '.25rem', backgroundColor: 'lightgreen', width: '8rem' }}
+								sx={{
+									marginTop: '.25rem',
+									backgroundColor: 'lightgreen',
+									width: '8rem',
+								}}
 							/>
 						</Box>
-						<Typography variant='h6' sx={{
-							margin: '2rem auto 0 7rem',
-							backgroundColor: '#fbfbfbf9',
-						}}>Total</Typography>
-
-
+						<Typography
+							variant='h6'
+							sx={{
+								margin: '2rem auto 0 7rem',
+								backgroundColor: '#fbfbfbf9',
+							}}
+						>
+							Total
+						</Typography>
+						{/* Totals Section */}
 						<Box
 							sx={{
 								display: 'flex',
@@ -656,7 +688,11 @@ export default function Home() {
 								InputProps={{
 									readOnly: true,
 								}}
-								sx={{ backgroundColor: '#f3eced', width: '10rem', marginLeft: '1rem' }}
+								sx={{
+									backgroundColor: '#f3eced',
+									width: '10rem',
+									marginLeft: '1rem',
+								}}
 							/>
 							{/* Cash Total */}
 							<TextField
@@ -669,10 +705,13 @@ export default function Home() {
 								InputProps={{
 									readOnly: true,
 								}}
-								sx={{ backgroundColor: '#f3eced', width: '10rem', marginLeft: '1rem' }}
+								sx={{
+									backgroundColor: '#f3eced',
+									width: '10rem',
+									marginLeft: '1rem',
+								}}
 							/>
 						</Box>
-
 
 						<Box
 							sx={{
@@ -685,15 +724,20 @@ export default function Home() {
 							}}
 						>
 							{/* Tax Amount */}
-							<Typography variant='h7' sx={{
-								margin: '0 auto 0 0',
-								backgroundColor: '#fbfbfbf9',
-							}}>Taxes</Typography>
+							<Typography
+								variant='h7'
+								sx={{
+									margin: '0 auto 0 0',
+									backgroundColor: '#fbfbfbf9',
+								}}
+							>
+								Taxes
+							</Typography>
 							<TextField
 								id='taxAmount'
 								name='taxAmount'
 								fullWidth
-								value=''
+								value={taxAmount.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -706,17 +750,22 @@ export default function Home() {
 								}}
 							/>
 							{/* Subtotal Amount */}
-							<Typography variant='h7' sx={{
-								margin: '0 auto 0 0',
-								backgroundColor: '#fbfbfbf9',
-							}}>Subtotal</Typography>
+							<Typography
+								variant='h7'
+								sx={{
+									margin: '0 auto 0 0',
+									backgroundColor: '#fbfbfbf9',
+								}}
+							>
+								Subtotal
+							</Typography>
 							<TextField
 								id='subTotalAmount'
 								name='subTotalAmount'
 								fullWidth
 								variant='outlined'
 								type='text'
-								value=''
+								value={subtotal}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -727,17 +776,22 @@ export default function Home() {
 								}}
 							/>
 							{/* Total Amount */}
-							<Typography variant='h7' sx={{
-								margin: '0 auto 0 0',
-								backgroundColor: '#fbfbfbf9',
-							}}>Total</Typography>
+							<Typography
+								variant='h7'
+								sx={{
+									margin: '0 auto 0 0',
+									backgroundColor: '#fbfbfbf9',
+								}}
+							>
+								Total
+							</Typography>
 							<TextField
 								id='totalAmount'
 								name='totalAmount'
 								fullWidth
 								variant='outlined'
 								type='text'
-								value=''
+								value={totalAmount}
 								InputProps={{
 									readOnly: true,
 								}}
