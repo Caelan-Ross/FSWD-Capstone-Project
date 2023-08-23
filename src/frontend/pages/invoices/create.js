@@ -529,7 +529,7 @@ export default function Home() {
 								justifyContent: 'space-between',
 								margin: '0 auto',
 								backgroundColor: '#fbfbfbf9',
-								width: '20rem',
+								width: '21rem',
 							}}
 						>
 							<Typography variant='h6'>Payment Type</Typography>
