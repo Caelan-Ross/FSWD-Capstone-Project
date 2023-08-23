@@ -1,8 +1,6 @@
-﻿using Battery_Doctor.Models;
-
-namespace Battery_Doctor.DTOs
+﻿namespace Battery_Doctor.DTOs
 {
-    public class InvoiceR_DTO
+    public class InvoiceU_DTO
     {
         public int Id { get; set; }
 
@@ -10,10 +8,8 @@ namespace Battery_Doctor.DTOs
 
         public string PaymentMethodR { get; set; }
 
-        public DateTime DateOfSale { get; set; }
-
         public float TotalPrice { get; set; }
 
-        public List<string> AssetNames { get; set; }
+        public List<int> AssetIds { get; set; }
     }
 }

@@ -43,8 +43,7 @@ namespace Battery_Doctor.Models
 
         public virtual PaymentMethod PaymentMethod { get; set; }
 
-        [AllowNull]
         [InverseProperty(nameof(Models.InvoiceDetails.Invoice))]
-        public ICollection<InvoiceDetails> InvoiceDetails { get; set; }
+        public virtual ICollection<InvoiceDetails> InvoiceDetails { get; set; }
     }
 }
