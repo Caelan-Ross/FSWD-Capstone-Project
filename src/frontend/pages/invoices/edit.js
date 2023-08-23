@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import Autocomplete from '@mui/material/Autocomplete';
 
 export default function Home() {
 	const router = useRouter();
@@ -110,7 +111,7 @@ export default function Home() {
 		event.preventDefault();
 		const updatedInvoice = {
 			...invoiceDetails,
-			totalPrice: totalAmount
+			totalPrice: totalAmount,
 		};
 
 		try {
@@ -208,24 +209,38 @@ export default function Home() {
 					>
 						<Typography variant='h6'>Customer Details</Typography>
 						{/* Customer drop down */}
-						<TextField
-							select
+						<Autocomplete
 							id='customerId'
 							name='customerId'
-							label='Customer'
-							variant='outlined'
-							fullWidth
-							// value={selectedCustomer}
-							value={selectedCustomer ? selectedCustomer.id : ''}
-							onChange={handleCustomerSelection}
+							options={customerOptions}
+							getOptionLabel={(option) =>
+								`${option.firstName} ${option.lastName}`
+							}
+							value={selectedCustomer}
+							onChange={(event, newValue) => {
+								setSelectedCustomer(newValue);
+								handleFieldChange('customerId', newValue ? newValue.id : '');
+							}}
+							filterOptions={(options, state) => {
+								const inputValue = state.inputValue.toLowerCase();
+								return options.filter(
+									(option) =>
+										option.firstName.toLowerCase().includes(inputValue) ||
+										option.lastName.toLowerCase().includes(inputValue) ||
+										option.phoneNumber.includes(inputValue)
+								);
+							}}
+							renderInput={(params) => (
+								<TextField
+									{...params}
+									label='Customer'
+									variant='outlined'
+									fullWidth
+								/>
+							)}
 							sx={{ mt: 1, backgroundColor: 'white' }}
-						>
-							{customerOptions.map((option) => (
-								<MenuItem key={option.id} value={option.id}>
-									{`${option.firstName} ${option.lastName}`}
-								</MenuItem>
-							))}
-						</TextField>
+						/>
+
 						<Box
 							sx={{
 								width: '100%',
