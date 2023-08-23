@@ -28,8 +28,8 @@ export default function Home() {
 		groupName: '',
 	});
 
-	const [error, setError] = useState(null);
-	const [isSuccess, setIsSuccess] = useState(false); // State for showing success message
+	const [isError, setIsError] = useState(null);
+	const [isSuccess, setIsSuccess] = useState(false);
 	const [typeOptions, setTypeOptions] = useState([]);
 	const [modelOptions, setModelOptions] = useState([]);
 	const [makeOptions, setMakeOptions] = useState([]);
@@ -356,6 +356,12 @@ export default function Home() {
 				{isSuccess && (
 					<Alert severity='success' sx={{ mt: 2 }}>
 						Edit successful!
+					</Alert>
+				)}
+				{/* Error Message */}
+				{isError && (
+					<Alert severity='error' sx={{ mt: 2 }}>
+						Error updating invoice details. Please try again later.
 					</Alert>
 				)}
 			</Box>

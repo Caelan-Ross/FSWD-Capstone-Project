@@ -24,7 +24,8 @@ export default function EditCustomer() {
 		email: '',
 	});
 
-	const [isSuccess, setIsSuccess] = useState(false); // State for showing success message
+	const [isError, setIsError] = useState(null);
+	const [isSuccess, setIsSuccess] = useState(false);
 
 	useEffect(() => {
 		// Fetch customer details by customerId
@@ -36,7 +37,6 @@ export default function EditCustomer() {
 			})
 			.then((response) => {
 				console.log(response);
-				// Update customerDetails state with fetched data
 				setCustomerDetails(response.data);
 			})
 			.catch((error) => {
@@ -174,6 +174,12 @@ export default function EditCustomer() {
 				{isSuccess && (
 					<Alert severity='success' sx={{ mt: 2 }}>
 						Edit successful!
+					</Alert>
+				)}
+				{/* Error Message */}
+				{isError && (
+					<Alert severity='error' sx={{ mt: 2 }}>
+						Error updating invoice details. Please try again later.
 					</Alert>
 				)}
 			</Box>

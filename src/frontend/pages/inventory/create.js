@@ -20,7 +20,7 @@ export default function Home() {
 		router.push(path);
 	};
 
-	const [error, setError] = useState(null);
+	const [isError, setIsError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
 	const API_BASE = 'http://localhost:3000/api/Batteries';
@@ -316,7 +316,7 @@ export default function Home() {
 			<Snackbar
 				open={showSnackbar}
 				autoHideDuration={2000}
-				onClose={() => setShowSnackbar(false)} // Close on click away
+				onClose={() => setShowSnackbar(false)}
 			>
 				<SnackbarContent
 					message='Battery created successfully'

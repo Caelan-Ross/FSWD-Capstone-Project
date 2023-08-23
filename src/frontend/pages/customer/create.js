@@ -19,7 +19,7 @@ export default function Home() {
 		router.push(path);
 	};
 
-	const [error, setError] = useState(null);
+	const [isError, setIsError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
 	const API_BASE = 'http://localhost:3000/api/customer/create';
@@ -38,7 +38,7 @@ export default function Home() {
 		try {
 			setLoading(true);
 			// Perform any additional validation or processing here if needed
-			setError(null);
+			setIsError(null);
 
 			await axios.post(url);
 			setShowSnackbar(true);
@@ -49,7 +49,7 @@ export default function Home() {
 			// Reset form fields
 			form.reset();
 		} catch (error) {
-			setError('Failed to create customer');
+			setIsError('Failed to create customer');
 		} finally {
 			setLoading(false);
 		}
