@@ -527,7 +527,7 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '1rem auto',
+								margin: '0 auto',
 								backgroundColor: '#fbfbfbf9',
 								width: '20rem',
 							}}
