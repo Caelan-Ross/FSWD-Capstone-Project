@@ -213,7 +213,7 @@ export default function Home() {
 							name='customerId'
 							options={customerOptions}
 							getOptionLabel={(option) =>
-								`${option.firstName} ${option.lastName}`
+								`${option.firstName} ${option.lastName} | ${option.phoneNumber}`
 							}
 							value={selectedCustomer}
 							onChange={(event, newValue) => {
