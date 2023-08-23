@@ -5,6 +5,8 @@ import {
 	TextField,
 	Button,
 	Alert,
+	Select,
+	MenuItem
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -28,9 +30,9 @@ export default function Home() {
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-	const [subtotal, setSubtotal] = useState(0);
-	const [taxAmount, setTaxAmount] = useState(0.05);
-	const [totalAmount, setTotalAmount] = useState(0);
+
+
+	// State for Line Items form
 
 	const [rows, setRows] = useState([
 		{
@@ -38,6 +40,12 @@ export default function Home() {
 			quantity: '',
 		},
 	]);
+
+	const handleInputChangeLines = (index, field, value) => {
+		const updatedRows = [...rows];
+		updatedRows[index][field] = value;
+		setRows(updatedRows);
+	};
 
 	const addRow = () => {
 		setRows([...rows, { item: '', quantity: '' }]);
@@ -47,6 +55,31 @@ export default function Home() {
 		const updatedRows = [...rows];
 		updatedRows.splice(index, 1);
 		setRows(updatedRows);
+	};
+
+	// State for Payment form
+	const [paymentLines, setPaymentLines] = useState([
+		{
+			paymentType: '',
+			amount: '',
+		},
+	]);
+
+	const handleInputChangePayment = (index, field, value) => {
+		const updatedPaymentLines = [...paymentLines];
+		updatedPaymentLines[index][field] = value;
+		setPaymentLines(updatedPaymentLines);
+	};
+
+	const addPaymentLine = () => {
+		setPaymentLines([...paymentLines, { paymentType: '', amount: '' }]);
+	};
+
+
+	const removePaymentLine = (index) => {
+		const updatedPaymentLines = [...paymentLines];
+		updatedPaymentLines.splice(index, 1);
+		setPaymentLines(updatedPaymentLines);
 	};
 
 	const API_BASE = 'http://localhost:3000/api/invoices/create';
@@ -63,24 +96,39 @@ export default function Home() {
 			});
 	}, []);
 
+	// const [taxAmount, setTaxAmount] = useState(0); // Initialize with 0, the value will be calculated
+	// const [subtotal, setSubtotal] = useState(0); // Initialize with 0, the value will be calculated
+	// const [totalAmount, setTotalAmount] = useState(0); // Initialize with 0, the value will be calculated
+
 	// Calculate totals
 	const handleInputChange = () => {
-		const cashAmount =
-			parseFloat(document.getElementById('cashAmount').value) || 0;
-		const creditAmount =
-			parseFloat(document.getElementById('creditAmount').value) || 0;
-		const debitAmount =
-			parseFloat(document.getElementById('debitAmount').value) || 0;
-		const customerCreditAmount =
-			-1 * parseFloat(document.getElementById('customerCreditAmount').value) ||
-			0;
+		const debitTotal = calculatePaymentTotal('debit');
+		const creditTotal = calculatePaymentTotal('credit');
+		const cashTotal = calculatePaymentTotal('cash');
+		const customerCreditAmount = -1 * parseFloat(document.getElementById('customerCreditAmount').value) || 0;
 
-		const newSubtotal =
-			cashAmount + creditAmount + debitAmount + customerCreditAmount;
-		const newTotalAmount = newSubtotal + newSubtotal * taxAmount;
+		const newSubtotal = cashTotal + creditTotal + debitTotal + customerCreditAmount;
+		const newTaxAmount = newSubtotal * 0.05; // Calculate tax as 5% of the subtotal
+		const newTotalAmount = newSubtotal + newTaxAmount;
 
+		// Update state variables
 		setSubtotal(newSubtotal);
+		setTaxAmount(newTaxAmount);
 		setTotalAmount(newTotalAmount);
+	};
+
+
+	const calculatePaymentTotal = (paymentType, currentAmount = 0) => {
+		let total = 0;
+
+		paymentLines.forEach((line) => {
+			if (line.paymentType === paymentType) {
+				total += parseFloat(line.amount) || 0;
+			}
+		});
+
+		total += currentAmount;
+		return total.toFixed(2);
 	};
 
 	// Submit Button
@@ -413,7 +461,8 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.item}
-									sx={{ backgroundColor: 'white', width: '24rem', }}
+									onChange={(e) => handleInputChangeLines(index, 'item', e.target.value)}
+									sx={{ backgroundColor: 'white', width: '24rem' }}
 								/>
 								<TextField
 									id={`quantity-${index}`}
@@ -423,6 +472,7 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.quantity}
+									onChange={(e) => handleInputChangeLines(index, 'quantity', e.target.value)}
 									sx={{ backgroundColor: 'white', width: '4rem' }}
 								/>
 								<IconButton onClick={addRow}>
@@ -450,8 +500,8 @@ export default function Home() {
 					<Box
 						sx={{
 							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'flex-start',
+							flexDirection: 'column',
+							alignItems: 'center',
 							margin: '0 auto',
 							width: '40rem',
 							backgroundColor: '#fbfbfbf9',
@@ -461,55 +511,91 @@ export default function Home() {
 							borderTop: '1px solid #ecececf9',
 							padding: '10px',
 							borderRadius: '10px',
+							overflow: 'auto',
 							height: '45rem'
 						}}
 					>
-						{/* Amount Total Labels */}
-						<Box sx={{ width: '25rem' }}>
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'space-between',
+								margin: '0 auto',
+								backgroundColor: '#fbfbfbf9',
+								width: '24rem'
+							}}
+						>
 							<Typography variant='h6'>Payment Type</Typography>
-							<TextField
-								id='cash'
-								name='cash'
-								label='Cash'
-								type='text'
-								variant='outlined'
-								fullWidth
-								value='Cash'
-								InputProps={{
-									readOnly: true,
+							<Typography variant='h6'>Amount</Typography>
+						</Box>
+						{paymentLines.map((row, index) => (
+							<Box
+								key={index}
+								sx={{
+									display: 'flex',
+									flexDirection: 'row',
+									alignItems: 'center',
+									justifyContent: 'center',
+									margin: '0 auto',
+									backgroundColor: '#fbfbfbf9',
 								}}
-								sx={{ mt: 1, backgroundColor: 'white' }}
-							/>
-							<TextField
-								id='credit'
-								name='credit'
-								label='Credit'
-								type='text'
-								variant='outlined'
-								fullWidth
-								value='Credit'
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-							/>
-							<TextField
-								id='debit'
-								name='debit'
-								label='Debit'
-								type='text'
-								variant='outlined'
-								fullWidth
-								value='Debit'
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-							/>
-							<TextField
-								id='customerCredit'
-								name='customerCredit'
-								label='Customer Credit'
+							>
+								<Select
+									id={`paymentType-${index}`}
+									name={`paymentType-${index}`}
+									label='Type'
+									variant='outlined'
+									fullWidth
+									value={row.paymentType}
+									onChange={(e) => handleInputChangePayment(index, 'paymentType', e.target.value)}
+									sx={{ backgroundColor: 'white', width: '14rem' }}
+								>
+									<MenuItem value='debit'>Debit</MenuItem>
+									<MenuItem value='credit'>Credit</MenuItem>
+									<MenuItem value='cash'>Cash</MenuItem>
+								</Select>
+								<TextField
+									id={`amount-${index}`}
+									name={`amount-${index}`}
+									label='$'
+									type='text'
+									variant='outlined'
+									fullWidth
+									value={row.amount}
+									onChange={(e) => handleInputChangePayment(index, 'amount', e.target.value)}
+									sx={{ backgroundColor: 'white', width: '8rem' }}
+								/>
+								<IconButton onClick={addPaymentLine}>
+									<AddCircleIcon sx={{ fontSize: '1.25rem', color: '#000000' }} />
+								</IconButton>
+								{index > 0 && (
+									<IconButton onClick={() => removePaymentLine(index)}>
+										<RemoveCircleOutlineIcon
+											sx={{ fontSize: '1.25rem', color: '#000000' }}
+										/>
+									</IconButton>
+								)}
+								{index === 0 && (
+									<IconButton disabled>
+										<RemoveCircleOutlineIcon
+											sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
+										/>
+									</IconButton>
+								)}
+							</Box>
+						))}<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'center',
+								margin: '0 10.5rem 0 auto',
+								backgroundColor: '#fbfbfbf9',
+							}}
+						><TextField
+								id='customerCreditAmount'
+								name='customerCreditAmount'
 								type='text'
 								variant='outlined'
 								fullWidth
@@ -517,134 +603,120 @@ export default function Home() {
 								InputProps={{
 									readOnly: true,
 								}}
-								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								sx={{ marginTop: '.25rem', backgroundColor: 'lightgreen', width: '14rem' }}
 							/>
 							<TextField
-								id='taxes'
-								name='taxes'
-								label='Taxes'
+								id={`amount`}
+								name={`amount`}
+								label='$'
 								type='text'
 								variant='outlined'
 								fullWidth
-								value='Taxes'
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{
-									mt: 3,
-									backgroundColor: '#f3eced',
-									borderRadius: '8px',
-								}}
-							/>
-							<TextField
-								id='subtotal'
-								name='subtotal'
-								label='Subtotal'
-								type='text'
-								variant='outlined'
-								fullWidth
-								value='Subtotal'
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{
-									backgroundColor: '#f3eced',
-									borderRadius: '8px',
-									marginTop: '.25rem',
-								}}
-							/>
-							<TextField
-								id='total'
-								name='total'
-								label='Total'
-								type='text'
-								variant='outlined'
-								fullWidth
-								value='Total'
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{
-									backgroundColor: '#f3dde0',
-									borderRadius: '8px',
-									marginTop: '.25rem',
-								}}
+								onChange={handleInputChange}
+								sx={{ marginTop: '.25rem', backgroundColor: 'lightgreen', width: '8rem' }}
 							/>
 						</Box>
-						{/* Amount Total Numbers */}
-						<Box sx={{ width: '20%' }}>
-							<Typography variant='h6'>Amount</Typography>
-							{/* Cash Amount */}
+						<Typography variant='h6' sx={{
+							margin: '2rem auto 0 7rem',
+							backgroundColor: '#fbfbfbf9',
+						}}>Total</Typography>
+
+
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'center',
+								margin: '0 auto',
+								backgroundColor: '#fbfbfbf9',
+							}}
+						>
+							{/* Debit Total */}
 							<TextField
-								id='cashAmount'
-								name='cashAmount'
-								label='Amount'
-								type='text'
+								id='debitTotal'
+								name='debitTotal'
+								label='Debit Total'
 								variant='outlined'
-								fullWidth
-								onChange={handleInputChange}
-								sx={{ mt: 1, backgroundColor: 'white' }}
+								type='text'
+								value={calculatePaymentTotal('debit')}
+								InputProps={{
+									readOnly: true,
+								}}
+								sx={{ backgroundColor: '#f3eced', width: '10rem' }}
 							/>
-							{/* Credit Amount */}
+							{/* Credit Total */}
 							<TextField
-								id='creditAmount'
-								name='creditAmount'
-								label='Amount'
-								type='text'
+								id='creditTotal'
+								name='creditTotal'
+								label='Credit Total'
 								variant='outlined'
-								fullWidth
-								onChange={handleInputChange}
-								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								type='text'
+								value={calculatePaymentTotal('credit')}
+								InputProps={{
+									readOnly: true,
+								}}
+								sx={{ backgroundColor: '#f3eced', width: '10rem', marginLeft: '1rem' }}
 							/>
-							{/* Debit Amount */}
+							{/* Cash Total */}
 							<TextField
-								id='debitAmount'
-								name='debitAmount'
-								label='Amount'
-								type='text'
+								id='cashTotal'
+								name='cashTotal'
+								label='Cash Total'
 								variant='outlined'
-								fullWidth
-								onChange={handleInputChange}
-								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
-							/>
-							{/* Customer Credit Amount */}
-							<TextField
-								id='customerCreditAmount'
-								name='customerCreditAmount'
-								label='Amount'
 								type='text'
-								variant='outlined'
-								fullWidth
-								onChange={handleInputChange}
-								sx={{ marginTop: '.25rem', backgroundColor: 'white' }}
+								value={calculatePaymentTotal('cash')}
+								InputProps={{
+									readOnly: true,
+								}}
+								sx={{ backgroundColor: '#f3eced', width: '10rem', marginLeft: '1rem' }}
 							/>
+						</Box>
+
+
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'center',
+								justifyContent: 'center',
+								margin: '0 auto',
+								backgroundColor: '#fbfbfbf9',
+							}}
+						>
 							{/* Tax Amount */}
+							<Typography variant='h7' sx={{
+								margin: '0 auto 0 0',
+								backgroundColor: '#fbfbfbf9',
+							}}>Taxes</Typography>
 							<TextField
 								id='taxAmount'
 								name='taxAmount'
-								label='Amount'
 								fullWidth
-								value={taxAmount}
+								value=''
 								InputProps={{
 									readOnly: true,
 								}}
 								variant='outlined'
 								type='text'
 								sx={{
-									mt: 3,
+									mt: 1,
 									backgroundColor: '#f3eced',
 									borderRadius: '8px',
 								}}
 							/>
-							{/* SubTotal Amount */}
+							{/* Subtotal Amount */}
+							<Typography variant='h7' sx={{
+								margin: '0 auto 0 0',
+								backgroundColor: '#fbfbfbf9',
+							}}>Subtotal</Typography>
 							<TextField
 								id='subTotalAmount'
 								name='subTotalAmount'
-								label='Amount'
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={subtotal.toFixed(2)}
+								value=''
 								InputProps={{
 									readOnly: true,
 								}}
@@ -655,14 +727,17 @@ export default function Home() {
 								}}
 							/>
 							{/* Total Amount */}
+							<Typography variant='h7' sx={{
+								margin: '0 auto 0 0',
+								backgroundColor: '#fbfbfbf9',
+							}}>Total</Typography>
 							<TextField
 								id='totalAmount'
 								name='totalAmount'
-								label='Amount'
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={totalAmount.toFixed(2)}
+								value=''
 								InputProps={{
 									readOnly: true,
 								}}
