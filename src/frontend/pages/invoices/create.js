@@ -210,9 +210,9 @@ export default function Home() {
 			alignItems='center'
 			sx={{
 				borderRadius: '8px',
-				margin: '1rem',
-				padding: '2rem',
-				height: '92%',
+				margin: '.5rem auto',
+				padding: '.5rem 1rem',
+				height: '80vh',
 				overflow: 'auto',
 				backgroundColor: '#E6E8E7',
 			}}
@@ -253,7 +253,7 @@ export default function Home() {
 					padding: '1rem',
 					justifyContent: 'space-evenly',
 					alignItems: 'center',
-					margin: '1rem auto',
+					margin: '1rem auto 0 auto',
 				}}
 			>
 				<Box
@@ -282,7 +282,7 @@ export default function Home() {
 							borderTop: '1px solid #ecececf9',
 							padding: '10px',
 							borderRadius: '10px',
-							height: '45rem',
+							height: '36rem'
 						}}
 					>
 						{/* Customer Section */}
@@ -402,7 +402,7 @@ export default function Home() {
 							label='Notes'
 							type='text'
 							multiline
-							rows={7.3}
+							rows={6}
 							variant='outlined'
 							fullWidth
 							sx={{ mt: 2 }}
@@ -424,7 +424,7 @@ export default function Home() {
 							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
-							height: '45rem',
+							height: '36rem'
 						}}
 					>
 						<Box
@@ -518,7 +518,7 @@ export default function Home() {
 							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
-							height: '45rem',
+							height: '36rem'
 						}}
 					>
 						<Box
@@ -527,9 +527,9 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto',
+								margin: '1rem auto',
 								backgroundColor: '#fbfbfbf9',
-								width: '24rem',
+								width: '20rem',
 							}}
 						>
 							<Typography variant='h6'>Payment Type</Typography>
@@ -544,7 +544,7 @@ export default function Home() {
 									flexDirection: 'row',
 									alignItems: 'center',
 									justifyContent: 'center',
-									margin: '0 auto',
+									margin: '0 auto 0 6.15rem',
 									backgroundColor: '#fbfbfbf9',
 								}}
 							>
@@ -562,7 +562,7 @@ export default function Home() {
 											e.target.value
 										)
 									}
-									sx={{ backgroundColor: 'white', width: '14rem' }}
+									sx={{ backgroundColor: 'white', width: '17rem' }}
 								>
 									<MenuItem value='debit'>Debit</MenuItem>
 									<MenuItem value='credit'>Credit</MenuItem>
@@ -579,7 +579,7 @@ export default function Home() {
 									onChange={(e) =>
 										handleInputChangePayment(index, 'amount', e.target.value)
 									}
-									sx={{ backgroundColor: 'white', width: '8rem' }}
+									sx={{ backgroundColor: 'white', width: '6rem' }}
 								/>
 								<IconButton onClick={addPaymentLine}>
 									<AddCircleIcon
@@ -609,7 +609,7 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center',
-								margin: '0 10.5rem 0 auto',
+								margin: '0 auto',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
@@ -626,7 +626,7 @@ export default function Home() {
 								sx={{
 									marginTop: '.25rem',
 									backgroundColor: 'lightgreen',
-									width: '14rem',
+									width: '17rem',
 								}}
 							/>
 							<TextField
@@ -640,7 +640,7 @@ export default function Home() {
 								sx={{
 									marginTop: '.25rem',
 									backgroundColor: 'lightgreen',
-									width: '8rem',
+									width: '6rem',
 								}}
 							/>
 						</Box>
@@ -651,7 +651,7 @@ export default function Home() {
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
-							Total
+							Totals
 						</Typography>
 						{/* Totals Section */}
 						<Box
@@ -660,7 +660,7 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center',
-								margin: '0 auto',
+								margin: '1rem auto 0 auto',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
@@ -668,20 +668,20 @@ export default function Home() {
 							<TextField
 								id='debitTotal'
 								name='debitTotal'
-								label='Debit Total'
+								label='Debit'
 								variant='outlined'
 								type='text'
 								value={calculatePaymentTotal('debit')}
 								InputProps={{
 									readOnly: true,
 								}}
-								sx={{ backgroundColor: '#f3eced', width: '10rem' }}
+								sx={{ backgroundColor: '#f3eced', width: '6rem' }}
 							/>
 							{/* Credit Total */}
 							<TextField
 								id='creditTotal'
 								name='creditTotal'
-								label='Credit Total'
+								label='Credit'
 								variant='outlined'
 								type='text'
 								value={calculatePaymentTotal('credit')}
@@ -690,7 +690,7 @@ export default function Home() {
 								}}
 								sx={{
 									backgroundColor: '#f3eced',
-									width: '10rem',
+									width: '6rem',
 									marginLeft: '1rem',
 								}}
 							/>
@@ -698,7 +698,7 @@ export default function Home() {
 							<TextField
 								id='cashTotal'
 								name='cashTotal'
-								label='Cash Total'
+								label='Cash'
 								variant='outlined'
 								type='text'
 								value={calculatePaymentTotal('cash')}
@@ -707,7 +707,24 @@ export default function Home() {
 								}}
 								sx={{
 									backgroundColor: '#f3eced',
-									width: '10rem',
+									width: '6rem',
+									marginLeft: '1rem',
+								}}
+							/>
+							{/* Customer Credit Total */}
+							<TextField
+								id='customerCreditTotal'
+								name='customerCreditTotal'
+								label='CX Credit'
+								variant='outlined'
+								type='text'
+								value={calculatePaymentTotal('cash')}
+								InputProps={{
+									readOnly: true,
+								}}
+								sx={{
+									backgroundColor: 'lightgreen',
+									width: '6rem',
 									marginLeft: '1rem',
 								}}
 							/>
@@ -719,23 +736,15 @@ export default function Home() {
 								flexDirection: 'column',
 								alignItems: 'center',
 								justifyContent: 'center',
-								margin: '0 auto',
+								margin: '2rem auto 0 auto',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
 							{/* Tax Amount */}
-							<Typography
-								variant='h7'
-								sx={{
-									margin: '0 auto 0 0',
-									backgroundColor: '#fbfbfbf9',
-								}}
-							>
-								Taxes
-							</Typography>
 							<TextField
 								id='taxAmount'
 								name='taxAmount'
+								label='Tax Total'
 								fullWidth
 								value={taxAmount.toFixed(2)}
 								InputProps={{
@@ -744,24 +753,17 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								sx={{
-									mt: 1,
+									marginTop: '.75rem',
 									backgroundColor: '#f3eced',
 									borderRadius: '8px',
+									width: '28rem'
 								}}
 							/>
 							{/* Subtotal Amount */}
-							<Typography
-								variant='h7'
-								sx={{
-									margin: '0 auto 0 0',
-									backgroundColor: '#fbfbfbf9',
-								}}
-							>
-								Subtotal
-							</Typography>
 							<TextField
 								id='subTotalAmount'
 								name='subTotalAmount'
+								label='Sub Total'
 								fullWidth
 								variant='outlined'
 								type='text'
@@ -772,22 +774,14 @@ export default function Home() {
 								sx={{
 									backgroundColor: '#f3eced',
 									borderRadius: '8px',
-									marginTop: '.25rem',
+									marginTop: '.75rem',
 								}}
 							/>
 							{/* Total Amount */}
-							<Typography
-								variant='h7'
-								sx={{
-									margin: '0 auto 0 0',
-									backgroundColor: '#fbfbfbf9',
-								}}
-							>
-								Total
-							</Typography>
 							<TextField
 								id='totalAmount'
 								name='totalAmount'
+								label='Total'
 								fullWidth
 								variant='outlined'
 								type='text'
@@ -796,9 +790,9 @@ export default function Home() {
 									readOnly: true,
 								}}
 								sx={{
-									backgroundColor: '#f3dde0',
+									backgroundColor: '#df9aa2',
 									borderRadius: '8px',
-									marginTop: '.25rem',
+									marginTop: '.75rem',
 								}}
 							/>
 						</Box>
@@ -812,7 +806,7 @@ export default function Home() {
 						type='submit'
 						disabled={loading}
 						color='primary'
-						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto' }}
+						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto 0 auto' }}
 					>
 						{loading ? 'Creating...' : 'Create'}
 					</Button>

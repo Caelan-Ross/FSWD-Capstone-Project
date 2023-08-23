@@ -199,9 +199,9 @@ export default function Invoices() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '1rem',
-				padding: '2rem',
-				height: '90%',
+				margin: '.5rem auto',
+				padding: '.5rem 1rem',
+				height: '80vh',
 				overflow: 'none',
 			}}
 		>
