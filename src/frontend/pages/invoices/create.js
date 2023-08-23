@@ -11,9 +11,9 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import axios from 'axios';
-import { red } from '@mui/material/colors';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import Autocomplete from '@mui/material/Autocomplete';
 
 export default function Home() {
 	const router = useRouter();
@@ -45,6 +45,7 @@ export default function Home() {
 			});
 	}, []);
 
+	// Calculate totals
 	const handleInputChange = () => {
 		const cashAmount =
 			parseFloat(document.getElementById('cashAmount').value) || 0;
@@ -219,29 +220,37 @@ export default function Home() {
 					>
 						{/* Customer Section */}
 						<Typography variant='h6'>Customer Details</Typography>
-						<TextField
-							select
+						<Autocomplete
 							id='customerId'
 							name='customerId'
-							label='Customer'
-							variant='outlined'
-							fullWidth
-							value={selectedCustomer ? selectedCustomer.id : ''}
-							onChange={(event) => {
-								const customerId = event.target.value;
-								const customer = customerOptions.find(
-									(option) => option.id === customerId
-								);
-								setSelectedCustomer(customer);
+							options={customerOptions}
+							getOptionLabel={(option) =>
+								`${option.firstName} ${option.lastName}`
+							}
+							value={selectedCustomer}
+							onChange={(event, newValue) => {
+								setSelectedCustomer(newValue);
 							}}
+							filterOptions={(options, state) => {
+								const inputValue = state.inputValue.toLowerCase();
+								return options.filter(
+									(option) =>
+										option.firstName.toLowerCase().includes(inputValue) ||
+										option.lastName.toLowerCase().includes(inputValue) ||
+										option.phoneNumber.includes(inputValue)
+								);
+							}}
+							renderInput={(params) => (
+								<TextField
+									{...params}
+									label='Customer'
+									variant='outlined'
+									fullWidth
+								/>
+							)}
 							sx={{ mt: 1, backgroundColor: 'white' }}
-						>
-							{customerOptions.map((option) => (
-								<MenuItem key={option.id} value={option.id}>
-									{option.firstName} {option.lastName}
-								</MenuItem>
-							))}
-						</TextField>
+						/>
+
 						<Box
 							sx={{
 								width: '100%',
