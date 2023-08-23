@@ -23,10 +23,6 @@ namespace Battery_Doctor.Models
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
-
-        [AllowNull]
-        [InverseProperty(nameof(BatteryModel.BatteryMake))]
-        public ICollection<BatteryModel> BatteryModels { get; set; }
     }
 }
 

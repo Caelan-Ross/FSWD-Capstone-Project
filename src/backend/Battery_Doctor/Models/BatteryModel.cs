@@ -21,11 +21,5 @@ namespace Battery_Doctor.Models
 
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
-
-        [ForeignKey("BatteryMake")]
-        [Column("make_id", TypeName = "int(10)")]
-        public int BatteryMakeId { get; set; }
-
-        public virtual BatteryMake BatteryMake { get; set; }
     }
 }

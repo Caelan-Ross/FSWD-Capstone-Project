@@ -71,9 +71,14 @@ namespace Battery_Doctor.Controllers
 
         // POST: api/Invoices
         [HttpPost]
-        public async Task<ActionResult<InvoiceCU_DTO>> PostInvoice(InvoiceCU_DTO invoiceDto)
+        public async Task<ActionResult<InvoiceC_DTO>> PostInvoice(InvoiceC_DTO invoiceDto)
         {
             PaymentMethod? paymentMethod = (PaymentMethod?)_context.Payment_Methods.FirstOrDefault(n => n.Method == invoiceDto.PaymentMethodR);
+
+            if(invoiceDto.AssetIds.Count() == 0)
+            {
+                return BadRequest();
+            }
 
             if(paymentMethod == null)
             {
@@ -87,7 +92,6 @@ namespace Battery_Doctor.Controllers
 
             var invoice = new Invoice
             {
-                Id = invoiceDto.Id,
                 CustomerId = invoiceDto.CustomerId,
                 PaymentMethodId = paymentMethod.Id,
                 DateOfSale = DateTime.Now,
@@ -96,6 +100,25 @@ namespace Battery_Doctor.Controllers
                 UpdatedAt = DateTime.Now
             };
 
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync();
+
+            invoice.InvoiceDetails = new List<InvoiceDetails>();
+
+            foreach(int id in invoiceDto.AssetIds)
+            {
+                invoice.InvoiceDetails.Add(new InvoiceDetails
+                {
+                    AssetId = id,
+                    InvoiceId = invoice.Id,
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now
+                });
+            }
+
+            _context.Entry(invoice).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
             var invoiceReadDto = new InvoiceR_DTO
             {
                 Id = invoice.Id,
@@ -103,22 +126,26 @@ namespace Battery_Doctor.Controllers
                 PaymentMethodR = _context.Payment_Methods.FirstOrDefault(x => x.Id == invoice.PaymentMethodId).Method,
                 DateOfSale = invoice.DateOfSale,
                 TotalPrice = invoice.TotalPrice,
+                AssetNames = invoice.InvoiceDetails.Select(x => _context.Battery_Makes.FirstOrDefault(m => m.Id == _context.Batteries.FirstOrDefault(b => b.Id == _context.Assets.FirstOrDefault(d => d.Id == x.AssetId).BatteryId).MakeId).Name).ToList()
             };
 
-            _context.Invoices.Add(invoice);
-            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetInvoice), new { id = invoice.Id }, invoiceReadDto);
         }
 
         // PUT: api/Invoices/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInvoice(int id, InvoiceCU_DTO invoiceDto)
+        public async Task<IActionResult> PutInvoice(int id, InvoiceU_DTO invoiceDto)
         {
             var invoice = await _context.Invoices.FindAsync(id);
             if(invoice == null)
             {
                 return NotFound();
+            }
+
+            if(invoiceDto.AssetIds.Count() == 0)
+            {
+                return BadRequest();
             }
 
             PaymentMethod? paymentMethod = (PaymentMethod?)_context.Payment_Methods.FirstOrDefault(n => n.Method == invoiceDto.PaymentMethodR);
@@ -137,6 +164,18 @@ namespace Battery_Doctor.Controllers
             invoice.TotalPrice = invoiceDto.TotalPrice;
             invoice.PaymentMethodId = paymentMethod.Id;
             invoice.CustomerId = invoiceDto.CustomerId;
+            invoice.InvoiceDetails.Clear();
+
+            foreach(int i in invoiceDto.AssetIds)
+            {
+                invoice.InvoiceDetails.Add(new InvoiceDetails
+                {
+                    AssetId = i,
+                    InvoiceId = invoice.Id,
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now
+                });
+            }
 
             _context.Entry(invoice).State = EntityState.Modified;
 
@@ -235,13 +274,18 @@ namespace Battery_Doctor.Controllers
 
                 // Save to desktop with filename "InvoiceData[Current Date].xlsx"
                 var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                var exportDirectory = Path.Combine(desktopPath, "Exports", "Invoice");
-                Directory.CreateDirectory(exportDirectory);
+                var exportDirectoryXl = Path.Combine(desktopPath, "Exports", "Invoice", "Xl");
+                var exportDirectoryCsv = Path.Combine(desktopPath, "Exports", "Invoice", "CSV");
+                Directory.CreateDirectory(exportDirectoryXl);
+                Directory.CreateDirectory(exportDirectoryCsv);
                 var now = DateTime.Now;
                 var currentDate = now.ToString("yyyyMMdd");
-                var filePath = Path.Combine(exportDirectory, $"InvoiceData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePath = Path.Combine(exportDirectoryXl, $"InvoiceData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePathCsv = Path.Combine(exportDirectoryCsv, $"InvoiceData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.csv");
 
                 package.SaveAs(new FileInfo(filePath));
+                package.SaveAs(new FileInfo(filePathCsv));
+
             }
 
             return NoContent();

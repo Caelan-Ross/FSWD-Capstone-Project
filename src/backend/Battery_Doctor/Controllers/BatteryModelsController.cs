@@ -30,8 +30,7 @@ namespace Battery_Doctor.Controllers
                 Id = bm.Id,
                 ModelName = bm.ModelName,
                 CreatedAt = bm.CreatedAt,
-                UpdatedAt = bm.UpdatedAt,
-                BatteryMakeId = bm.BatteryMakeId
+                UpdatedAt = bm.UpdatedAt
             }).ToList();
 
             return batteryModelDtos;
@@ -53,8 +52,7 @@ namespace Battery_Doctor.Controllers
                 Id = batteryModel.Id,
                 ModelName = batteryModel.ModelName,
                 CreatedAt = batteryModel.CreatedAt,
-                UpdatedAt = batteryModel.UpdatedAt,
-                BatteryMakeId = batteryModel.BatteryMakeId
+                UpdatedAt = batteryModel.UpdatedAt
             };
 
             return batteryModelDto;
@@ -72,7 +70,6 @@ namespace Battery_Doctor.Controllers
             var batteryModel = new BatteryModel
             {
                 ModelName = batteryModelDto.ModelName,
-                BatteryMakeId = batteryModelDto.BatteryMakeId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
             };
@@ -104,7 +101,6 @@ namespace Battery_Doctor.Controllers
             {
                 Id = batteryModelDto.Id,
                 ModelName = batteryModelDto.ModelName,
-                BatteryMakeId = batteryModelDto.BatteryMakeId,
                 UpdatedAt = DateTime.UtcNow,
                 CreatedAt = batteryModelDto.CreatedAt // Preserving the original CreatedAt value
             };

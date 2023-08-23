@@ -29,6 +29,7 @@ namespace Battery_Doctor.Controllers
                 .Include(b => b.BatteryModel)
                 .Include(b => b.BatteryMake)
                 .Include(b => b.BatteryGroup)
+                .Include(b => b.BatteryCondition)
                 .ToListAsync();
 
             var batteryReadDtos = batteries.Select(b => new BatteryReadDto
@@ -37,6 +38,7 @@ namespace Battery_Doctor.Controllers
                 TypeName = b.BatteryType.TypeName,
                 ModelName = b.BatteryModel.ModelName,
                 MakeName = b.BatteryMake.Name,
+                ConditionName = b.BatteryCondition.ConditionName,
                 Voltage = b.Voltage,
                 Capacity = b.Capacity,
                 Price = b.Price,
@@ -58,6 +60,7 @@ namespace Battery_Doctor.Controllers
                 .Include(b => b.BatteryModel)
                 .Include(b => b.BatteryMake)
                 .Include(b => b.BatteryGroup)
+                .Include(b => b.BatteryCondition)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (battery == null)
@@ -71,6 +74,7 @@ namespace Battery_Doctor.Controllers
                 TypeName = battery.BatteryType.TypeName,
                 ModelName = battery.BatteryModel.ModelName,
                 MakeName = battery.BatteryMake.Name,
+                ConditionName = battery.BatteryCondition.ConditionName,
                 Voltage = battery.Voltage,
                 Capacity = battery.Capacity,
                 Price = battery.Price,
@@ -93,13 +97,17 @@ namespace Battery_Doctor.Controllers
 
             BatteryModel? model = (BatteryModel?)_context.Battery_Models.FirstOrDefault(n => n.ModelName == batteryCreateDto.ModelName);
 
-            BatteryGroup? group = (BatteryGroup?)_context.Battery_Groups.FirstOrDefault();
+            BatteryGroup? group = (BatteryGroup?)_context.Battery_Groups.FirstOrDefault(n => n.GroupName == batteryCreateDto.GroupName);
 
-            if(group == null)
+            BatteryCondition? condition = (BatteryCondition?)_context.Battery_Conditions.FirstOrDefault(n => n.ConditionName == batteryCreateDto.ConditionName);
+            
+            Unit? unit = (Unit?)_context.Units.FirstOrDefault(n => n.UnitType == batteryCreateDto.UnitType);
+
+            if(unit == null)
             {
-                Unit unit = new Unit
+                unit = new Unit
                 {
-                    UnitType = "default"
+                    UnitType = batteryCreateDto.UnitType
                 };
 
                 _context.Units.Add(unit);
@@ -107,14 +115,31 @@ namespace Battery_Doctor.Controllers
 
                 group = new BatteryGroup
                 {
+                    GroupName = batteryCreateDto.GroupName,
+                    Length = batteryCreateDto.Length,
+                    Width = batteryCreateDto.Width,
+                    Height = batteryCreateDto.Height,
                     UnitId = unit.Id,
-                    GroupName = "default",
-                    Length = 0,
-                    Width = 0,
-                    Height = 0,
                     CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
+
+                _context.Battery_Groups.Add(group);
+                await _context.SaveChangesAsync();
+            }
+            else if(group == null)
+            {
+                group = new BatteryGroup
+                {
+                    GroupName = batteryCreateDto.GroupName,
+                    Length = batteryCreateDto.Length,
+                    Width = batteryCreateDto.Width,
+                    Height = batteryCreateDto.Height,
+                    UnitId = unit.Id,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
                 _context.Battery_Groups.Add(group);
                 await _context.SaveChangesAsync();
             }
@@ -149,10 +174,21 @@ namespace Battery_Doctor.Controllers
                 {
                     ModelName = batteryCreateDto.ModelName,
                     CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    BatteryMakeId = make.Id
+                    UpdatedAt = DateTime.Now
                 };
                 _context.Battery_Models.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if(condition == null)
+            {
+                condition = new BatteryCondition
+                {
+                    ConditionName = batteryCreateDto.ConditionName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                _context.Battery_Conditions.Add(condition);
                 await _context.SaveChangesAsync();
             }
 
@@ -161,16 +197,30 @@ namespace Battery_Doctor.Controllers
                 TypeId = type.Id,
                 ModelId = model.Id,
                 MakeId = make.Id,
+                ConditionId = condition.Id,
+                GroupId = group.Id,
                 Voltage = batteryCreateDto.Voltage,
                 Capacity = batteryCreateDto.Capacity,
                 Price = batteryCreateDto.Price,
-                QuantityOnHand = batteryCreateDto.QuantityOnHand,
-                GroupId = group.Id,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
             
             _context.Batteries.Add(battery);
+            await _context.SaveChangesAsync();
+
+            Asset asset = new Asset
+            {
+                QRCode = "",
+                BatteryId = battery.Id,
+                WarrantyDate = DateTime.Now,
+                StampedSerial = batteryCreateDto.StampedSerial,
+                CustomerId = batteryCreateDto.CustomerId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+
+            _context.Assets.Add(asset);
             await _context.SaveChangesAsync();
 
             var batteryReadDto = new BatteryReadDto
@@ -183,6 +233,7 @@ namespace Battery_Doctor.Controllers
                 Capacity = battery.Capacity,
                 Price = battery.Price,
                 QuantityOnHand = battery.QuantityOnHand,
+                ConditionName = condition.ConditionName,
                 GroupName = group.GroupName,
                 CreatedAt = battery.CreatedAt,
                 UpdatedAt = battery.UpdatedAt
@@ -206,13 +257,17 @@ namespace Battery_Doctor.Controllers
 
             BatteryModel? model = (BatteryModel?)_context.Battery_Models.FirstOrDefault(n => n.ModelName == batteryUpdateDto.ModelName);
 
-            BatteryGroup? group = (BatteryGroup?)_context.Battery_Groups.FirstOrDefault();
+            BatteryGroup? group = (BatteryGroup?)_context.Battery_Groups.FirstOrDefault(n => n.GroupName == batteryUpdateDto.GroupName);
 
-            if(group == null)
+            BatteryCondition? condition = (BatteryCondition?)_context.Battery_Conditions.FirstOrDefault(n => n.ConditionName == batteryUpdateDto.ConditionName);
+
+            Unit? unit = (Unit?)_context.Units.FirstOrDefault(n => n.UnitType == batteryUpdateDto.UnitType);
+
+            if(unit == null)
             {
-                Unit unit = new Unit
+                unit = new Unit
                 {
-                    UnitType = "default"
+                    UnitType = batteryUpdateDto.UnitType
                 };
 
                 _context.Units.Add(unit);
@@ -220,16 +275,27 @@ namespace Battery_Doctor.Controllers
 
                 group = new BatteryGroup
                 {
+                    GroupName = batteryUpdateDto.GroupName,
+                    Length = batteryUpdateDto.Length,
+                    Width = batteryUpdateDto.Width,
+                    Height = batteryUpdateDto.Height,
                     UnitId = unit.Id,
-                    GroupName = "default",
-                    Length = 0,
-                    Width = 0,
-                    Height = 0,
                     CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
-                _context.Battery_Groups.Add(group);
-                await _context.SaveChangesAsync();
+            }
+            else if(group == null)
+            {
+                group = new BatteryGroup
+                {
+                    GroupName = batteryUpdateDto.GroupName,
+                    Length = batteryUpdateDto.Length,
+                    Width = batteryUpdateDto.Width,
+                    Height = batteryUpdateDto.Height,
+                    UnitId = unit.Id,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
             }
 
             if(type == null)
@@ -262,20 +328,31 @@ namespace Battery_Doctor.Controllers
                 {
                     ModelName = batteryUpdateDto.ModelName,
                     CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-                    BatteryMakeId = make.Id
+                    UpdatedAt = DateTime.Now
                 };
                 _context.Battery_Models.Add(model);
+                await _context.SaveChangesAsync();
+            }
+
+            if(condition == null)
+            {
+                condition = new BatteryCondition
+                {
+                    ConditionName = batteryUpdateDto.ConditionName,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+                _context.Battery_Conditions.Add(condition);
                 await _context.SaveChangesAsync();
             }
 
             battery.TypeId = type.Id;
             battery.ModelId = model.Id;
             battery.MakeId = make.Id;
+            battery.ConditionId = condition.Id;
             battery.Voltage = batteryUpdateDto.Voltage;
             battery.Capacity = batteryUpdateDto.Capacity;
             battery.Price = batteryUpdateDto.Price;
-            battery.QuantityOnHand = batteryUpdateDto.QuantityOnHand;
             battery.GroupId = group.Id;
             battery.UpdatedAt = DateTime.UtcNow;
 
@@ -336,12 +413,14 @@ namespace Battery_Doctor.Controllers
                 worksheet.Cells[1, 2].Value = "Battery Type";
                 worksheet.Cells[1, 3].Value = "Battery Model";
                 worksheet.Cells[1, 4].Value = "Battery Make";
-                worksheet.Cells[1, 5].Value = "Voltage";
-                worksheet.Cells[1, 6].Value = "Capacity";
-                worksheet.Cells[1, 7].Value = "Price";
-                worksheet.Cells[1, 8].Value = "Quantity On Hand";
-                worksheet.Cells[1, 9].Value = "Created At";
-                worksheet.Cells[1, 10].Value = "Updated At";
+                worksheet.Cells[1, 5].Value = "Battery Condition";
+                worksheet.Cells[1, 6].Value = "Battery Group";
+                worksheet.Cells[1, 7].Value = "Voltage";
+                worksheet.Cells[1, 8].Value = "Capacity";
+                worksheet.Cells[1, 9].Value = "Price";
+                worksheet.Cells[1, 10].Value = "Quantity On Hand";
+                worksheet.Cells[1, 11].Value = "Created At";
+                worksheet.Cells[1, 12].Value = "Updated At";
 
                 int rowNumber = 2;
 
@@ -351,17 +430,19 @@ namespace Battery_Doctor.Controllers
                     worksheet.Cells[rowNumber, 2].Value = _context.Battery_Types.Find(battery.TypeId).TypeName;
                     worksheet.Cells[rowNumber, 3].Value = _context.Battery_Models.Find(battery.ModelId).ModelName;
                     worksheet.Cells[rowNumber, 4].Value = _context.Battery_Makes.Find(battery.MakeId).Name;
-                    worksheet.Cells[rowNumber, 5].Value = battery.Voltage;
-                    worksheet.Cells[rowNumber, 6].Value = battery.Capacity;
-                    worksheet.Cells[rowNumber, 7].Value = battery.Price;
-                    worksheet.Cells[rowNumber, 8].Value = battery.QuantityOnHand;
-                    worksheet.Cells[rowNumber, 9].Value = battery.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
-                    worksheet.Cells[rowNumber, 10].Value = battery.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    worksheet.Cells[rowNumber, 5].Value = _context.Battery_Conditions.Find(battery.ConditionId).ConditionName;
+                    worksheet.Cells[rowNumber, 6].Value = _context.Battery_Groups.Find(battery.GroupId).GroupName;
+                    worksheet.Cells[rowNumber, 7].Value = battery.Voltage;
+                    worksheet.Cells[rowNumber, 8].Value = battery.Capacity;
+                    worksheet.Cells[rowNumber, 9].Value = battery.Price;
+                    worksheet.Cells[rowNumber, 10].Value = battery.QuantityOnHand;
+                    worksheet.Cells[rowNumber, 11].Value = battery.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    worksheet.Cells[rowNumber, 12].Value = battery.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss");
                     rowNumber++;
                 }
 
                 // Auto-Formatting
-                using(var range = worksheet.Cells[1, 1, rowNumber - 1, 10])
+                using(var range = worksheet.Cells[1, 1, rowNumber - 1, 12])
                 {
                     // Setting border for all cells
                     range.Style.Border.Top.Style = ExcelBorderStyle.Thin;
@@ -370,11 +451,11 @@ namespace Battery_Doctor.Controllers
                     range.Style.Border.Right.Style = ExcelBorderStyle.Thin;
 
                     // Setting font bold for header
-                    range[1, 1, 1, 10].Style.Font.Bold = true;
+                    range[1, 1, 1, 12].Style.Font.Bold = true;
 
                     // Setting background color for header
-                    range[1, 1, 1, 10].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    range[1, 1, 1, 10].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                    range[1, 1, 1, 12].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range[1, 1, 1, 12].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
                 }
 
                 // AutoFit columns to content size for entire columns
@@ -382,12 +463,15 @@ namespace Battery_Doctor.Controllers
 
                 // Save to "Exports" subdirectory on the Desktop
                 var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                var exportDirectory = Path.Combine(desktopPath, "Exports", "Battery");
-                Directory.CreateDirectory(exportDirectory);
+                var exportDirectoryXl = Path.Combine(desktopPath, "Exports", "Batteries", "Xl");
+                var exportDirectoryCsv = Path.Combine(desktopPath, "Exports", "Batteries", "CSV");
+                Directory.CreateDirectory(exportDirectoryXl);
+                Directory.CreateDirectory(exportDirectoryCsv);
 
                 var now = DateTime.Now;
                 var currentDate = now.ToString("yyyyMMdd");
-                var filePath = Path.Combine(exportDirectory, $"BatteryData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePath = Path.Combine(exportDirectoryXl, $"BatteryData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePathCsv = Path.Combine(exportDirectoryCsv, $"BatteryData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.csv");
 
                 package.SaveAs(new FileInfo(filePath));
             }
