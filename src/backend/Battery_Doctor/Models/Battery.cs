@@ -43,7 +43,7 @@ namespace Battery_Doctor.Models
         public float Price { get; set; }
 
         [Column("quantity_on_hand")]
-        public int QuantityOnHand 
+        public virtual int QuantityOnHand 
         { 
             get { 
                 return Handlers.AssetHandler.GetAssetAmount(Id); 

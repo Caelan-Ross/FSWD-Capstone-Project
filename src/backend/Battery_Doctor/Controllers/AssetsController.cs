@@ -29,7 +29,7 @@ namespace Battery_Doctor.Controllers
             {
                 Id = a.Id,
                 QRCode = a.QRCode,
-                BatteryName = a.Battery.BatteryGroup.GroupName,
+                BatteryName = a.Battery.BatteryMake.Name,
                 StampedSerial = a.StampedSerial,
                 WarrantyDate = a.WarrantyDate
 
@@ -44,7 +44,7 @@ namespace Battery_Doctor.Controllers
         {
             var asset = await _context.Assets
                 .Include(a => a.Battery)
-                .Include(a => a.Battery.BatteryGroup)
+                .Include(a => a.Battery.BatteryMake)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (asset == null)
@@ -55,7 +55,7 @@ namespace Battery_Doctor.Controllers
             var assetR_DTO = new AssetR_DTO
             {
                 QRCode = asset.QRCode,
-                BatteryName = asset.Battery.BatteryGroup.GroupName,
+                BatteryName = asset.Battery.BatteryMake.Name,
                 StampedSerial = asset.StampedSerial,
                 WarrantyDate = asset.WarrantyDate
             };

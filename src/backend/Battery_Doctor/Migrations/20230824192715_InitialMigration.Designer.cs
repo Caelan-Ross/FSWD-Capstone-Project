@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Battery_Doctor.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230824153128_InitialMigration")]
+    [Migration("20230824192715_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -374,9 +374,21 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("int(10)")
                         .HasColumnName("invoice_id");
 
+                    b.Property<float>("CashAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("cash_amount");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at");
+
+                    b.Property<float>("CreditAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("credit_amount");
+
+                    b.Property<float>("CustomerCreditAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("customer_credit_amount");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int(10)")
@@ -386,9 +398,21 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_of_sale");
 
+                    b.Property<float>("DebitAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("debit_amount");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("notes");
+
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int(10)")
                         .HasColumnName("payment_method_id");
+
+                    b.Property<float>("TaxRate")
+                        .HasColumnType("float")
+                        .HasColumnName("tax_rate");
 
                     b.Property<float>("TotalPrice")
                         .HasColumnType("float")
@@ -423,7 +447,8 @@ namespace Battery_Doctor.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<int>("InvoiceId")
-                        .HasColumnType("int(10)");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("invoice_id");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)")

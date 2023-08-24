@@ -1,5 +1,4 @@
-﻿using Battery_Doctor.Models;
-
+﻿
 namespace Battery_Doctor.DTOs
 {
     public class InvoiceR_DTO
@@ -13,6 +12,18 @@ namespace Battery_Doctor.DTOs
         public DateTime DateOfSale { get; set; }
 
         public float TotalPrice { get; set; }
+
+        public float CashAmount { get; set; }
+
+        public float DebitAmount { get; set; }
+
+        public float CreditAmount { get; set; }
+
+        public float CustomerCreditAmount { get; set; }
+
+        public float TaxRate { get; set; }
+
+        public string Notes { get; set; }
 
         public List<string> AssetNames { get; set; }
     }

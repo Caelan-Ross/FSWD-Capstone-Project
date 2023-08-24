@@ -234,8 +234,15 @@ namespace Battery_Doctor.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     customer_id = table.Column<int>(type: "int(10)", nullable: false),
                     payment_method_id = table.Column<int>(type: "int(10)", nullable: false),
+                    notes = table.Column<string>(type: "varchar(500)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     date_of_sale = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    cash_amount = table.Column<float>(type: "float", nullable: false),
+                    debit_amount = table.Column<float>(type: "float", nullable: false),
+                    credit_amount = table.Column<float>(type: "float", nullable: false),
+                    customer_credit_amount = table.Column<float>(type: "float", nullable: false),
                     total_price = table.Column<float>(type: "float", nullable: false),
+                    tax_rate = table.Column<float>(type: "float", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -399,7 +406,7 @@ namespace Battery_Doctor.Migrations
                 {
                     invoice_details_id = table.Column<int>(type: "int(10)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    InvoiceId = table.Column<int>(type: "int(10)", nullable: false),
+                    invoice_id = table.Column<int>(type: "int(10)", nullable: false),
                     asset_id = table.Column<int>(type: "int(10)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -414,8 +421,8 @@ namespace Battery_Doctor.Migrations
                         principalColumn: "asset_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Invoice_Details_Invoices_InvoiceId",
-                        column: x => x.InvoiceId,
+                        name: "FK_Invoice_Details_Invoices_invoice_id",
+                        column: x => x.invoice_id,
                         principalTable: "Invoices",
                         principalColumn: "invoice_id",
                         onDelete: ReferentialAction.Cascade);
@@ -468,9 +475,9 @@ namespace Battery_Doctor.Migrations
                 column: "asset_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoice_Details_InvoiceId",
+                name: "IX_Invoice_Details_invoice_id",
                 table: "Invoice_Details",
-                column: "InvoiceId");
+                column: "invoice_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_customer_id",

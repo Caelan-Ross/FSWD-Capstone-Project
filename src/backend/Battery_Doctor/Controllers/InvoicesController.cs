@@ -34,8 +34,15 @@ namespace Battery_Doctor.Controllers
                 Id = i.Id,
                 CustomerId = i.CustomerId,
                 PaymentMethodR = _context.Payment_Methods.FirstOrDefault(x => x.Id == i.PaymentMethodId).Method,
-                DateOfSale= i.DateOfSale,
-                TotalPrice= i.TotalPrice,
+                DateOfSale = i.DateOfSale,
+                TotalPrice = i.TotalPrice,
+                CashAmount = i.CashAmount,
+                DebitAmount = i.DebitAmount,
+                CreditAmount = i.CreditAmount,
+                CustomerCreditAmount = i.CustomerCreditAmount,
+                TaxRate = i.TaxRate,
+                Notes = i.Notes
+
             }).ToList();
 
             return invoiceReadDtos;
@@ -64,6 +71,12 @@ namespace Battery_Doctor.Controllers
                 PaymentMethodR = _context.Payment_Methods.FirstOrDefault(x => x.Id == invoice.PaymentMethodId).Method,
                 DateOfSale = invoice.DateOfSale,
                 TotalPrice = invoice.TotalPrice,
+                CashAmount = invoice.CashAmount,
+                DebitAmount = invoice.DebitAmount,
+                CreditAmount = invoice.CreditAmount,
+                TaxRate = invoice.TaxRate,
+                CustomerCreditAmount = invoice.CustomerCreditAmount,
+                Notes = invoice.Notes
             };
 
             return invoiceReadDto;
@@ -111,6 +124,12 @@ namespace Battery_Doctor.Controllers
                 PaymentMethodId = paymentMethod.Id,
                 DateOfSale = DateTime.Now,
                 TotalPrice = invoiceDto.TotalPrice,
+                Notes = invoiceDto.Notes,
+                CashAmount = invoiceDto.CashAmount,
+                DebitAmount = invoiceDto.DebitAmount,
+                CreditAmount = invoiceDto.CreditAmount,
+                CustomerCreditAmount = invoiceDto.CustomerCreditAmount,
+                TaxRate = invoiceDto.TaxRate,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
@@ -141,6 +160,11 @@ namespace Battery_Doctor.Controllers
                 PaymentMethodR = _context.Payment_Methods.FirstOrDefault(x => x.Id == invoice.PaymentMethodId).Method,
                 DateOfSale = invoice.DateOfSale,
                 TotalPrice = invoice.TotalPrice,
+                CashAmount = invoice.CashAmount,
+                DebitAmount = invoice.DebitAmount,
+                CreditAmount = invoice.CreditAmount,
+                CustomerCreditAmount = invoice.CustomerCreditAmount,
+                TaxRate = invoice.TaxRate,
                 AssetNames = invoice.InvoiceDetails.Select(x => _context.Battery_Makes.FirstOrDefault(m => m.Id == _context.Batteries.FirstOrDefault(b => b.Id == _context.Assets.FirstOrDefault(d => d.Id == x.AssetId).BatteryId).MakeId).Name).ToList()
             };
 
@@ -179,6 +203,11 @@ namespace Battery_Doctor.Controllers
             invoice.TotalPrice = invoiceDto.TotalPrice;
             invoice.PaymentMethodId = paymentMethod.Id;
             invoice.CustomerId = invoiceDto.CustomerId;
+            invoice.CashAmount = invoiceDto.CashAmount;
+            invoice.DebitAmount = invoiceDto.DebitAmount;
+            invoice.CreditAmount = invoiceDto.CreditAmount;
+            invoice.TaxRate = invoiceDto.TaxRate;
+            invoice.Notes = invoiceDto.Notes;
             invoice.InvoiceDetails.Clear();
 
             foreach(int i in invoiceDto.AssetIds)
@@ -250,8 +279,14 @@ namespace Battery_Doctor.Controllers
                 worksheet.Cells[1, 3].Value = "Payment Method";
                 worksheet.Cells[1, 4].Value = "Date of Sale";
                 worksheet.Cells[1, 5].Value = "Total Price";
-                worksheet.Cells[1, 6].Value = "Created At";
-                worksheet.Cells[1, 7].Value = "Updated At";
+                worksheet.Cells[1, 6].Value = "Cash Amount";
+                worksheet.Cells[1, 7].Value = "Debit Amount";
+                worksheet.Cells[1, 8].Value = "Credit Amount";
+                worksheet.Cells[1, 9].Value = "Customer Credit Amount";
+                worksheet.Cells[1, 10].Value = "Tax Rate";
+                worksheet.Cells[1, 11].Value = "Notes";
+                worksheet.Cells[1, 12].Value = "Created At";
+                worksheet.Cells[1, 13].Value = "Updated At";
 
                 int rowNumber = 2;
 
@@ -262,13 +297,19 @@ namespace Battery_Doctor.Controllers
                     worksheet.Cells[rowNumber, 3].Value = _context.Payment_Methods.Find(invoice.PaymentMethodId).Method; // Assuming PaymentMethod has a 'Name' property
                     worksheet.Cells[rowNumber, 4].Value = invoice.DateOfSale.ToString("yyyy-MM-dd");
                     worksheet.Cells[rowNumber, 5].Value = invoice.TotalPrice;
-                    worksheet.Cells[rowNumber, 6].Value = invoice.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
-                    worksheet.Cells[rowNumber, 7].Value = invoice.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    worksheet.Cells[rowNumber, 6].Value = invoice.CashAmount;
+                    worksheet.Cells[rowNumber, 7].Value = invoice.DebitAmount;
+                    worksheet.Cells[rowNumber, 8].Value = invoice.CreditAmount;
+                    worksheet.Cells[rowNumber, 9].Value = invoice.CustomerCreditAmount;
+                    worksheet.Cells[rowNumber, 10].Value = invoice.TaxRate;
+                    worksheet.Cells[rowNumber, 11].Value = invoice.Notes;
+                    worksheet.Cells[rowNumber, 12].Value = invoice.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                    worksheet.Cells[rowNumber, 13].Value = invoice.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss");
                     rowNumber++;
                 }
 
                 // Auto-Formatting
-                using(var range = worksheet.Cells[1, 1, rowNumber - 1, 7])
+                using(var range = worksheet.Cells[1, 1, rowNumber - 1, 13])
                 {
                     // Setting border for all cells
                     range.Style.Border.Top.Style = ExcelBorderStyle.Thin;
