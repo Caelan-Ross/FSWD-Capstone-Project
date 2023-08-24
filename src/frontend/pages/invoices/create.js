@@ -494,9 +494,13 @@ export default function Home() {
 											name={`item-${index}`}
 											options={lineItemOptions}
 											getOptionLabel={(option) => option.batteryName}
-											value={row.item}
+											value={row.item} //removes x from dropdown
 											onChange={(event, newValue) => {
 												handleInputChangeLines(index, 'item', newValue);
+												const selectedPrice = newValue
+													? newValue.price.toFixed(2)
+													: '';
+												handleInputChangeLines(index, 'price', selectedPrice);
 											}}
 											renderInput={(params) => (
 												<TextField
@@ -512,6 +516,11 @@ export default function Home() {
 												/>
 											)}
 											inputValue={row.item ? row.item.batteryName : ''}
+											sx={{
+												'& .MuiAutocomplete-clearIndicator': {
+													display: 'none', // Hide the clear indicator (X) icon
+												},
+											}}
 										/>
 									</Grid>
 									<Grid item>
@@ -522,7 +531,7 @@ export default function Home() {
 											type='text'
 											variant='outlined'
 											fullWidth
-											value={row.price.toFixed(2)}
+											value={row.price}
 											onChange={(e) =>
 												handleInputChangeLines(index, 'price', e.target.value)
 											}
@@ -532,27 +541,27 @@ export default function Home() {
 												height: '40px',
 											}}
 										/>
+										<IconButton onClick={addRow}>
+											<AddCircleIcon
+												sx={{ fontSize: '1.25rem', color: '#000000', marginTop: '8px' }}
+											/>
+										</IconButton>
+										{index > 0 && (
+											<IconButton onClick={() => removeRow(index)}>
+												<RemoveCircleOutlineIcon
+													sx={{ fontSize: '1.25rem', color: '#000000', marginTop: '8px' }}
+												/>
+											</IconButton>
+										)}
+										{index === 0 && (
+											<IconButton disabled>
+												<RemoveCircleOutlineIcon
+													sx={{ fontSize: '1.25rem', color: '#d3d3d3', marginTop: '8px'}}
+												/>
+											</IconButton>
+										)}
 									</Grid>
 								</Grid>
-								<IconButton onClick={addRow}>
-									<AddCircleIcon
-										sx={{ fontSize: '1.25rem', color: '#000000' }}
-									/>
-								</IconButton>
-								{index > 0 && (
-									<IconButton onClick={() => removeRow(index)}>
-										<RemoveCircleOutlineIcon
-											sx={{ fontSize: '1.25rem', color: '#000000' }}
-										/>
-									</IconButton>
-								)}
-								{index === 0 && (
-									<IconButton disabled>
-										<RemoveCircleOutlineIcon
-											sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-										/>
-									</IconButton>
-								)}
 							</Box>
 						))}
 					</Box>
