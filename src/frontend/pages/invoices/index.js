@@ -35,6 +35,8 @@ export default function Invoices() {
 
 	const API_BASE = 'http://localhost:7166/api/Invoices';
 	const [invoiceData, setInvoiceData] = useState([]);
+
+	// State for alerts
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
 		open: false,
 		customerId: null,

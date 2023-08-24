@@ -246,7 +246,6 @@ export default function Customer() {
 				/>
 				{/* Customer DataGrid */}
 				<DataGrid
-					// rows={customerData}
 					rows={filteredCustomerData}
 					columns={columns}
 					pageSize={5}

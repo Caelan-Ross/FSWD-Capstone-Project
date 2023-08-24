@@ -10,6 +10,7 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
+	TextField,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -30,19 +31,28 @@ export default function Home() {
 
 	const API_BASE = 'http://localhost:7166/api/Batteries';
 	const [inventoryData, setInventoryData] = useState([]);
+	const [searchQuery, setSearchQuery] = useState([]);
+
+	// State for alerts
+	const [showSnackbar, setShowSnackbar] = useState(false);
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
 		open: false,
 		batteryId: null,
 	});
-	const [showSnackbar, setShowSnackbar] = useState(false);
 	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
 	// Data Fields
 	const columns = [
 		{ field: 'id', headerName: <strong>Battery ID</strong>, width: 100 },
-		{ field: 'typeName', headerName: <strong>Type</strong>, width: 150 },
+		{ field: 'typeName', headerName: <strong>Type</strong>, width: 100 },
 		{ field: 'modelName', headerName: <strong>Model</strong>, width: 100 },
 		{ field: 'makeName', headerName: <strong>Make</strong>, width: 100 },
+		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
+		{
+			field: 'conditionName',
+			headerName: <strong>Condition</strong>,
+			width: 100,
+		},
 		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 100 },
 		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100 },
 		{ field: 'price', headerName: <strong>Price</strong>, width: 100 },
@@ -51,7 +61,6 @@ export default function Home() {
 			headerName: <strong>Qty on Hand</strong>,
 			width: 100,
 		},
-		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
 		{
 			field: 'edit',
 			headerName: <strong>Edit</strong>,
@@ -73,24 +82,6 @@ export default function Home() {
 			),
 		},
 	];
-
-	// Fetch Inventory Data
-	useEffect(() => {
-		axios
-			.get(API_BASE, {
-				headers: {
-					accept: 'text/plain',
-				},
-			})
-			.then((response) => {
-				console.log(response);
-				// Update inventoryData state with fetched data
-				setInventoryData(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching battery data:', error);
-			});
-	}, []);
 
 	// Function to open the delete confirmation dialog
 	const openDeleteConfirmation = (batteryId) => {
@@ -146,6 +137,33 @@ export default function Home() {
 			console.error('Error exporting batteries:', error);
 		}
 	};
+
+	// Filter battery data based on search query
+	const filteredInventoryData = inventoryData.filter((battery) => {
+		const lowerCaseSearchQuery = searchQuery.toLowerCase();
+		return (
+			typeof battery.makeName === 'string' &&
+			battery.makeName.toLowerCase().includes(lowerCaseSearchQuery)
+		);
+	});
+
+	// Fetch Inventory Data
+	useEffect(() => {
+		axios
+			.get(API_BASE, {
+				headers: {
+					accept: 'text/plain',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+				// Update inventoryData state with fetched data
+				setInventoryData(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching battery data:', error);
+			});
+	}, []);
 
 	return (
 		<Box
@@ -217,7 +235,6 @@ export default function Home() {
 				/>
 			</Snackbar>
 
-			{/* Inventory DataGrid */}
 			<div
 				style={{
 					height: '90%',
@@ -227,8 +244,19 @@ export default function Home() {
 					padding: '.5rem',
 				}}
 			>
+				{/* Searchbar */}
+				<TextField
+					type='text'
+					label='Search by make'
+					variant='outlined'
+					fullWidth
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
+					sx={{ marginBottom: theme.spacing(2) }} // Add some bottom margin for spacing
+				/>
+				{/* Inventory DataGrid */}
 				<DataGrid
-					rows={inventoryData}
+					rows={filteredInventoryData}
 					columns={columns}
 					pageSize={5}
 					sx={{ alignItems: 'center', margin: 'auto' }}
