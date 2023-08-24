@@ -242,7 +242,7 @@ export default function Customer() {
 					fullWidth
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
-					sx={{ marginBottom: theme.spacing(2) }} // Add some bottom margin for spacing
+					sx={{ marginBottom: theme.spacing(2) }}
 				/>
 				{/* Customer DataGrid */}
 				<DataGrid

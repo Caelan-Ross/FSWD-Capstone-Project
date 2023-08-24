@@ -252,7 +252,7 @@ export default function Home() {
 					fullWidth
 					value={searchQuery}
 					onChange={(e) => setSearchQuery(e.target.value)}
-					sx={{ marginBottom: theme.spacing(2) }} // Add some bottom margin for spacing
+					sx={{ marginBottom: theme.spacing(2) }}
 				/>
 				{/* Inventory DataGrid */}
 				<DataGrid
