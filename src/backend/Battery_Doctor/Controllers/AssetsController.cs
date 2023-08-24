@@ -31,6 +31,7 @@ namespace Battery_Doctor.Controllers
                 QRCode = a.QRCode,
                 BatteryName = a.Battery.BatteryMake.Name,
                 StampedSerial = a.StampedSerial,
+                Price = a.Battery.Price,
                 WarrantyDate = a.WarrantyDate
 
             }).ToList();
@@ -57,6 +58,7 @@ namespace Battery_Doctor.Controllers
                 QRCode = asset.QRCode,
                 BatteryName = asset.Battery.BatteryMake.Name,
                 StampedSerial = asset.StampedSerial,
+                Price = asset.Battery.Price,
                 WarrantyDate = asset.WarrantyDate
             };
 
