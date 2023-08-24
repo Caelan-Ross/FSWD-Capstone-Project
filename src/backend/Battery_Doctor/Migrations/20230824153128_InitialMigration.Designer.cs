@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Battery_Doctor.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230823193638_InitialMigration")]
+    [Migration("20230824153128_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -131,10 +131,6 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
-
                     b.Property<string>("QRCode")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -158,8 +154,6 @@ namespace Battery_Doctor.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BatteryId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("Assets");
                 });
@@ -626,15 +620,7 @@ namespace Battery_Doctor.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Battery_Doctor.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Battery");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.Battery", b =>

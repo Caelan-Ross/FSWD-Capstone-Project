@@ -14,8 +14,6 @@ namespace Battery_Doctor.DTOs
 
         public string StampedSerial { get; set; }
 
-        public int CustomerId { get; set; }
-
         public int InvoiceId { get; set; }
 
     }

@@ -10,8 +10,6 @@
 
         public string StampedSerial { get; set; }
 
-        public string CustomerFL { get; set; }
-
         public DateTime WarrantyDate { get; set; }
 
     }

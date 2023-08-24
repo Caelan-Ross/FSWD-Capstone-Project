@@ -23,7 +23,6 @@ namespace Battery_Doctor.Controllers
         {
             List<Asset> assets = _context.Assets
                 .Include(a => a.Battery)
-                .Include(a => a.Customer)
                 .Include(a => a.Battery.BatteryGroup)
                 .ToList();
             List<AssetR_DTO> assetR_DTOs = assets.Select(a => new AssetR_DTO
@@ -32,7 +31,6 @@ namespace Battery_Doctor.Controllers
                 QRCode = a.QRCode,
                 BatteryName = a.Battery.BatteryGroup.GroupName,
                 StampedSerial = a.StampedSerial,
-                CustomerFL = (a.Customer.FirstName + " " + a.Customer.LastName),
                 WarrantyDate = a.WarrantyDate
 
             }).ToList();
@@ -46,7 +44,6 @@ namespace Battery_Doctor.Controllers
         {
             var asset = await _context.Assets
                 .Include(a => a.Battery)
-                .Include(a => a.Customer)
                 .Include(a => a.Battery.BatteryGroup)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
@@ -60,7 +57,6 @@ namespace Battery_Doctor.Controllers
                 QRCode = asset.QRCode,
                 BatteryName = asset.Battery.BatteryGroup.GroupName,
                 StampedSerial = asset.StampedSerial,
-                CustomerFL = (asset.Customer.FirstName + " " + asset.Customer.LastName),
                 WarrantyDate = asset.WarrantyDate
             };
 
@@ -71,8 +67,7 @@ namespace Battery_Doctor.Controllers
         [HttpPost]
         public async Task<ActionResult<Asset>> PostAsset(AssetC_DTO createAssetDto)
         {
-            if (!_context.Batteries.Any(b => b.Id == createAssetDto.BatteryId) ||
-                (createAssetDto.CustomerId.ToString() != "" && !_context.Customers.Any(c => c.Id == createAssetDto.CustomerId)))
+            if (!_context.Batteries.Any(b => b.Id == createAssetDto.BatteryId))
             {
                 return BadRequest("The provided BatteryId or CustomerId is invalid.");
             }
@@ -80,7 +75,6 @@ namespace Battery_Doctor.Controllers
             Asset asset = new Asset
             {
                 BatteryId = createAssetDto.BatteryId,
-                CustomerId = createAssetDto.CustomerId,
                 WarrantyDate = DateTime.Now,
                 StampedSerial = createAssetDto.StampedSerial,
                 CreatedAt = DateTime.Now,
@@ -102,8 +96,7 @@ namespace Battery_Doctor.Controllers
                 return BadRequest();
             }
 
-            if (!_context.Batteries.Any(b => b.Id == asset.BatteryId) ||
-                (asset.CustomerId.ToString() != "" && !_context.Customers.Any(c => c.Id == asset.CustomerId)))
+            if (!_context.Batteries.Any(b => b.Id == asset.BatteryId))
             {
                 return BadRequest("The provided BatteryId or CustomerId is invalid.");
             }

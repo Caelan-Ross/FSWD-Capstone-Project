@@ -347,7 +347,6 @@ namespace Battery_Doctor.Migrations
                     warranty_date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     stamped_serial = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    customer_id = table.Column<int>(type: "int(10)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -359,12 +358,6 @@ namespace Battery_Doctor.Migrations
                         column: x => x.battery_id,
                         principalTable: "Batteries",
                         principalColumn: "battery_id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Assets_Customers_customer_id",
-                        column: x => x.customer_id,
-                        principalTable: "Customers",
-                        principalColumn: "customer_id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -433,11 +426,6 @@ namespace Battery_Doctor.Migrations
                 name: "IX_Assets_battery_id",
                 table: "Assets",
                 column: "battery_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Assets_customer_id",
-                table: "Assets",
-                column: "customer_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Batteries_condition_id",
