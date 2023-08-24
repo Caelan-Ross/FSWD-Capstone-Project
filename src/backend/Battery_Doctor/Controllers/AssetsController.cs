@@ -23,7 +23,7 @@ namespace Battery_Doctor.Controllers
         {
             List<Asset> assets = _context.Assets
                 .Include(a => a.Battery)
-                .Include(a => a.Battery.BatteryGroup)
+                .Include(a => a.Battery.BatteryMake)
                 .ToList();
             List<AssetR_DTO> assetR_DTOs = assets.Select(a => new AssetR_DTO
             {

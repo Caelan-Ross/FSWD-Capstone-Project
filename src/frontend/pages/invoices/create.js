@@ -7,6 +7,7 @@ import {
 	Alert,
 	Select,
 	MenuItem,
+	Grid,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -23,13 +24,21 @@ export default function Home() {
 	const handleNavigation = (path) => {
 		router.push(path);
 	};
+	const API_BASE = 'http://localhost:7166/api/Invoices/';
 
-	const API_BASE = 'http://localhost:3000/api/invoices/create';
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
+
+	// Customer Drop Down
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+	// LineItems Drop Down
+	const [lineItemOptions, setLineItemOptions] = useState([]);
+	const [selectedLineItem, setSelectedLineItem] = useState([]);
+
+	// Amounts
 	const [taxAmount, setTaxAmount] = useState(0);
 	const [subtotal, setSubtotal] = useState(0);
 	const [totalAmount, setTotalAmount] = useState(0);
@@ -39,16 +48,29 @@ export default function Home() {
 	const [rows, setRows] = useState([
 		{
 			item: '',
-			price: '',
+			price: 0,
 		},
 	]);
 
+	// Handle Line Items
+	// const handleInputChangeLines = (index, field, value) => {
+	// 	const updatedRows = [...rows];
+	// 	updatedRows[index][field] = value;
+	// 	setRows(updatedRows);
+	// };
 	const handleInputChangeLines = (index, field, value) => {
 		const updatedRows = [...rows];
-		updatedRows[index][field] = value;
+		if (field === 'item') {
+			updatedRows[index]['item'] = value;
+			// Fetch and update the price from the selected line item
+			const selectedPrice =
+				lineItemOptions.find((item) => item.id === value.id)?.price || 0;
+			updatedRows[index]['price'] = selectedPrice;
+		} else {
+			updatedRows[index][field] = value;
+		}
 		setRows(updatedRows);
 	};
-
 	const addRow = () => {
 		setRows([...rows, { item: '', price: '' }]);
 	};
@@ -92,8 +114,9 @@ export default function Home() {
 		const creditTotal = parseFloat(calculatePaymentTotal('credit'));
 		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
-			parseFloat(-1 * parseFloat(document.getElementById('customerCreditAmount').value)) ||
-			0;
+			parseFloat(
+				-1 * parseFloat(document.getElementById('customerCreditAmount').value)
+			) || 0;
 
 		const newSubtotal =
 			cashTotal + creditTotal + debitTotal + customerCreditTotal;
@@ -202,6 +225,16 @@ export default function Home() {
 			.catch((error) => {
 				console.error('Error fetching customers:', error);
 			});
+
+		// Fetch data for lineItem dropdown
+		axios
+			.get('http://localhost:7166/api/Assets')
+			.then((response) => {
+				setLineItemOptions(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customers:', error);
+			});
 	}, []);
 
 	return (
@@ -283,7 +316,7 @@ export default function Home() {
 							borderTop: '1px solid #ecececf9',
 							padding: '10px',
 							borderRadius: '10px',
-							height: '36rem'
+							height: '36rem',
 						}}
 					>
 						{/* Customer Section */}
@@ -425,7 +458,7 @@ export default function Home() {
 							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
-							height: '36rem'
+							height: '36rem',
 						}}
 					>
 						<Box
@@ -454,32 +487,53 @@ export default function Home() {
 									backgroundColor: '#fbfbfbf9',
 								}}
 							>
-								<TextField
-									id={`item-${index}`}
-									name={`item-${index}`}
-									label='Item'
-									type='text'
-									variant='outlined'
-									fullWidth
-									value={row.item}
-									onChange={(e) =>
-										handleInputChangeLines(index, 'item', e.target.value)
-									}
-									sx={{ backgroundColor: 'white', width: '18rem' }}
-								/>
-								<TextField
-									id={`price-${index}`}
-									name={`price-${index}`}
-									label='$'
-									type='text'
-									variant='outlined'
-									fullWidth
-									value={row.price}
-									onChange={(e) =>
-										handleInputChangeLines(index, 'price', e.target.value)
-									}
-									sx={{ backgroundColor: 'white', width: '6rem' }}
-								/>
+								<Grid container alignItems='center' mb={4}>
+									<Grid item>
+										<Autocomplete
+											id={`item-${index}`}
+											name={`item-${index}`}
+											options={lineItemOptions}
+											getOptionLabel={(option) => option.batteryName}
+											value={row.item}
+											onChange={(event, newValue) => {
+												handleInputChangeLines(index, 'item', newValue);
+											}}
+											renderInput={(params) => (
+												<TextField
+													{...params}
+													label='Item'
+													variant='outlined'
+													fullWidth
+													sx={{
+														backgroundColor: 'white',
+														width: '18rem',
+														height: '40px',
+													}}
+												/>
+											)}
+											inputValue={row.item ? row.item.batteryName : ''}
+										/>
+									</Grid>
+									<Grid item>
+										<TextField
+											id={`price-${index}`}
+											name={`price-${index}`}
+											label='$'
+											type='text'
+											variant='outlined'
+											fullWidth
+											value={row.price.toFixed(2)}
+											onChange={(e) =>
+												handleInputChangeLines(index, 'price', e.target.value)
+											}
+											sx={{
+												backgroundColor: 'white',
+												width: '6rem',
+												height: '40px',
+											}}
+										/>
+									</Grid>
+								</Grid>
 								<IconButton onClick={addRow}>
 									<AddCircleIcon
 										sx={{ fontSize: '1.25rem', color: '#000000' }}
@@ -519,7 +573,7 @@ export default function Home() {
 							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
-							height: '36rem'
+							height: '36rem',
 						}}
 					>
 						<Box
@@ -645,9 +699,7 @@ export default function Home() {
 								}}
 							/>
 							<IconButton disabled>
-								<AddCircleIcon
-									sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-								/>
+								<AddCircleIcon sx={{ fontSize: '1.25rem', color: '#d3d3d3' }} />
 							</IconButton>
 
 							<IconButton disabled>
@@ -769,7 +821,7 @@ export default function Home() {
 									marginTop: '.75rem',
 									backgroundColor: '#f3eced',
 									borderRadius: '8px',
-									width: '28rem'
+									width: '28rem',
 								}}
 							/>
 							{/* Subtotal Amount */}
@@ -819,7 +871,11 @@ export default function Home() {
 						type='submit'
 						disabled={loading}
 						color='primary'
-						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto 0 auto' }}
+						sx={{
+							width: '20rem',
+							textAlign: 'center',
+							margin: '1rem auto 0 auto',
+						}}
 					>
 						{loading ? 'Creating...' : 'Create'}
 					</Button>
