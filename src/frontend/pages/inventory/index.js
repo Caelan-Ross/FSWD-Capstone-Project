@@ -261,7 +261,7 @@ export default function Home() {
 					rows={filteredInventoryData}
 					columns={columns}
 					pageSize={5}
-					sx={{ alignItems: 'center', margin: 'auto' }}
+					sx={{ alignItems: 'center', margin: 'auto', height: '37rem' }}
 				/>
 			</div>
 

@@ -114,20 +114,27 @@ export default function Home() {
 		const creditTotal = parseFloat(calculatePaymentTotal('credit'));
 		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
-			parseFloat(
-				-1 * parseFloat(document.getElementById('customerCreditAmount').value)
-			) || 0;
-
-		const newSubtotal =
-			cashTotal + creditTotal + debitTotal + customerCreditTotal;
-		const newTaxAmount = newSubtotal * 0.05; // Calculate tax as 5% of the subtotal
-		const newTotalAmount = newSubtotal + newTaxAmount;
-
+		  parseFloat(
+			-1 * parseFloat(document.getElementById('customerCreditAmount').value)
+		  ) || 0;
+	  
+		const itemPrices = rows.map(row => parseFloat(row.price) || 0);
+		const newSubtotal = itemPrices.reduce((total, price) => total + price, 0) + customerCreditTotal;
+		const newTaxAmount = parseFloat(newSubtotal) * 0.05;
+		const newTotalAmount = parseFloat(newSubtotal) + parseFloat(newTaxAmount);
+	  
 		// Update state variables
 		setCustomerCreditAmount(customerCreditTotal);
-		setSubtotal(newSubtotal);
-		setTaxAmount(newTaxAmount);
-		setTotalAmount(newTotalAmount);
+		setSubtotal(parseFloat(newSubtotal));
+		setTaxAmount(parseFloat(newTaxAmount));
+		setTotalAmount(parseFloat(newTotalAmount));
+	  };
+
+	const handlePriceChange = (index, newPrice) => {
+		const newRows = [...rows];
+		newRows[index].price = newPrice;
+		setRows(newRows);
+		handleInputChange(); // Recalculate based on new prices
 	};
 
 	// Sum total of each type of payment (cash OR debit OR credit)
@@ -487,7 +494,7 @@ export default function Home() {
 									backgroundColor: '#fbfbfbf9',
 								}}
 							>
-								<Grid container alignItems='center' mb={4}>
+								<Grid container alignItems='center'>
 									<Grid item>
 										<Autocomplete
 											id={`item-${index}`}
@@ -511,14 +518,13 @@ export default function Home() {
 													sx={{
 														backgroundColor: 'white',
 														width: '18rem',
-														height: '40px',
 													}}
 												/>
 											)}
 											inputValue={row.item ? row.item.batteryName : ''}
 											sx={{
 												'& .MuiAutocomplete-clearIndicator': {
-													display: 'none', // Hide the clear indicator (X) icon
+													display: 'none',
 												},
 											}}
 										/>
@@ -532,31 +538,28 @@ export default function Home() {
 											variant='outlined'
 											fullWidth
 											value={row.price}
-											onChange={(e) =>
-												handleInputChangeLines(index, 'price', e.target.value)
-											}
+											onChange={(e) => handlePriceChange(index, e.target.value)} // Call handlePriceChange
 											sx={{
 												backgroundColor: 'white',
 												width: '6rem',
-												height: '40px',
 											}}
 										/>
 										<IconButton onClick={addRow}>
 											<AddCircleIcon
-												sx={{ fontSize: '1.25rem', color: '#000000', marginTop: '8px' }}
+												sx={{ fontSize: '1.25rem', color: '#000000' }}
 											/>
 										</IconButton>
 										{index > 0 && (
 											<IconButton onClick={() => removeRow(index)}>
 												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#000000', marginTop: '8px' }}
+													sx={{ fontSize: '1.25rem', color: '#000000' }}
 												/>
 											</IconButton>
 										)}
 										{index === 0 && (
 											<IconButton disabled>
 												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#d3d3d3', marginTop: '8px'}}
+													sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
 												/>
 											</IconButton>
 										)}
