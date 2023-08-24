@@ -543,9 +543,9 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto 0 5rem',
+								margin: '0 auto 0 4.5rem',
 								backgroundColor: '#fbfbfbf9',
-								width: '20rem',
+								width: '20.25rem',
 							}}
 						>
 							<Typography variant='h6'>Payment Type</Typography>
@@ -674,8 +674,8 @@ export default function Home() {
 						<Typography
 							variant='h6'
 							sx={{
-								margin: '2rem auto 0 5rem',
-								width: '20rem',
+								margin: '2rem auto 0 4.25rem',
+								width: '20.25rem',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
