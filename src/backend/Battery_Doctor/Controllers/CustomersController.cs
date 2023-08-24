@@ -208,14 +208,19 @@ namespace Battery_Doctor.Controllers
 
                 // Save to desktop with filename "CustomerData[Current Date].xlsx"
                 var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                var exportDirectory = Path.Combine(desktopPath, "Exports", "Customer");
-                Directory.CreateDirectory(exportDirectory);
+                var exportDirectoryXl = Path.Combine(desktopPath, "Exports", "Customer", "Xl");
+                var exportDirectoryCsv = Path.Combine(desktopPath, "Exports", "Customer", "CSV");
+                Directory.CreateDirectory(exportDirectoryXl);
+                Directory.CreateDirectory(exportDirectoryCsv);
 
                 var now = DateTime.Now;
                 var currentDate = now.ToString("yyyyMMdd");
-                var filePath = Path.Combine(exportDirectory, $"CustomerData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePath = Path.Combine(exportDirectoryXl, $"CustomerData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.xlsx");
+                var filePathCsv = Path.Combine(exportDirectoryCsv, $"CustomerData[{currentDate}]-{now.Ticks.ToString().Substring(now.ToString().Length - 5)}.csv");
 
                 package.SaveAs(new FileInfo(filePath));
+                package.SaveAs(new FileInfo(filePathCsv));
+
             }
 
             return NoContent();

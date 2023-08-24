@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Battery_Doctor.Models;
 using Battery_Doctor.Data;
-
+using Battery_Doctor.DTOs;
 
 namespace Battery_Doctor.Controllers
 {
@@ -19,21 +19,32 @@ namespace Battery_Doctor.Controllers
 
         // GET: api/Assets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Asset>>> GetAssets()
+        public async Task<ActionResult<IEnumerable<AssetR_DTO>>> GetAssets()
         {
-            return await _context.Assets
+            List<Asset> assets = _context.Assets
                 .Include(a => a.Battery)
-                .Include(a => a.Customer)
-                .ToListAsync();
+                .Include(a => a.Battery.BatteryGroup)
+                .ToList();
+            List<AssetR_DTO> assetR_DTOs = assets.Select(a => new AssetR_DTO
+            {
+                Id = a.Id,
+                QRCode = a.QRCode,
+                BatteryName = a.Battery.BatteryGroup.GroupName,
+                StampedSerial = a.StampedSerial,
+                WarrantyDate = a.WarrantyDate
+
+            }).ToList();
+
+            return assetR_DTOs;
         }
 
         // GET: api/Assets/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Asset>> GetAsset(int id)
+        public async Task<ActionResult<AssetR_DTO>> GetAsset(int id)
         {
             var asset = await _context.Assets
                 .Include(a => a.Battery)
-                .Include(a => a.Customer)
+                .Include(a => a.Battery.BatteryGroup)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (asset == null)
@@ -41,21 +52,35 @@ namespace Battery_Doctor.Controllers
                 return NotFound();
             }
 
-            return asset;
+            var assetR_DTO = new AssetR_DTO
+            {
+                QRCode = asset.QRCode,
+                BatteryName = asset.Battery.BatteryGroup.GroupName,
+                StampedSerial = asset.StampedSerial,
+                WarrantyDate = asset.WarrantyDate
+            };
+
+            return assetR_DTO;
         }
 
         // POST: api/Assets
         [HttpPost]
-        public async Task<ActionResult<Asset>> PostAsset(Asset asset)
+        public async Task<ActionResult<Asset>> PostAsset(AssetC_DTO createAssetDto)
         {
-            if (!_context.Batteries.Any(b => b.Id == asset.BatteryId) ||
-                (asset.CustomerId.HasValue && !_context.Customers.Any(c => c.Id == asset.CustomerId.Value)))
+            if (!_context.Batteries.Any(b => b.Id == createAssetDto.BatteryId))
             {
                 return BadRequest("The provided BatteryId or CustomerId is invalid.");
             }
 
-            asset.CreatedAt = DateTime.UtcNow;
-            asset.UpdatedAt = DateTime.UtcNow;
+            Asset asset = new Asset
+            {
+                BatteryId = createAssetDto.BatteryId,
+                WarrantyDate = DateTime.Now,
+                StampedSerial = createAssetDto.StampedSerial,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+            };
+
             _context.Assets.Add(asset);
             await _context.SaveChangesAsync();
 
@@ -71,8 +96,7 @@ namespace Battery_Doctor.Controllers
                 return BadRequest();
             }
 
-            if (!_context.Batteries.Any(b => b.Id == asset.BatteryId) ||
-                (asset.CustomerId.HasValue && !_context.Customers.Any(c => c.Id == asset.CustomerId.Value)))
+            if (!_context.Batteries.Any(b => b.Id == asset.BatteryId))
             {
                 return BadRequest("The provided BatteryId or CustomerId is invalid.");
             }

@@ -10,6 +10,7 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
+	TextField
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -30,12 +31,15 @@ export default function Customer() {
 
 	const API_BASE = 'http://localhost:7166/api/Customers';
 	const [customerData, setCustomerData] = useState([]);
+	const [searchQuery, setSearchQuery] = useState('');
+
+	// State for alerts
+	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
 		open: false,
 		customerId: null,
 	});
-	const [showSnackbar, setShowSnackbar] = useState(false);
-	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 
 	// Data Fields
 	const columns = [
@@ -69,24 +73,6 @@ export default function Customer() {
 			),
 		},
 	];
-
-	// Fetch Customer Data
-	useEffect(() => {
-		axios
-			.get(API_BASE, {
-				headers: {
-					accept: 'text/plain',
-				},
-			})
-			.then((response) => {
-				console.log(response);
-				// Update customerData state with fetched data
-				setCustomerData(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching customer data:', error);
-			});
-	}, []);
 
 	// Function to open the delete confirmation dialog
 	const openDeleteConfirmation = (customerId) => {
@@ -141,6 +127,34 @@ export default function Customer() {
 			console.error('Error exporting customers:', error);
 		}
 	};
+
+	// Filter customer data based on search query
+	const filteredCustomerData = customerData.filter((customer) => {
+		const lowerCaseSearchQuery = searchQuery.toLowerCase();
+		return (
+			customer.firstName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			customer.lastName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			customer.phoneNumber.includes(searchQuery)
+		);
+	});
+
+	// Fetch Customer Data
+	useEffect(() => {
+		axios
+			.get(API_BASE, {
+				headers: {
+					accept: 'text/plain',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+				// Update customerData state with fetched data
+				setCustomerData(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customer data:', error);
+			});
+	}, []);
 
 	return (
 		<Box
@@ -211,7 +225,6 @@ export default function Customer() {
 				/>
 			</Snackbar>
 
-			{/* Customer DataGrid */}
 			<div
 				style={{
 					height: '90%',
@@ -221,8 +234,20 @@ export default function Customer() {
 					borderRadius: '10px',
 				}}
 			>
+				{/* Searchbar */}
+				<TextField
+					type='text'
+					label='Search by name or phone number'
+					variant='outlined'
+					fullWidth
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
+					sx={{ marginBottom: theme.spacing(2) }} // Add some bottom margin for spacing
+				/>
+				{/* Customer DataGrid */}
 				<DataGrid
-					rows={customerData}
+					// rows={customerData}
+					rows={filteredCustomerData}
 					columns={columns}
 					pageSize={5}
 					sx={{ alignItems: 'center', margin: 'auto' }}
