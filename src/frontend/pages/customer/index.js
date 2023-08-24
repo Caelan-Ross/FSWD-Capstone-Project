@@ -178,7 +178,7 @@ export default function Customer() {
 				</Box>
 				<Box>
 					{/* Create Customer Icon */}
-					<IconButton onClick={() => handleNavigation('/inventory/create')}>
+					<IconButton onClick={() => handleNavigation('/customer/create')}>
 						<AddCircleIcon sx={{ fontSize: '2.5rem', color: '#000000' }} />
 					</IconButton>
 					{/* Export Customers Icon */}
