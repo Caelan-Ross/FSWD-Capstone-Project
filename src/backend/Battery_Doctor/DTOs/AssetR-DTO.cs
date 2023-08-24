@@ -10,6 +10,8 @@
 
         public string StampedSerial { get; set; }
 
+        public float Price { get; set; }
+
         public DateTime WarrantyDate { get; set; }
 
     }
