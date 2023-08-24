@@ -494,7 +494,7 @@ export default function Home() {
 											name={`item-${index}`}
 											options={lineItemOptions}
 											getOptionLabel={(option) => option.batteryName}
-											value={row.item} //removes x from dropdown
+											value={row.item}
 											onChange={(event, newValue) => {
 												handleInputChangeLines(index, 'item', newValue);
 												const selectedPrice = newValue
