@@ -39,7 +39,8 @@ export default function Home() {
 	const [rows, setRows] = useState([
 		{
 			item: '',
-			quantity: '',
+			price: '',
+			quantity: ''
 		},
 	]);
 
@@ -434,13 +435,14 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto',
+								margin: '0 auto 0 .5rem',
 								backgroundColor: '#fbfbfbf9',
-								width: '24rem',
+								width: '30rem',
 							}}
 						>
 							<Typography variant='h6'>Line Items</Typography>
-							<Typography variant='h6'>Quantity</Typography>
+							<Typography variant='h6' sx={{ marginLeft: '9rem' }}>Price</Typography>
+							<Typography variant='h6' sx={{ marginRight: '1.5rem' }}>Quantity</Typography>
 						</Box>
 						{rows.map((row, index) => (
 							<Box
@@ -465,7 +467,20 @@ export default function Home() {
 									onChange={(e) =>
 										handleInputChangeLines(index, 'item', e.target.value)
 									}
-									sx={{ backgroundColor: 'white', width: '24rem' }}
+									sx={{ backgroundColor: 'white', width: '18rem' }}
+								/>
+								<TextField
+									id={`price-${index}`}
+									name={`price-${index}`}
+									label='$'
+									type='text'
+									variant='outlined'
+									fullWidth
+									value={row.price}
+									onChange={(e) =>
+										handleInputChangeLines(index, 'price', e.target.value)
+									}
+									sx={{ backgroundColor: 'white', width: '6rem' }}
 								/>
 								<TextField
 									id={`quantity-${index}`}
@@ -478,7 +493,7 @@ export default function Home() {
 									onChange={(e) =>
 										handleInputChangeLines(index, 'quantity', e.target.value)
 									}
-									sx={{ backgroundColor: 'white', width: '4rem' }}
+									sx={{ backgroundColor: 'white', width: '6rem' }}
 								/>
 								<IconButton onClick={addRow}>
 									<AddCircleIcon
@@ -528,9 +543,9 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto',
+								margin: '0 auto 0 5rem',
 								backgroundColor: '#fbfbfbf9',
-								width: '21rem',
+								width: '20rem',
 							}}
 						>
 							<Typography variant='h6'>Payment Type</Typography>
@@ -545,7 +560,7 @@ export default function Home() {
 									flexDirection: 'row',
 									alignItems: 'center',
 									justifyContent: 'center',
-									margin: '0 auto 0 6.15rem',
+									margin: '0 auto',
 									backgroundColor: '#fbfbfbf9',
 								}}
 							>
@@ -563,7 +578,7 @@ export default function Home() {
 											e.target.value
 										)
 									}
-									sx={{ backgroundColor: 'white', width: '17rem' }}
+									sx={{ backgroundColor: 'white', width: '16rem' }}
 								>
 									<MenuItem value='debit'>Debit</MenuItem>
 									<MenuItem value='credit'>Credit</MenuItem>
@@ -627,7 +642,7 @@ export default function Home() {
 								sx={{
 									marginTop: '.25rem',
 									backgroundColor: 'lightgreen',
-									width: '17rem',
+									width: '16rem',
 								}}
 							/>
 							<TextField
@@ -644,11 +659,23 @@ export default function Home() {
 									width: '6rem',
 								}}
 							/>
+							<IconButton disabled>
+								<AddCircleIcon
+									sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
+								/>
+							</IconButton>
+
+							<IconButton disabled>
+								<RemoveCircleOutlineIcon
+									sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
+								/>
+							</IconButton>
 						</Box>
 						<Typography
 							variant='h6'
 							sx={{
-								margin: '2rem auto 0 7rem',
+								margin: '2rem auto 0 5rem',
+								width: '20rem',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
