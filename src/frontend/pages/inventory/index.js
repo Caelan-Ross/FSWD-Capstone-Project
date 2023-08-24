@@ -140,7 +140,9 @@ export default function Home() {
 
 	// Filter battery data based on search query
 	const filteredInventoryData = inventoryData.filter((battery) => {
-		const lowerCaseSearchQuery = searchQuery.toLowerCase();
+		const lowerCaseSearchQuery =
+			typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
+
 		return (
 			typeof battery.makeName === 'string' &&
 			battery.makeName.toLowerCase().includes(lowerCaseSearchQuery)
