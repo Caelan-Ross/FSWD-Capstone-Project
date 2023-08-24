@@ -75,6 +75,8 @@ namespace Battery_Doctor.Controllers
         {
             PaymentMethod? paymentMethod = (PaymentMethod?)_context.Payment_Methods.FirstOrDefault(n => n.Method == invoiceDto.PaymentMethodR);
 
+            Customer? customer = (Customer?)_context.Customers.FirstOrDefault(n => n.PhoneNumber == invoiceDto.PhoneNumber && n.Email == invoiceDto.Email);
+
             if(invoiceDto.AssetIds.Count() == 0)
             {
                 return BadRequest();
@@ -90,9 +92,22 @@ namespace Battery_Doctor.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            if(customer == null)
+            {
+                customer = new Customer
+                {
+                    FirstName = invoiceDto.FirstName,
+                    LastName = invoiceDto.LastName,
+                    PhoneNumber = invoiceDto.PhoneNumber,
+                    Email = invoiceDto.Email,
+                };
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+            }
+
             var invoice = new Invoice
             {
-                CustomerId = invoiceDto.CustomerId,
+                CustomerId = customer.Id,
                 PaymentMethodId = paymentMethod.Id,
                 DateOfSale = DateTime.Now,
                 TotalPrice = invoiceDto.TotalPrice,
