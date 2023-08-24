@@ -40,7 +40,6 @@ export default function Home() {
 		{
 			item: '',
 			price: '',
-			quantity: ''
 		},
 	]);
 
@@ -51,7 +50,7 @@ export default function Home() {
 	};
 
 	const addRow = () => {
-		setRows([...rows, { item: '', quantity: '' }]);
+		setRows([...rows, { item: '', price: '' }]);
 	};
 
 	const removeRow = (index) => {
@@ -435,14 +434,13 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto 0 .5rem',
+								margin: '0 auto 0 3.5rem',
 								backgroundColor: '#fbfbfbf9',
-								width: '30rem',
+								width: '20.85rem',
 							}}
 						>
 							<Typography variant='h6'>Line Items</Typography>
-							<Typography variant='h6' sx={{ marginLeft: '9rem' }}>Price</Typography>
-							<Typography variant='h6' sx={{ marginRight: '1.5rem' }}>Quantity</Typography>
+							<Typography variant='h6'>Price</Typography>
 						</Box>
 						{rows.map((row, index) => (
 							<Box
@@ -479,19 +477,6 @@ export default function Home() {
 									value={row.price}
 									onChange={(e) =>
 										handleInputChangeLines(index, 'price', e.target.value)
-									}
-									sx={{ backgroundColor: 'white', width: '6rem' }}
-								/>
-								<TextField
-									id={`quantity-${index}`}
-									name={`quantity-${index}`}
-									label='Qty'
-									type='text'
-									variant='outlined'
-									fullWidth
-									value={row.quantity}
-									onChange={(e) =>
-										handleInputChangeLines(index, 'quantity', e.target.value)
 									}
 									sx={{ backgroundColor: 'white', width: '6rem' }}
 								/>
@@ -543,9 +528,9 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto 0 5rem',
+								margin: '0 auto 0 4.5rem',
 								backgroundColor: '#fbfbfbf9',
-								width: '20rem',
+								width: '20.25rem',
 							}}
 						>
 							<Typography variant='h6'>Payment Type</Typography>
@@ -674,8 +659,8 @@ export default function Home() {
 						<Typography
 							variant='h6'
 							sx={{
-								margin: '2rem auto 0 5rem',
-								width: '20rem',
+								margin: '2rem auto 0 4.25rem',
+								width: '20.25rem',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
