@@ -53,11 +53,6 @@ export default function Home() {
 	]);
 
 	// Handle Line Items
-	// const handleInputChangeLines = (index, field, value) => {
-	// 	const updatedRows = [...rows];
-	// 	updatedRows[index][field] = value;
-	// 	setRows(updatedRows);
-	// };
 	const handleInputChangeLines = (index, field, value) => {
 		const updatedRows = [...rows];
 		if (field === 'item') {
@@ -467,7 +462,7 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto 0 3.5rem',
+								margin: '0 auto 0.3rem 3.5rem',
 								backgroundColor: '#fbfbfbf9',
 								width: '20.85rem',
 							}}
@@ -487,7 +482,8 @@ export default function Home() {
 									backgroundColor: '#fbfbfbf9',
 								}}
 							>
-								<Grid container alignItems='center' mb={4}>
+								<Grid container alignItems='center' mb={3}>
+									{/* line item */}
 									<Grid item>
 										<Autocomplete
 											id={`item-${index}`}
@@ -523,6 +519,7 @@ export default function Home() {
 											}}
 										/>
 									</Grid>
+									{/* price */}
 									<Grid item>
 										<TextField
 											id={`price-${index}`}
