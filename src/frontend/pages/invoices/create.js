@@ -64,8 +64,9 @@ export default function Home() {
 			updatedRows[index]['item'] = value;
 			// Fetch and update the price from the selected line item
 			const selectedPrice =
-				lineItemOptions.find((item) => item.id === value.id)?.price || 0;
+				lineItemOptions.find(item => item.id === value.id)?.price || 0;
 			updatedRows[index]['price'] = selectedPrice;
+			handleInputChange(); // Recalculate based on new prices
 		} else {
 			updatedRows[index][field] = value;
 		}
@@ -114,21 +115,23 @@ export default function Home() {
 		const creditTotal = parseFloat(calculatePaymentTotal('credit'));
 		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
-		  parseFloat(
-			-1 * parseFloat(document.getElementById('customerCreditAmount').value)
-		  ) || 0;
-	  
+			parseFloat(
+				1 * parseFloat(document.getElementById('customerCreditAmount').value)
+			) || 0;
+
 		const itemPrices = rows.map(row => parseFloat(row.price) || 0);
-		const newSubtotal = itemPrices.reduce((total, price) => total + price, 0) + customerCreditTotal;
+		const itemsSubtotal = itemPrices.reduce((total, price) => total + price, 0);
+
+		const newSubtotal = itemsSubtotal - customerCreditTotal;
 		const newTaxAmount = parseFloat(newSubtotal) * 0.05;
 		const newTotalAmount = parseFloat(newSubtotal) + parseFloat(newTaxAmount);
-	  
+
 		// Update state variables
 		setCustomerCreditAmount(customerCreditTotal);
 		setSubtotal(parseFloat(newSubtotal));
 		setTaxAmount(parseFloat(newTaxAmount));
 		setTotalAmount(parseFloat(newTotalAmount));
-	  };
+	};
 
 	const handlePriceChange = (index, newPrice) => {
 		const newRows = [...rows];
