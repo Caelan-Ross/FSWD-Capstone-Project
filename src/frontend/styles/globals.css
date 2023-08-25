@@ -116,6 +116,10 @@ a {
   color: black;
 }
 
+.css-t89xny-MuiDataGrid-columnHeaderTitle {
+  font-weight: bold;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
