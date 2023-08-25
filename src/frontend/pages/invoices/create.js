@@ -52,19 +52,13 @@ export default function Home() {
 		},
 	]);
 
-	// Handle Line Items
-	// const handleInputChangeLines = (index, field, value) => {
-	// 	const updatedRows = [...rows];
-	// 	updatedRows[index][field] = value;
-	// 	setRows(updatedRows);
-	// };
 	const handleInputChangeLines = (index, field, value) => {
 		const updatedRows = [...rows];
 		if (field === 'item') {
 			updatedRows[index]['item'] = value;
 			// Fetch and update the price from the selected line item
 			const selectedPrice =
-				lineItemOptions.find(item => item.id === value.id)?.price || 0;
+				lineItemOptions.find((item) => item.id === value.id)?.price || 0;
 			updatedRows[index]['price'] = selectedPrice;
 			handleInputChange(); // Recalculate based on new prices
 		} else {
@@ -119,7 +113,7 @@ export default function Home() {
 				1 * parseFloat(document.getElementById('customerCreditAmount').value)
 			) || 0;
 
-		const itemPrices = rows.map(row => parseFloat(row.price) || 0);
+		const itemPrices = rows.map((row) => parseFloat(row.price) || 0);
 		const itemsSubtotal = itemPrices.reduce((total, price) => total + price, 0);
 
 		const newSubtotal = itemsSubtotal - customerCreditTotal;
@@ -161,62 +155,64 @@ export default function Home() {
 		const url = `http://localhost:7166/api/Invoices`;
 		try {
 			setLoading(true);
-			// Perform any additional validation or processing here if needed
 			setError(null);
 
-			var paymentMethod = '';
+			const paymentMethod = [];
 
-			if (document.getElementById('cashAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Cash';
-				} else {
-					paymentMethod = 'Cash';
-				}
+			if (calculatePaymentTotal('cash') > 0) {
+				paymentMethod.push('Cash');
 			}
 
-			if (document.getElementById('creditAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Credit';
-				} else {
-					paymentMethod = 'Credit';
-				}
+			if (calculatePaymentTotal('credit') > 0) {
+				paymentMethod.push('Credit');
 			}
 
-			if (document.getElementById('debitAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Debit';
-				} else {
-					paymentMethod = 'Debit';
-				}
+			if (calculatePaymentTotal('debit') > 0) {
+				paymentMethod.push('Debit');
 			}
 
-			if (document.getElementById('customerCreditAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Customer Credit';
-				} else {
-					paymentMethod = 'Customer Credit';
-				}
+			if (customerCreditAmount > 0) {
+				paymentMethod.push('Customer Credit');
 			}
+
+			console.log(paymentMethod);
 
 			const requestData = {
-				Id: 0,
-				CustomerId: selectedCustomer.id,
-				PaymentMethodR: paymentMethod,
-				TotalPrice: totalAmount.toFixed(2),
+				id: 0,
+				firstName: selectedCustomer ? selectedCustomer.firstName : '',
+				lastName: selectedCustomer ? selectedCustomer.lastName : '',
+				phoneNumber: selectedCustomer ? selectedCustomer.phoneNumber : '',
+				email: selectedCustomer ? selectedCustomer.email : '',
+				paymentMethodR: paymentMethod.join(', '),
+				cashAmount: calculatePaymentTotal('cash'),
+				debitAmount: calculatePaymentTotal('debit'),
+				creditAmount: calculatePaymentTotal('credit'),
+				customerCreditAmount: customerCreditAmount,
+				taxRate: 0.05, // You might need to adjust this based on your requirements
+				notes: '', // Add notes value
+				totalPrice: totalAmount, // Use the calculated total amount
+				assetIds: selectedLineItem ? [selectedLineItem.id] : [], // Use selectedLineItem's id
 			};
 
-			await axios.post(url, requestData, {
+			const response = await axios.post(url, requestData, {
 				headers: {
 					'Content-Type': 'application/json',
 				},
 			});
-			setShowSnackbar(true);
-			setTimeout(() => {
-				setShowSnackbar(false);
-				router.push('/invoices');
-			}, 2000);
-			// Reset form fields
-			form.reset();
+
+			if (
+				response.status === 200 ||
+				response.status === 201 ||
+				response.status === 204
+			) {
+				setShowSnackbar(true);
+				setTimeout(() => {
+					setShowSnackbar(false);
+					router.push('/invoices');
+				}, 2000);
+			} else {
+				setError('Failed to create invoice');
+			}
 		} catch (error) {
 			console.log(error);
 			setError('Failed to create invoice');
@@ -506,6 +502,7 @@ export default function Home() {
 											getOptionLabel={(option) => option.batteryName}
 											value={row.item}
 											onChange={(event, newValue) => {
+												setSelectedLineItem(newValue);
 												handleInputChangeLines(index, 'item', newValue);
 												const selectedPrice = newValue
 													? newValue.price.toFixed(2)
