@@ -43,27 +43,27 @@ export default function Home() {
 
 	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: <strong>Battery ID</strong>, width: 100 },
-		{ field: 'typeName', headerName: <strong>Type</strong>, width: 100 },
-		{ field: 'modelName', headerName: <strong>Model</strong>, width: 100 },
-		{ field: 'makeName', headerName: <strong>Make</strong>, width: 100 },
-		{ field: 'groupName', headerName: <strong>Group</strong>, width: 100 },
+		{ field: 'id', headerName: 'Battery ID', width: 100 },
+		{ field: 'typeName', headerName: 'Type', width: 100 },
+		{ field: 'modelName', headerName: 'Model', width: 100 },
+		{ field: 'makeName', headerName: 'Make', width: 100 },
+		{ field: 'groupName', headerName: 'Group', width: 100 },
 		{
 			field: 'conditionName',
-			headerName: <strong>Condition</strong>,
+			headerName: 'Condition',
 			width: 100,
 		},
-		{ field: 'voltage', headerName: <strong>Voltage</strong>, width: 100 },
-		{ field: 'capacity', headerName: <strong>Capacity</strong>, width: 100 },
-		{ field: 'price', headerName: <strong>Price</strong>, width: 100 },
+		{ field: 'voltage', headerName: 'Voltage', width: 100 },
+		{ field: 'capacity', headerName: 'Capacity', width: 100 },
+		{ field: 'price', headerName: 'Price', width: 100 },
 		{
 			field: 'quantityOnHand',
-			headerName: <strong>Qty on Hand</strong>,
+			headerName: 'Qty on Hand',
 			width: 100,
 		},
 		{
 			field: 'edit',
-			headerName: <strong>Edit</strong>,
+			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -73,7 +73,7 @@ export default function Home() {
 		},
 		{
 			field: 'delete',
-			headerName: <strong>Delete</strong>,
+			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
@@ -257,11 +257,10 @@ export default function Home() {
 					sx={{ marginBottom: theme.spacing(2) }}
 				/>
 				{/* Inventory DataGrid */}
-				<DataGrid
+				<DataGrid autoPageSize
 					rows={filteredInventoryData}
 					columns={columns}
-					pageSize={5}
-					sx={{ alignItems: 'center', margin: 'auto', height: '37rem' }}
+					sx={{ height: '40rem' }}
 				/>
 			</div>
 

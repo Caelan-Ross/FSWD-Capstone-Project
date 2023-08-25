@@ -44,18 +44,18 @@ export default function Customer() {
 
 	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: <strong>Customer ID</strong>, width: 100 },
-		{ field: 'firstName', headerName: <strong>First Name</strong>, width: 300 },
-		{ field: 'lastName', headerName: <strong>Last Name</strong>, width: 300 },
+		{ field: 'id', headerName: 'Customer ID', width: 100 },
+		{ field: 'firstName', headerName: 'First Name', width: 300 },
+		{ field: 'lastName', headerName: 'Last Name', width: 300 },
 		{
 			field: 'phoneNumber',
-			headerName: <strong>Phone No.</strong>,
+			headerName: 'Phone No.',
 			width: 300,
 		},
-		{ field: 'email', headerName: <strong>Email</strong>, width: 300 },
+		{ field: 'email', headerName: 'Email', width: 300 },
 		{
 			field: 'edit',
-			headerName: <strong>Edit</strong>,
+			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -65,7 +65,7 @@ export default function Customer() {
 		},
 		{
 			field: 'delete',
-			headerName: <strong>Delete</strong>,
+			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
 			  <IconButton onClick={() => openDeleteConfirmation(params.row.id, params.row.firstName)}>
@@ -259,7 +259,8 @@ export default function Customer() {
 					rows={filteredCustomerData}
 					columns={columns}
 					pageSize={5}
-					sx={{ alignItems: 'center', margin: 'auto', height: '37rem' }}
+					autoPageSize
+					sx={{ height: '40rem' }}
 				/>
 			</div>
 

@@ -299,8 +299,8 @@ export default function Invoices() {
 				<DataGrid
 					rows={filteredInvoiceData}
 					columns={columns}
-					pageSize={5}
-					sx={{ alignItems: 'center', margin: 'auto', height: '37rem' }}
+					autoPageSize
+					sx={{ height: '40rem' }}
 				/>
 			</div>
 			{/* Delete Confirmation Dialog */}
