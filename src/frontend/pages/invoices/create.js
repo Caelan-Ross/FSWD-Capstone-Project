@@ -534,6 +534,7 @@ export default function Home() {
 									</Grid>
 									<Grid item>
 										<TextField
+											disabled
 											id={`price-${index}`}
 											name={`price-${index}`}
 											label='$'
