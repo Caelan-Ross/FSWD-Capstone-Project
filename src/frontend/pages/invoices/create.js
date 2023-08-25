@@ -52,7 +52,6 @@ export default function Home() {
 		},
 	]);
 
-	// Handle Line Items
 	const handleInputChangeLines = (index, field, value) => {
 		const updatedRows = [...rows];
 		if (field === 'item') {
@@ -61,6 +60,7 @@ export default function Home() {
 			const selectedPrice =
 				lineItemOptions.find((item) => item.id === value.id)?.price || 0;
 			updatedRows[index]['price'] = selectedPrice;
+			handleInputChange(); // Recalculate based on new prices
 		} else {
 			updatedRows[index][field] = value;
 		}
@@ -110,19 +110,28 @@ export default function Home() {
 		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
 			parseFloat(
-				-1 * parseFloat(document.getElementById('customerCreditAmount').value)
+				1 * parseFloat(document.getElementById('customerCreditAmount').value)
 			) || 0;
 
-		const newSubtotal =
-			cashTotal + creditTotal + debitTotal + customerCreditTotal;
-		const newTaxAmount = newSubtotal * 0.05; // Calculate tax as 5% of the subtotal
-		const newTotalAmount = newSubtotal + newTaxAmount;
+		const itemPrices = rows.map((row) => parseFloat(row.price) || 0);
+		const itemsSubtotal = itemPrices.reduce((total, price) => total + price, 0);
+
+		const newSubtotal = itemsSubtotal - customerCreditTotal;
+		const newTaxAmount = parseFloat(newSubtotal) * 0.05;
+		const newTotalAmount = parseFloat(newSubtotal) + parseFloat(newTaxAmount);
 
 		// Update state variables
 		setCustomerCreditAmount(customerCreditTotal);
-		setSubtotal(newSubtotal);
-		setTaxAmount(newTaxAmount);
-		setTotalAmount(newTotalAmount);
+		setSubtotal(parseFloat(newSubtotal));
+		setTaxAmount(parseFloat(newTaxAmount));
+		setTotalAmount(parseFloat(newTotalAmount));
+	};
+
+	const handlePriceChange = (index, newPrice) => {
+		const newRows = [...rows];
+		newRows[index].price = newPrice;
+		setRows(newRows);
+		handleInputChange(); // Recalculate based on new prices
 	};
 
 	// Sum total of each type of payment (cash OR debit OR credit)
@@ -146,62 +155,64 @@ export default function Home() {
 		const url = `http://localhost:7166/api/Invoices`;
 		try {
 			setLoading(true);
-			// Perform any additional validation or processing here if needed
 			setError(null);
 
-			var paymentMethod = '';
+			const paymentMethod = [];
 
-			if (document.getElementById('cashAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Cash';
-				} else {
-					paymentMethod = 'Cash';
-				}
+			if (calculatePaymentTotal('cash') > 0) {
+				paymentMethod.push('Cash');
 			}
 
-			if (document.getElementById('creditAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Credit';
-				} else {
-					paymentMethod = 'Credit';
-				}
+			if (calculatePaymentTotal('credit') > 0) {
+				paymentMethod.push('Credit');
 			}
 
-			if (document.getElementById('debitAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Debit';
-				} else {
-					paymentMethod = 'Debit';
-				}
+			if (calculatePaymentTotal('debit') > 0) {
+				paymentMethod.push('Debit');
 			}
 
-			if (document.getElementById('customerCreditAmount').value != '') {
-				if (paymentMethod != '') {
-					paymentMethod = paymentMethod + ' | Customer Credit';
-				} else {
-					paymentMethod = 'Customer Credit';
-				}
+			if (customerCreditAmount > 0) {
+				paymentMethod.push('Customer Credit');
 			}
+
+			console.log(paymentMethod);
 
 			const requestData = {
-				Id: 0,
-				CustomerId: selectedCustomer.id,
-				PaymentMethodR: paymentMethod,
-				TotalPrice: totalAmount.toFixed(2),
+				id: 0,
+				firstName: selectedCustomer ? selectedCustomer.firstName : '',
+				lastName: selectedCustomer ? selectedCustomer.lastName : '',
+				phoneNumber: selectedCustomer ? selectedCustomer.phoneNumber : '',
+				email: selectedCustomer ? selectedCustomer.email : '',
+				paymentMethodR: paymentMethod.join(', '),
+				cashAmount: calculatePaymentTotal('cash'),
+				debitAmount: calculatePaymentTotal('debit'),
+				creditAmount: calculatePaymentTotal('credit'),
+				customerCreditAmount: customerCreditAmount,
+				taxRate: 0.05, // You might need to adjust this based on your requirements
+				notes: '', // Add notes value
+				totalPrice: totalAmount, // Use the calculated total amount
+				assetIds: selectedLineItem ? [selectedLineItem.id] : [], // Use selectedLineItem's id
 			};
 
-			await axios.post(url, requestData, {
+			const response = await axios.post(url, requestData, {
 				headers: {
 					'Content-Type': 'application/json',
 				},
 			});
-			setShowSnackbar(true);
-			setTimeout(() => {
-				setShowSnackbar(false);
-				router.push('/invoices');
-			}, 2000);
-			// Reset form fields
-			form.reset();
+
+			if (
+				response.status === 200 ||
+				response.status === 201 ||
+				response.status === 204
+			) {
+				setShowSnackbar(true);
+				setTimeout(() => {
+					setShowSnackbar(false);
+					router.push('/invoices');
+				}, 2000);
+			} else {
+				setError('Failed to create invoice');
+			}
 		} catch (error) {
 			console.log(error);
 			setError('Failed to create invoice');
@@ -482,8 +493,7 @@ export default function Home() {
 									backgroundColor: '#fbfbfbf9',
 								}}
 							>
-								<Grid container alignItems='center' mb={3}>
-									{/* line item */}
+								<Grid container alignItems='center'>
 									<Grid item>
 										<Autocomplete
 											id={`item-${index}`}
@@ -492,6 +502,7 @@ export default function Home() {
 											getOptionLabel={(option) => option.batteryName}
 											value={row.item}
 											onChange={(event, newValue) => {
+												setSelectedLineItem(newValue);
 												handleInputChangeLines(index, 'item', newValue);
 												const selectedPrice = newValue
 													? newValue.price.toFixed(2)
@@ -507,14 +518,13 @@ export default function Home() {
 													sx={{
 														backgroundColor: 'white',
 														width: '18rem',
-														height: '40px',
 													}}
 												/>
 											)}
 											inputValue={row.item ? row.item.batteryName : ''}
 											sx={{
 												'& .MuiAutocomplete-clearIndicator': {
-													display: 'none', // Hide the clear indicator (X) icon
+													display: 'none',
 												},
 											}}
 										/>
@@ -522,6 +532,7 @@ export default function Home() {
 									{/* price */}
 									<Grid item>
 										<TextField
+											disabled
 											id={`price-${index}`}
 											name={`price-${index}`}
 											label='$'
@@ -529,31 +540,28 @@ export default function Home() {
 											variant='outlined'
 											fullWidth
 											value={row.price}
-											onChange={(e) =>
-												handleInputChangeLines(index, 'price', e.target.value)
-											}
+											onChange={(e) => handlePriceChange(index, e.target.value)} // Call handlePriceChange
 											sx={{
 												backgroundColor: 'white',
 												width: '6rem',
-												height: '40px',
 											}}
 										/>
 										<IconButton onClick={addRow}>
 											<AddCircleIcon
-												sx={{ fontSize: '1.25rem', color: '#000000', marginTop: '8px' }}
+												sx={{ fontSize: '1.25rem', color: '#000000' }}
 											/>
 										</IconButton>
 										{index > 0 && (
 											<IconButton onClick={() => removeRow(index)}>
 												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#000000', marginTop: '8px' }}
+													sx={{ fontSize: '1.25rem', color: '#000000' }}
 												/>
 											</IconButton>
 										)}
 										{index === 0 && (
 											<IconButton disabled>
 												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#d3d3d3', marginTop: '8px'}}
+													sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
 												/>
 											</IconButton>
 										)}
