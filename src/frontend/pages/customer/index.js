@@ -41,6 +41,7 @@ export default function Customer() {
 		customerId: null,
 	});
 
+
 	// Data Fields
 	const columns = [
 		{ field: 'id', headerName: <strong>Customer ID</strong>, width: 100 },
@@ -67,20 +68,21 @@ export default function Customer() {
 			headerName: <strong>Delete</strong>,
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
-					<DeleteIcon />
-				</IconButton>
+			  <IconButton onClick={() => openDeleteConfirmation(params.row.id, params.row.firstName)}>
+				<DeleteIcon />
+			  </IconButton>
 			),
-		},
+		  },
 	];
 
 	// Function to open the delete confirmation dialog
-	const openDeleteConfirmation = (customerId) => {
+	const openDeleteConfirmation = (customerId, firstName) => {
 		setDeleteConfirmation({
-			open: true,
-			customerId: customerId,
+		  open: true,
+		  customerId: customerId,
+		  expectedFirstName: firstName,
 		});
-	};
+	  };
 
 	// Function to close the delete confirmation dialog
 	const closeDeleteConfirmation = () => {
@@ -108,6 +110,14 @@ export default function Customer() {
 			.catch((error) => {
 				console.error('Error deleting customer:', error);
 			});
+	};
+
+	const [enteredFirstName, setEnteredFirstName] = useState('');
+	const expectedFirstName = '';
+
+
+	const handleDeleteConfirm = (event) => {
+		setEnteredFirstName(event.target.value);
 	};
 
 	// Send user to editCustomer.js
@@ -258,14 +268,25 @@ export default function Customer() {
 				<DialogTitle>Delete Customer</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Are you sure you want to delete this customer?
+						Are you sure you want to delete this customer? This customer may have invoices associated with their information and these will be deleted in the process. Please enter the customer's first name as it appears and press delete to confirm.
 					</DialogContentText>
+					{/* Controlled input field for delete confirmation */}
+					<TextField
+						label="Enter First Name"
+						value={enteredFirstName}
+						onChange={handleDeleteConfirm}
+						sx={{
+							margin: '2rem auto 0 auto'
+						}}
+					/>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
 					<Button
 						onClick={() => handleDelete(deleteConfirmation.customerId)}
 						color='primary'
+						// Disable the Delete button if the entered first name doesn't match
+						disabled={enteredFirstName !== deleteConfirmation.expectedFirstName}
 					>
 						Delete
 					</Button>
@@ -273,4 +294,4 @@ export default function Customer() {
 			</Dialog>
 		</Box>
 	);
-}
+}	
