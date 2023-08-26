@@ -386,6 +386,7 @@ export default function Home() {
 								`${option.firstName} ${option.lastName} | ${option.phoneNumber}`
 							}
 							value={selectedCustomer}
+							disabled
 							onChange={(event, newValue) => {
 								setSelectedCustomer(newValue);
 								handleFieldChange('customerId', newValue ? newValue.id : '');
@@ -425,6 +426,9 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.firstName : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.firstName
@@ -441,6 +445,9 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.lastName : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.lastName
@@ -466,6 +473,9 @@ export default function Home() {
 								variant='outlined'
 								type='email'
 								value={selectedCustomer ? selectedCustomer.email : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.email ? true : false,
@@ -480,6 +490,9 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.phoneNumber : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.phoneNumber
@@ -534,7 +547,6 @@ export default function Home() {
 							<Typography variant='h6'>Line Items</Typography>
 							<Typography variant='h6'>Price</Typography>
 						</Box>
-						{/* {rows.map((row, index) => ( */}
 						{assetData.map((asset, index) => (
 							<Box
 								key={index}
@@ -552,6 +564,7 @@ export default function Home() {
 										<Autocomplete
 											id={`item-${index}`}
 											name={`item-${index}`}
+											disabled
 											options={assetData}
 											getOptionLabel={(option) =>
 												`${option.batteryName} | $${option.price})}`
@@ -598,9 +611,10 @@ export default function Home() {
 												width: '6rem',
 											}}
 										/>
-										<IconButton onClick={addRow}>
+										{/* <IconButton onClick={addRow}> */}
+										<IconButton disabled>
 											<AddCircleIcon
-												sx={{ fontSize: '1.25rem', color: '#000000' }}
+												sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
 											/>
 										</IconButton>
 										{index > 0 && (
@@ -675,6 +689,7 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.paymentType}
+									disabled
 									onChange={(e) =>
 										handleInputChangePayment(
 											index,
@@ -696,6 +711,9 @@ export default function Home() {
 									variant='outlined'
 									fullWidth
 									value={row.amount}
+									InputProps={{
+										readOnly: true,
+									}}
 									onChange={(e) =>
 										handleInputChangePayment(index, 'amount', e.target.value)
 									}
@@ -757,6 +775,9 @@ export default function Home() {
 								variant='outlined'
 								fullWidth
 								onChange={handleInputChange}
+								InputProps={{
+									readOnly: true,
+								}}
 								sx={{
 									marginTop: '.25rem',
 									backgroundColor: 'lightgreen',
