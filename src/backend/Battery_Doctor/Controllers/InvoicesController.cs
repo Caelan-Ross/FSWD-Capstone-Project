@@ -5,7 +5,6 @@ using Battery_Doctor.Data;
 using Battery_Doctor.DTOs;
 using OfficeOpenXml.Style;
 using OfficeOpenXml;
-using System.Linq;
 
 namespace Battery_Doctor.Controllers
 {
@@ -42,9 +41,7 @@ namespace Battery_Doctor.Controllers
                 CreditAmount = i.CreditAmount,
                 CustomerCreditAmount = i.CustomerCreditAmount,
                 TaxRate = i.TaxRate,
-                Notes = i.Notes,
-                AssetIds = i.InvoiceDetails.Select(d => d.AssetId).ToList()
-
+                Notes = i.Notes
             }).ToList();
 
             return invoiceReadDtos;
@@ -78,8 +75,7 @@ namespace Battery_Doctor.Controllers
                 CreditAmount = invoice.CreditAmount,
                 TaxRate = invoice.TaxRate,
                 CustomerCreditAmount = invoice.CustomerCreditAmount,
-                Notes = invoice.Notes,
-                AssetIds = invoice.InvoiceDetails.Select(d => d.AssetId).ToList()
+                Notes = invoice.Notes
             };
 
             return invoiceReadDto;
@@ -168,7 +164,7 @@ namespace Battery_Doctor.Controllers
                 CreditAmount = invoice.CreditAmount,
                 CustomerCreditAmount = invoice.CustomerCreditAmount,
                 TaxRate = invoice.TaxRate,
-                AssetNames = invoice.InvoiceDetails.Select(x => _context.Battery_Makes.FirstOrDefault(m => m.Id == _context.Batteries.FirstOrDefault(b => b.Id == _context.Assets.FirstOrDefault(d => d.Id == x.AssetId).BatteryId).MakeId).Name).ToList()
+                AssetIds = invoice.InvoiceDetails.Select(d => d.AssetId).ToList(),
             };
 
 
