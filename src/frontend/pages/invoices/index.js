@@ -300,7 +300,7 @@ export default function Invoices() {
 					rows={filteredInvoiceData}
 					columns={columns}
 					autoPageSize
-					sx={{ height: '40rem' }}
+					sx={{ height: '37rem' }}
 				/>
 			</div>
 			{/* Delete Confirmation Dialog */}

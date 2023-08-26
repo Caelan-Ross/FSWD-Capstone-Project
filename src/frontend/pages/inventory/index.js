@@ -260,7 +260,7 @@ export default function Home() {
 				<DataGrid autoPageSize
 					rows={filteredInventoryData}
 					columns={columns}
-					sx={{ height: '40rem' }}
+					sx={{ height: '37rem' }}
 				/>
 			</div>
 
