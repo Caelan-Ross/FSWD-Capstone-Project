@@ -16,6 +16,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
@@ -60,9 +61,14 @@ export default function Invoices() {
 	};
 
 	// Send user to edit
-	const handleEdit = (invoiceId) => {
-		router.push(`/invoices/edit?id=${invoiceId}`);
+	// const handleEdit = (invoiceId) => {
+		// router.push(`/invoices/edit?id=${invoiceId}`);
+	// };
+
+	const handleView = (invoiceId) => {
+		router.push(`/invoices/view?id=${invoiceId}`);
 	};
+
 
 	// Display Headings
 	const columns = [
@@ -103,8 +109,11 @@ export default function Invoices() {
 			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => handleEdit(params.row.id)}>
-					<EditIcon />
+				// <IconButton onClick={() => handleEdit(params.row.id)}>
+					// <EditIcon />
+				// </IconButton>
+				<IconButton onClick={() => handleView(params.row.id)}>
+					<InfoIcon />
 				</IconButton>
 			),
 		},

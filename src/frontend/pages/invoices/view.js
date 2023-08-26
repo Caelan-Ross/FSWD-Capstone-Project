@@ -317,7 +317,7 @@ export default function Home() {
 			>
 				{isError && <Alert severity='error'>{isError}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
-					Edit Invoice
+					Invoice #{invoiceId}
 				</Typography>
 
 				<Box display='flex' onClick={() => router.push('/invoices')}>
