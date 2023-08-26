@@ -57,6 +57,7 @@ export default function Home() {
 	const [selectedLineItem, setSelectedLineItem] = useState([]);
 
 	// Amounts
+	const [taxRate, setTaxRate] = useState(0.05);
 	const [taxAmount, setTaxAmount] = useState(0);
 	const [subtotal, setSubtotal] = useState(0);
 	const [totalAmount, setTotalAmount] = useState(invoiceDetails.totalPrice);
@@ -108,6 +109,9 @@ export default function Home() {
 				lineItemOptions.find((item) => item.id === value.id)?.price || 0;
 			updatedRows[index]['price'] = selectedPrice;
 			handleInputChange(); // Recalculate based on new prices
+			setSubtotal(
+				updatedRows.reduce((total, row) => total + (row.price || 0), 0)
+			);
 		} else {
 			updatedRows[index][field] = value;
 		}
@@ -153,9 +157,6 @@ export default function Home() {
 
 	// Calculate totals of all types of payment
 	const handleInputChange = () => {
-		// const debitTotal = parseFloat(calculatePaymentTotal('debit'));
-		// const creditTotal = parseFloat(calculatePaymentTotal('credit'));
-		// const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
 			parseFloat(
 				1 * parseFloat(document.getElementById('customerCreditAmount').value)
@@ -215,6 +216,19 @@ export default function Home() {
 			console.error('Error updating invoice details:', error);
 			setIsError(true);
 		}
+	};
+
+	// Calculate the subtotal based on the line item's prices
+	const calculateSubtotal = () => {
+		const itemPrices = assetData.map((asset) => parseFloat(asset.price) || 0);
+		const subtotal = itemPrices.reduce((total, price) => total + price, 0);
+		return subtotal.toFixed(2);
+	};
+
+	// Calculate tax amount from subtotal
+	const calculateTaxTotal = () => {
+		const taxTotal = calculateSubtotal() * 0.05;
+		return taxTotal.toFixed(2);
 	};
 
 	useEffect(() => {
@@ -530,7 +544,7 @@ export default function Home() {
 								justifyContent: 'space-between',
 								backgroundColor: '#fbfbfbf9',
 								width: '26rem',
-								mb: '0.5rem'
+								mb: '0.5rem',
 							}}
 						>
 							<Typography variant='h6'>Line Items</Typography>
@@ -562,7 +576,7 @@ export default function Home() {
 										type='text'
 										variant='outlined'
 										fullWidth
-										value={asset.price}
+										value={asset.price.toFixed(2)}
 										InputProps={{
 											readOnly: true,
 										}}
@@ -604,7 +618,9 @@ export default function Home() {
 								width: '20.25rem',
 							}}
 						>
-							<Typography variant='h6' mt='8px'>Payment Totals</Typography>
+							<Typography variant='h6' mt='8px'>
+								Payment Totals
+							</Typography>
 						</Box>
 						{/* Totals Section */}
 						<Box
@@ -613,7 +629,6 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center',
-								// margin: '1rem auto 0 auto',
 								margin: '0.5rem auto 0 auto',
 								backgroundColor: '#fbfbfbf9',
 							}}
@@ -625,7 +640,7 @@ export default function Home() {
 								label='Debit'
 								variant='outlined'
 								type='text'
-								value={calculatePaymentTotal('debit')}
+								value={`${invoiceDetails.debitAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -638,7 +653,7 @@ export default function Home() {
 								label='Credit'
 								variant='outlined'
 								type='text'
-								value={calculatePaymentTotal('credit')}
+								value={`${invoiceDetails.creditAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -655,7 +670,7 @@ export default function Home() {
 								label='Cash'
 								variant='outlined'
 								type='text'
-								value={calculatePaymentTotal('cash')}
+								value={`${invoiceDetails.cashAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -672,7 +687,7 @@ export default function Home() {
 								label='CX Credit'
 								variant='outlined'
 								type='text'
-								value={customerCreditAmount}
+								value={`${invoiceDetails.customerCreditAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -680,6 +695,32 @@ export default function Home() {
 									backgroundColor: 'lightgreen',
 									width: '6rem',
 									marginLeft: '1rem',
+								}}
+							/>
+						</Box>
+						<Box>
+							{/* Customer Payment Total */}
+							<TextField
+								id='customerTotal'
+								name='customerTotal'
+								label='Customer Total'
+								fullWidth
+								value={(
+									invoiceDetails.debitAmount +
+									invoiceDetails.creditAmount +
+									invoiceDetails.cashAmount +
+									invoiceDetails.customerCreditAmount
+								).toFixed(2)}
+								InputProps={{
+									readOnly: true,
+								}}
+								variant='outlined'
+								type='text'
+								sx={{
+									marginTop: '.75rem',
+									backgroundColor: '#f3eced',
+									borderRadius: '8px',
+									width: '28rem',
 								}}
 							/>
 						</Box>
@@ -700,7 +741,7 @@ export default function Home() {
 								name='taxAmount'
 								label='Tax Total'
 								fullWidth
-								value={taxAmount.toFixed(2)}
+								value={calculateTaxTotal()}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -721,7 +762,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={subtotal}
+								value={calculateSubtotal()}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -739,7 +780,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={totalAmount}
+								value={totalAmount.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}
