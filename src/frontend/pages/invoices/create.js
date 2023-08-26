@@ -176,7 +176,7 @@ export default function Home() {
 			}
 
 			// Calculate line items data
-			const lineItemsData = rows.map((row) => row.item.id);
+			const assetsData = rows.map((row) => row.item.id);
 
 			const requestData = {
 				id: 0,
@@ -192,7 +192,7 @@ export default function Home() {
 				taxRate: 0.05, // You might need to adjust this based on your requirements
 				notes: '', // Add notes value
 				totalPrice: totalAmount, // Use the calculated total amount
-				assetIds: lineItemsData,
+				assetIds: assetsData,
 			};
 
 			console.log(requestData);

@@ -512,6 +512,9 @@ export default function Home() {
 							rows={7.3}
 							variant='outlined'
 							fullWidth
+							InputProps={{
+								readOnly: true,
+							}}
 							sx={{ mt: 2 }}
 						/>
 					</Box>
@@ -567,9 +570,7 @@ export default function Home() {
 											name={`item-${index}`}
 											disabled
 											options={assetData}
-											getOptionLabel={(option) =>
-												`${option.batteryName}`
-											}
+											getOptionLabel={(option) => `${option.batteryName}`}
 											value={asset}
 											onChange={(event, newValue) => {
 												handleInputChangeLines(index, 'item', newValue);
@@ -619,9 +620,9 @@ export default function Home() {
 											/>
 										</IconButton>
 										{index > 0 && (
-											<IconButton onClick={() => removeRow(index)}>
+											<IconButton disabled onClick={() => removeRow(index)}>
 												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#000000' }}
+													sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
 												/>
 											</IconButton>
 										)}
@@ -952,7 +953,7 @@ export default function Home() {
 				</Box>
 				<Box>
 					{/* Edit Button */}
-					<Button
+					{/* <Button
 						className='btn-primary'
 						variant='contained'
 						type='submit'
@@ -961,7 +962,7 @@ export default function Home() {
 						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto' }}
 					>
 						Save
-					</Button>
+					</Button> */}
 				</Box>
 				{/* Success Message */}
 				{isSuccess && (
