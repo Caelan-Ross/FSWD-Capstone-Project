@@ -1,9 +1,24 @@
-import { useState } from 'react';
-import { Typography, Box, TextField, Button, Tab, Tabs, MenuItem, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import {
+    Typography,
+    Box,
+    IconButton,
+    TextField,
+    Button,
+    Alert,
+    MenuItem, Tab, Tabs, ToggleButtonGroup, ToggleButton
+} from '@mui/material';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
+import axios from 'axios';
 
 export default function Home() {
     const [activeTab, setActiveTab] = useState(0); // Default to the first tab
     const [serialNumber, setSerialNumber] = useState('');
+    const [isNewBattery, setIsNewBattery] = useState(false);
+    const [batteryOption, setBatteryOption] = useState('');
     const [isNewModel, setIsNewModel] = useState(false);
     const [modelOption, setModelOption] = useState('');
     const [modelName, setModelName] = useState('');
@@ -11,7 +26,7 @@ export default function Home() {
     const [typeOption, setTypeOption] = useState('');
     const [typeName, setTypeName] = useState('');
     const [isNewMake, setIsNewMake] = useState(false);
-    const [makeOption, setMakeOption] = useState('');
+    const [makeOptions, setMakeOptions] = useState([]);
     const [makeName, setMakeName] = useState('');
     const [isNewCondition, setIsNewCondition] = useState(false);
     const [conditionText, setConditionText] = useState('');
@@ -29,19 +44,135 @@ export default function Home() {
     const [unitName, setUnitName] = useState('');
     const [unitOption, setUnitOption] = useState('');
 
+
+    const [detailedBatteryInfo, setDetailedBatteryInfo] = useState(null);
+
+
+    const tabs = [
+        { label: 'Serial Number' },
+        { label: 'Battery Make' },
+        { label: 'Model' },
+        { label: 'Type' },
+        { label: 'Make' },
+        { label: 'Condition' },
+        { label: 'Details' },
+        { label: 'Group' },
+        { label: 'Unit' },
+        { label: 'Create Summary' },
+    ];
+
     const dummyGroupOptions = [
         { value: 'group1', label: 'Group 1' },
         { value: 'group2', label: 'Group 2' },
         // ... Add more options as needed ...
     ];
 
-    const handleNextTab = () => {
-        setActiveTab(activeTab + 1);
+    const handleNextTab = async () => {
+        if (isNewBattery && makeName) {
+            // If user entered a new battery make name, move to the next tab directly
+            setActiveTab(activeTab + 1);
+            return;
+        }
+        
+        else if (activeTab === 1 && batteryOption) {
+            try {
+                const selectedMake = makeOptions.find(option => option.id === batteryOption);
+                const response = await axios.get(`http://localhost:7166/api/Batteries?id=${selectedMake.id}`);
+                const selectedBattery = response.data[0]; // Assuming you get only one matching battery
+                setTypeName(selectedBattery.typeName);
+                setModelName(selectedBattery.modelName);
+                setMakeName(selectedBattery.makeName);
+                setConditionText(selectedBattery.conditionName);
+                setVoltage(selectedBattery.voltage);
+                setCapacity(selectedBattery.capacity);
+                setPrice(selectedBattery.price);
+                setGroupName(selectedBattery.groupName);
+                setGroupLength(selectedBattery.length);
+                setGroupHeight(selectedBattery.height);
+                setGroupWidth(selectedBattery.width);
+                setUnitOption(selectedBattery.unitType);
+                setSerialNumber(serialNumber);
+            } catch (error) {
+                // Handle error if fetching data fails
+                console.error('Error fetching battery data:', error);
+                return;
+            }
+            setActiveTab(9); // Move to the Review and Confirm tab directly
+        } else if (activeTab < tabs.length - 1) {
+            setActiveTab(activeTab + 1);
+        }
     };
 
     const handlePreviousTab = () => {
         setActiveTab(activeTab - 1);
     };
+
+    useEffect(() => {
+        // Fetch data for battery dropdown
+        axios
+            .get('http://localhost:7166/api/Batteries')
+            .then((response) => {
+                setBatteryOption(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching type options:', error);
+            });
+        // Fetch data for battery type dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryTypes')
+            .then((response) => {
+                setTypeOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching type options:', error);
+            });
+
+        // Fetch data for battery model dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryModels')
+            .then((response) => {
+                setModelOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching type options:', error);
+            });
+
+        // Fetch data for battery make dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryMakes')
+            .then((response) => {
+                setMakeOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching type options:', error);
+            });
+
+        // Fetch data for battery group dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryGroups')
+            .then((response) => {
+                setGroupOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching type options:', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        // Fetch the detailed battery information based on the selected makeName
+        if (makeName) {
+            // Fetch detailed battery information using the provided endpoint
+            axios.get(`http://localhost:7166/api/Batteries?makeName=${makeName}`)
+                .then(response => {
+                    if (response.data.length > 0) {
+                        setDetailedBatteryInfo(response.data[0]);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching detailed battery info:', error);
+                });
+        }
+    }, [makeName]);
 
     const handleSubmit = () => {
         // Gather data from all tabs
@@ -76,22 +207,41 @@ export default function Home() {
                 overflow: 'auto',
             }}
         >
-            {/* Page Heading */}
-            <Typography variant='h3' align='center' component='h2'>
-                Create Battery
-            </Typography>
+            {/* Page Heading & Back Button */}
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                }}
+            >
+
+                <Typography variant='h3' align='center' component='h2'>
+                    Create Asset
+                </Typography>
+
+                <Box display='flex' onClick={() => handleNavigation('/inventory')}>
+                    <IconButton>
+                        <ArrowCircleLeftIcon
+                            sx={{ fontSize: '2.5rem', color: '#000000' }}
+                        />
+                    </IconButton>
+                </Box>
+            </Box>
 
             <Tabs value={activeTab} sx={{ width: '100%' }}>
-                <Tab label='Serial Number' />
-                <Tab label='Model' disabled />
-                <Tab label='Type' disabled />
-                <Tab label='Make' disabled />
-                <Tab label='Condition' disabled />
-                <Tab label='Details' disabled />
-                <Tab label='Group' disabled />
-                <Tab label='Unit' disabled />
-                <Tab label='Create Summary' disabled />
-                {/* Add more tabs as needed */}
+                {tabs.map((tab, index) => {
+                    if (index <= activeTab) {
+                        return (
+                            <Tab
+                                key={index}
+                                label={tab.label}
+                                onClick={() => setActiveTab(index)}
+                            />
+                        );
+                    }
+                    return null;
+                })}
             </Tabs>
 
             {activeTab === 0 && (
@@ -123,8 +273,8 @@ export default function Home() {
                             <Typography variant='h6'>Stamped Serial</Typography>
                             <TextField
                                 input
-                                id='stampedSerial'
-                                name='stampedSerial'
+                                id='serialNumber'
+                                name='serialNumber'
                                 label='Enter stamped serial no.'
                                 variant='outlined'
                                 fullWidth
@@ -151,9 +301,101 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-
-            {/* Add content for other tabs here */}
             {activeTab === 1 && (
+                <Box>
+                    <Typography variant='h6'>New Battery</Typography>
+                    <ToggleButtonGroup
+                        value={isNewBattery}
+                        exclusive
+                        onChange={() => setIsNewBattery(!isNewBattery)}
+                    >
+                        <ToggleButton value={true} variant='contained' color='primary'>
+                            Yes
+                        </ToggleButton>
+                        <ToggleButton value={false} variant='contained' color='primary'>
+                            No
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+
+                    {isNewBattery ? (
+                        <Box sx={{ mt: 2 }}>
+                            <TextField
+                                label='Battery Make Name'
+                                variant='outlined'
+                                fullWidth
+                                value={makeName}
+                                onChange={(e) => setMakeName(e.target.value)}
+                            />
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    mt: 2,
+                                }}
+                            >
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={handlePreviousTab}
+                                    disabled={activeTab === 0}
+                                >
+                                    Previous
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={handleNextTab}
+                                >
+                                    Next
+                                </Button>
+                            </Box>
+                        </Box>
+                    ) : (
+                        <Box sx={{ mt: 2 }}>
+                            <TextField
+                                select
+                                label='Select Battery Make'
+                                variant='outlined'
+                                fullWidth
+                                value={batteryOption}
+                                onChange={(e) => setBatteryOption(e.target.value)}
+                            >
+                                {makeOptions.map((option) => (
+                                    <MenuItem key={option.id} value={option.id}>
+                                        {option.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    mt: 2,
+                                }}
+                            >
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={handlePreviousTab}
+                                    disabled={activeTab === 0}
+                                >
+                                    Previous
+                                </Button>
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    onClick={handleNextTab}
+                                    disabled={!batteryOption}
+                                >
+                                    Next
+                                </Button>
+                            </Box>
+                        </Box>
+                    )}
+                </Box>
+            )}
+            {/* Add content for other tabs here */}
+            {activeTab === 2 && (
                 <Box
                 // ... (Similar styling as previous tab)
                 >
@@ -245,7 +487,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 2 && (
+            {activeTab === 3 && (
                 <Box>
                     <Box
                         sx={{
@@ -335,7 +577,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 3 && (
+            {activeTab === 4 && (
                 <Box>
                     <Box
                         sx={{
@@ -425,7 +667,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 4 && (
+            {activeTab === 5 && (
                 <Box>
                     <Box
                         sx={{
@@ -515,7 +757,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 5 && (
+            {activeTab === 6 && (
                 <Box>
                     <Box
                         sx={{
@@ -581,7 +823,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 6 && (
+            {activeTab === 7 && (
                 <Box>
                     <Box
                         sx={{
@@ -724,7 +966,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 7 && (
+            {activeTab === 8 && (
                 <Box>
                     <Typography variant='h6'>New Unit</Typography>
                     <ToggleButtonGroup
@@ -797,63 +1039,53 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-{activeTab === 8 && (
-    <Box>
-        <Typography variant='h6'>Review and Confirm</Typography>
-
-        <Typography>Serial Number: {serialNumber}</Typography>
-        <Typography>Selected Model: {modelOption}</Typography>
-        <Typography>Type Name: {typeName || typeOption}</Typography>
-        <Typography>Selected Make: {makeOption}</Typography>
-        <Typography>Condition: {conditionText || conditionOption}</Typography>
-        <Typography>Voltage: {voltage}</Typography>
-        <Typography>Capacity: {capacity}</Typography>
-        <Typography>Price: {price}</Typography>
-        <Typography>Selected Group: {groupName || groupOption}</Typography>
-        {isNewGroup ? (
-            <Box>
-                <Typography>Length: {groupLength}</Typography>
-                <Typography>Height: {groupHeight}</Typography>
-                <Typography>Width: {groupWidth}</Typography>
-            </Box>
-        ) : (
-            groupOption === 'group1' && (
+            {activeTab === 9 && detailedBatteryInfo && (
                 <Box>
-                    <Typography>Length: {groupLength || 'Length data from API'}</Typography>
-                    <Typography>Height: {groupHeight || 'Height data from API'}</Typography>
-                    <Typography>Width: {groupWidth || 'Width data from API'}</Typography>
-                </Box>
-            )
-        )}
-        <Typography>Selected Unit: {unitOption}</Typography>
+                    <Typography variant='h6'>Review and Confirm</Typography>
 
-        <Box
-            sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                mt: 2,
-            }}
-        >
-            <Button
-                variant='contained'
-                color='primary'
-                onClick={handlePreviousTab}
-                disabled={activeTab === 0}
-            >
-                Previous
-            </Button>
-            <Button
-                variant='contained'
-                color='primary'
-                className='btn-primary'
-                // onClick={handleSubmit}
-            // Add conditions to enable/disable Create based on inputs
-            >
-                Create
-            </Button>
-        </Box>
-    </Box>
-)}
+                    <Typography>Type Name: {detailedBatteryInfo.typeName}</Typography>
+                    <Typography>Model Name: {detailedBatteryInfo.modelName}</Typography>
+                    <Typography>Make Name: {detailedBatteryInfo.makeName}</Typography>
+                    <Typography>Condition Name: {detailedBatteryInfo.conditionName}</Typography>
+                    <Typography>Voltage: {detailedBatteryInfo.voltage}</Typography>
+                    <Typography>Capacity: {detailedBatteryInfo.capacity}</Typography>
+                    <Typography>Price: {detailedBatteryInfo.price}</Typography>
+                    <Typography>Group Name: {detailedBatteryInfo.groupName}</Typography>
+                    <Typography>Length: {detailedBatteryInfo.length}</Typography>
+                    <Typography>Width: {detailedBatteryInfo.width}</Typography>
+                    <Typography>Height: {detailedBatteryInfo.height}</Typography>
+                    <Typography>Unit Type: {detailedBatteryInfo.unitType}</Typography>
+                    <Typography>Stamped Serial: {serialNumber}</Typography>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            mt: 2,
+                        }}
+                    >
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            onClick={handlePreviousTab}
+                            disabled={activeTab === 0}
+                        >
+                            Previous
+                        </Button>
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            className='btn-primary'
+                            onClick={handleSubmit}
+                            // Add conditions to enable/disable Create based on inputs
+                            // Disabled condition based on your requirements
+                            disabled={!detailedBatteryInfo}
+                        >
+                            Create
+                        </Button>
+                    </Box>
+                </Box>
+            )}
         </Box>
     );
 }
