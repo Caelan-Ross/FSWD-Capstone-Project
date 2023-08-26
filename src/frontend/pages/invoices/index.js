@@ -61,9 +61,9 @@ export default function Invoices() {
 	};
 
 	// Send user to edit
-	// const handleEdit = (invoiceId) => {
-		// router.push(`/invoices/edit?id=${invoiceId}`);
-	// };
+	 const handleEdit = (invoiceId) => {
+		 router.push(`/invoices/edit?id=${invoiceId}`);
+	 };
 
 	const handleView = (invoiceId) => {
 		router.push(`/invoices/view?id=${invoiceId}`);
@@ -105,13 +105,10 @@ export default function Invoices() {
 		},
 		// Delete and Edit Icons
 		{
-			field: 'edit',
-			headerName: 'Edit',
+			field: 'view',
+			headerName: 'view',
 			width: 100,
 			renderCell: (params) => (
-				// <IconButton onClick={() => handleEdit(params.row.id)}>
-					// <EditIcon />
-				// </IconButton>
 				<IconButton onClick={() => handleView(params.row.id)}>
 					<InfoIcon />
 				</IconButton>

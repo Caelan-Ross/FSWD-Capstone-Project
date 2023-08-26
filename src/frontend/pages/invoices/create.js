@@ -35,6 +35,9 @@ export default function Home() {
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
 
+	// Invoice Notes
+	const [notes, setNotes] = useState('');
+
 	// LineItems Drop Down
 	const [lineItemOptions, setLineItemOptions] = useState([]);
 	const [selectedLineItem, setSelectedLineItem] = useState([]);
@@ -189,9 +192,9 @@ export default function Home() {
 				debitAmount: calculatePaymentTotal('debit'),
 				creditAmount: calculatePaymentTotal('credit'),
 				customerCreditAmount: customerCreditAmount,
-				taxRate: 0.05, // You might need to adjust this based on your requirements
-				notes: '', // Add notes value
-				totalPrice: totalAmount, // Use the calculated total amount
+				taxRate: 0.05,
+				notes: notes,
+				totalPrice: totalAmount,
 				assetIds: assetsData,
 			};
 
@@ -449,6 +452,8 @@ export default function Home() {
 							rows={6}
 							variant='outlined'
 							fullWidth
+							value = {notes}
+							onChange={(e) => setNotes(e.target.value)}
 							sx={{ mt: 2 }}
 						/>
 					</Box>

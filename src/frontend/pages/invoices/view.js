@@ -496,6 +496,7 @@ export default function Home() {
 							rows={7.3}
 							variant='outlined'
 							fullWidth
+							value={invoiceDetails.notes}
 							InputProps={{
 								readOnly: true,
 							}}
