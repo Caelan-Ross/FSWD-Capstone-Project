@@ -379,36 +379,20 @@ export default function Home() {
 					>
 						<Typography variant='h6'>Customer Details</Typography>
 						{/* Customer drop down */}
-						<Autocomplete
+						<TextField
 							id='customerId'
 							name='customerId'
-							options={customerOptions}
-							getOptionLabel={(option) =>
-								`${option.firstName} ${option.lastName} | ${option.phoneNumber}`
+							label='Customer'
+							variant='outlined'
+							fullWidth
+							value={
+								selectedCustomer
+									? `${selectedCustomer.firstName} ${selectedCustomer.lastName} | ${selectedCustomer.phoneNumber}`
+									: ''
 							}
-							value={selectedCustomer}
-							disabled
-							onChange={(event, newValue) => {
-								setSelectedCustomer(newValue);
-								handleFieldChange('customerId', newValue ? newValue.id : '');
+							InputProps={{
+								readOnly: true,
 							}}
-							filterOptions={(options, state) => {
-								const inputValue = state.inputValue.toLowerCase();
-								return options.filter(
-									(option) =>
-										option.firstName.toLowerCase().includes(inputValue) ||
-										option.lastName.toLowerCase().includes(inputValue) ||
-										option.phoneNumber.includes(inputValue)
-								);
-							}}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									label='Customer'
-									variant='outlined'
-									fullWidth
-								/>
-							)}
 							sx={{ mt: 1, backgroundColor: 'white' }}
 						/>
 
@@ -565,41 +549,23 @@ export default function Home() {
 							>
 								<Grid container alignItems='center'>
 									<Grid item>
-										<Autocomplete
-											id={`item-${index}`}
-											name={`item-${index}`}
-											disabled
-											options={assetData}
-											getOptionLabel={(option) => `${option.batteryName}`}
-											value={asset}
-											onChange={(event, newValue) => {
-												handleInputChangeLines(index, 'item', newValue);
-												handleInputChangeLines(index, 'price', newValue.price);
+										<TextField
+											label='Item'
+											variant='outlined'
+											fullWidth
+											value={asset.batteryName}
+											InputProps={{
+												readOnly: true,
 											}}
-											renderInput={(params) => (
-												<TextField
-													{...params}
-													label='Item'
-													variant='outlined'
-													fullWidth
-													sx={{
-														backgroundColor: 'white',
-														width: '18rem',
-													}}
-												/>
-											)}
-											inputValue={asset ? asset.batteryName : ''}
 											sx={{
-												'& .MuiAutocomplete-clearIndicator': {
-													display: 'none',
-												},
+												backgroundColor: 'white',
+												width: '18rem',
 											}}
 										/>
 									</Grid>
 									{/* price */}
 									<Grid item>
 										<TextField
-											disabled
 											id={`price-${index}`}
 											name={`price-${index}`}
 											label='$'
@@ -607,32 +573,14 @@ export default function Home() {
 											variant='outlined'
 											fullWidth
 											value={asset.price}
-											onChange={(e) => handlePriceChange(index, e.target.value)} // Call handlePriceChange
+											InputProps={{
+												readOnly: true,
+											}}
 											sx={{
 												backgroundColor: 'white',
 												width: '6rem',
 											}}
 										/>
-										{/* <IconButton onClick={addRow}> */}
-										<IconButton disabled>
-											<AddCircleIcon
-												sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-											/>
-										</IconButton>
-										{index > 0 && (
-											<IconButton disabled onClick={() => removeRow(index)}>
-												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-												/>
-											</IconButton>
-										)}
-										{index === 0 && (
-											<IconButton disabled>
-												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-												/>
-											</IconButton>
-										)}
 									</Grid>
 								</Grid>
 							</Box>
