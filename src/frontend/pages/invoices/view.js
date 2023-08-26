@@ -209,8 +209,8 @@ export default function Home() {
 			await axios.put(`${API_BASE}/${invoiceId}`, updatedInvoice);
 			setIsSuccess(true);
 			setTimeout(() => {
-				setIsSuccess(false); // Hide success after delay
-				router.push('/invoices'); // Navigate back to the customer list page
+				setIsSuccess(false);
+				router.push('/invoices');
 			}, 1000);
 		} catch (error) {
 			console.error('Error updating invoice details:', error);
@@ -238,7 +238,6 @@ export default function Home() {
 			.then((response) => {
 				console.log(response);
 				setInvoiceDetails(response.data);
-				console.log('invoiceDetails:', JSON.stringify(invoiceDetails, null, 2)); // Log the invoiceDetails state as JSON
 
 				// Fetch customer details by customerId
 				fetchCustomer(response.data.customerId)
@@ -273,7 +272,7 @@ export default function Home() {
 				const initialPaymentLines = paymentTypes.map((type) => {
 					return {
 						paymentType: type,
-						amount: response.data[type + 'Amount'], // Use the corresponding property in invoiceDetails
+						amount: response.data[type + 'Amount'],
 					};
 				});
 
