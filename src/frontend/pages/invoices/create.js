@@ -175,7 +175,8 @@ export default function Home() {
 				paymentMethod.push('Customer Credit');
 			}
 
-			console.log(paymentMethod);
+			// Calculate line items data
+			const lineItemsData = rows.map((row) => row.item.id);
 
 			const requestData = {
 				id: 0,
@@ -191,8 +192,10 @@ export default function Home() {
 				taxRate: 0.05, // You might need to adjust this based on your requirements
 				notes: '', // Add notes value
 				totalPrice: totalAmount, // Use the calculated total amount
-				assetIds: selectedLineItem ? [selectedLineItem.id] : [], // Use selectedLineItem's id
+				assetIds: lineItemsData,
 			};
+
+			console.log(requestData);
 
 			const response = await axios.post(url, requestData, {
 				headers: {

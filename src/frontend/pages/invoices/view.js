@@ -248,6 +248,7 @@ export default function Home() {
 							(assetResponse) => assetResponse.data
 						);
 						setAssetData(fetchedAssetData);
+						console.log(assetData);
 					})
 					.catch((error) => {
 						console.error('Error fetching asset data:', error);
@@ -567,7 +568,7 @@ export default function Home() {
 											disabled
 											options={assetData}
 											getOptionLabel={(option) =>
-												`${option.batteryName} | $${option.price})}`
+												`${option.batteryName}`
 											}
 											value={asset}
 											onChange={(event, newValue) => {
