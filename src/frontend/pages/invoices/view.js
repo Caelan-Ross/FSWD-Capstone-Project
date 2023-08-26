@@ -899,19 +899,6 @@ export default function Home() {
 						</Box>
 					</Box>
 				</Box>
-				<Box>
-					{/* Edit Button */}
-					{/* <Button
-						className='btn-primary'
-						variant='contained'
-						type='submit'
-						disabled={loading}
-						color='primary'
-						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto' }}
-					>
-						Save
-					</Button> */}
-				</Box>
 				{/* Success Message */}
 				{isSuccess && (
 					<Alert severity='success' sx={{ mt: 2 }}>
