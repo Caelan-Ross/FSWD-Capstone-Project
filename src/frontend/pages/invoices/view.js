@@ -490,7 +490,7 @@ export default function Home() {
 						<TextField
 							id='notes'
 							name='notes'
-							label='Notes'
+							label='Invoice Notes'
 							type='text'
 							multiline
 							rows={7.3}
@@ -670,15 +670,15 @@ export default function Home() {
 									}
 									sx={{ backgroundColor: 'white', width: '6rem' }}
 								/>
-								<IconButton onClick={addPaymentLine}>
+								<IconButton disabled onClick={addPaymentLine}>
 									<AddCircleIcon
-										sx={{ fontSize: '1.25rem', color: '#000000' }}
+										sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
 									/>
 								</IconButton>
 								{index > 0 && (
-									<IconButton onClick={() => removePaymentLine(index)}>
+									<IconButton disabled onClick={() => removePaymentLine(index)}>
 										<RemoveCircleOutlineIcon
-											sx={{ fontSize: '1.25rem', color: '#000000' }}
+											sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
 										/>
 									</IconButton>
 								)}

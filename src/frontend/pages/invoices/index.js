@@ -102,6 +102,10 @@ export default function Invoices() {
 			field: 'totalPrice',
 			headerName: 'Total Price',
 			width: 200,
+			valueFormatter: (params) => {
+				const price = params.value;
+				return `$${price.toFixed(2)}`;
+			}
 		},
 		// Delete and Edit Icons
 		{

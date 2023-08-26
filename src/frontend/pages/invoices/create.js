@@ -446,7 +446,7 @@ export default function Home() {
 						<TextField
 							id='notes'
 							name='notes'
-							label='Notes'
+							label='Invoice Notes'
 							type='text'
 							multiline
 							rows={6}
