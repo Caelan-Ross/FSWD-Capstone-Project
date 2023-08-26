@@ -110,7 +110,7 @@ export default function Invoices() {
 		// Delete and Edit Icons
 		{
 			field: 'view',
-			headerName: 'view',
+			headerName: 'View',
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleView(params.row.id)}>

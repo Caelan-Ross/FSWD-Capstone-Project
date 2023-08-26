@@ -528,63 +528,51 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto 0.3rem 3.5rem',
 								backgroundColor: '#fbfbfbf9',
-								width: '20.85rem',
+								width: '26rem',
+								mb: '0.5rem'
 							}}
 						>
 							<Typography variant='h6'>Line Items</Typography>
 							<Typography variant='h6'>Price</Typography>
 						</Box>
 						{assetData.map((asset, index) => (
-							<Box
-								key={index}
-								sx={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'center',
-									justifyContent: 'center',
-									margin: '0 auto',
-									backgroundColor: '#fbfbfbf9',
-								}}
-							>
-								<Grid container alignItems='center'>
-									<Grid item>
-										<TextField
-											label='Item'
-											variant='outlined'
-											fullWidth
-											value={asset.batteryName}
-											InputProps={{
-												readOnly: true,
-											}}
-											sx={{
-												backgroundColor: 'white',
-												width: '18rem',
-											}}
-										/>
-									</Grid>
-									{/* price */}
-									<Grid item>
-										<TextField
-											id={`price-${index}`}
-											name={`price-${index}`}
-											label='$'
-											type='text'
-											variant='outlined'
-											fullWidth
-											value={asset.price}
-											InputProps={{
-												readOnly: true,
-											}}
-											sx={{
-												backgroundColor: 'white',
-												width: '6rem',
-											}}
-										/>
-									</Grid>
+							<Grid container alignItems='space-between' gap='9rem'>
+								<Grid item mb='1rem'>
+									<TextField
+										label='Item'
+										variant='outlined'
+										fullWidth
+										value={asset.batteryName}
+										InputProps={{
+											readOnly: true,
+										}}
+										sx={{
+											backgroundColor: 'white',
+											width: '18rem',
+										}}
+									/>
 								</Grid>
-							</Box>
+								{/* price */}
+								<Grid item>
+									<TextField
+										id={`price-${index}`}
+										name={`price-${index}`}
+										label='$'
+										type='text'
+										variant='outlined'
+										fullWidth
+										value={asset.price}
+										InputProps={{
+											readOnly: true,
+										}}
+										sx={{
+											backgroundColor: 'white',
+											width: '6rem',
+										}}
+									/>
+								</Grid>
+							</Grid>
 						))}
 					</Box>
 					{/* Payment Section */}
@@ -600,7 +588,6 @@ export default function Home() {
 							borderLeft: '1px solid lightgray',
 							borderBottom: '1px solid #ecececf9',
 							borderTop: '1px solid #ecececf9',
-							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
 							height: '36rem',
@@ -617,144 +604,8 @@ export default function Home() {
 								width: '20.25rem',
 							}}
 						>
-							<Typography variant='h6'>Payment Type</Typography>
-							<Typography variant='h6'>Amount</Typography>
+							<Typography variant='h6' mt='8px'>Payment Totals</Typography>
 						</Box>
-						{/* User Select Payment Type */}
-						{paymentLines.map((row, index) => (
-							<Box
-								key={index}
-								sx={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'center',
-									justifyContent: 'center',
-									margin: '0 auto',
-									backgroundColor: '#fbfbfbf9',
-								}}
-							>
-								<Select
-									id={`paymentType-${index}`}
-									name={`paymentType-${index}`}
-									label='Type'
-									variant='outlined'
-									fullWidth
-									value={row.paymentType}
-									disabled
-									onChange={(e) =>
-										handleInputChangePayment(
-											index,
-											'paymentType',
-											e.target.value
-										)
-									}
-									sx={{ backgroundColor: 'white', width: '16rem' }}
-								>
-									<MenuItem value='debit'>Debit</MenuItem>
-									<MenuItem value='credit'>Credit</MenuItem>
-									<MenuItem value='cash'>Cash</MenuItem>
-								</Select>
-								<TextField
-									id={`amount-${index}`}
-									name={`amount-${index}`}
-									label='$'
-									type='text'
-									variant='outlined'
-									fullWidth
-									value={row.amount}
-									InputProps={{
-										readOnly: true,
-									}}
-									onChange={(e) =>
-										handleInputChangePayment(index, 'amount', e.target.value)
-									}
-									sx={{ backgroundColor: 'white', width: '6rem' }}
-								/>
-								<IconButton disabled onClick={addPaymentLine}>
-									<AddCircleIcon
-										sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-									/>
-								</IconButton>
-								{index > 0 && (
-									<IconButton disabled onClick={() => removePaymentLine(index)}>
-										<RemoveCircleOutlineIcon
-											sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-										/>
-									</IconButton>
-								)}
-								{index === 0 && (
-									<IconButton disabled>
-										<RemoveCircleOutlineIcon
-											sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-										/>
-									</IconButton>
-								)}
-							</Box>
-						))}
-						{/* Customer Credit */}
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'center',
-								margin: '0 auto',
-								backgroundColor: '#fbfbfbf9',
-							}}
-						>
-							<TextField
-								id='customerCreditLabel'
-								name='customerCreditLabel'
-								type='text'
-								variant='outlined'
-								fullWidth
-								value='Customer Credit'
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{
-									marginTop: '.25rem',
-									backgroundColor: 'lightgreen',
-									width: '16rem',
-								}}
-							/>
-							<TextField
-								id={'customerCreditAmount'}
-								name={'customerCreditAmount'}
-								label='$'
-								type='text'
-								variant='outlined'
-								fullWidth
-								onChange={handleInputChange}
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{
-									marginTop: '.25rem',
-									backgroundColor: 'lightgreen',
-									width: '6rem',
-								}}
-							/>
-							<IconButton disabled>
-								<AddCircleIcon sx={{ fontSize: '1.25rem', color: '#d3d3d3' }} />
-							</IconButton>
-
-							<IconButton disabled>
-								<RemoveCircleOutlineIcon
-									sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-								/>
-							</IconButton>
-						</Box>
-						<Typography
-							variant='h6'
-							sx={{
-								margin: '2rem auto 0 4.25rem',
-								width: '20.25rem',
-								backgroundColor: '#fbfbfbf9',
-							}}
-						>
-							Totals
-						</Typography>
 						{/* Totals Section */}
 						<Box
 							sx={{
@@ -762,7 +613,8 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center',
-								margin: '1rem auto 0 auto',
+								// margin: '1rem auto 0 auto',
+								margin: '0.5rem auto 0 auto',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
