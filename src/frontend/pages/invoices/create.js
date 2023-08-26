@@ -855,7 +855,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={subtotal}
+								value={subtotal.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -873,7 +873,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={totalAmount}
+								value={totalAmount.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}
