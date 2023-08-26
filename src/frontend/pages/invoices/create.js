@@ -7,7 +7,7 @@ import {
 	Alert,
 	Select,
 	MenuItem,
-	Grid,
+	Grid
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
@@ -26,6 +26,7 @@ export default function Home() {
 	};
 	const API_BASE = 'http://localhost:7166/api/Invoices/';
 
+	// Alerts
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
@@ -105,9 +106,9 @@ export default function Home() {
 
 	// Calculate totals of all types of payment
 	const handleInputChange = () => {
-		const debitTotal = parseFloat(calculatePaymentTotal('debit'));
-		const creditTotal = parseFloat(calculatePaymentTotal('credit'));
-		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
+		// const debitTotal = parseFloat(calculatePaymentTotal('debit'));
+		// const creditTotal = parseFloat(calculatePaymentTotal('credit'));
+		// const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
 			parseFloat(
 				1 * parseFloat(document.getElementById('customerCreditAmount').value)
@@ -151,7 +152,6 @@ export default function Home() {
 	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const form = event.target;
 		const url = `http://localhost:7166/api/Invoices`;
 		try {
 			setLoading(true);
@@ -308,6 +308,7 @@ export default function Home() {
 						borderRadius: '8px',
 					}}
 				>
+					{/* Customer Section */}
 					<Box
 						sx={{
 							display: 'flex',
@@ -325,8 +326,8 @@ export default function Home() {
 							height: '36rem',
 						}}
 					>
-						{/* Customer Section */}
 						<Typography variant='h6'>Customer Details</Typography>
+						{/* Customer Dropdown */}
 						<Autocomplete
 							id='customerId'
 							name='customerId'
