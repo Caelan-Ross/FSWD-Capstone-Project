@@ -25,6 +25,6 @@ namespace Battery_Doctor.DTOs
 
         public string Notes { get; set; }
 
-        public List<string> AssetNames { get; set; }
+        public List<int> AssetIds { get; set; }
     }
 }
