@@ -260,7 +260,7 @@ export default function Customer() {
 					columns={columns}
 					pageSize={5}
 					autoPageSize
-					sx={{ height: '40rem' }}
+					sx={{ height: '37rem' }}
 				/>
 			</div>
 
