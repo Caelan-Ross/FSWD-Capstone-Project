@@ -53,7 +53,6 @@ export default function Home() {
         { label: 'Battery Make' },
         { label: 'Model' },
         { label: 'Type' },
-        { label: 'Make' },
         { label: 'Condition' },
         { label: 'Details' },
         { label: 'Group' },
@@ -97,7 +96,7 @@ export default function Home() {
                 console.error('Error fetching battery data:', error);
                 return;
             }
-            setActiveTab(9); // Move to the Review and Confirm tab directly
+            setActiveTab(8); // Move to the Review and Confirm tab directly
         } else if (activeTab < tabs.length - 1) {
             setActiveTab(activeTab + 1);
         }
@@ -173,25 +172,6 @@ export default function Home() {
                 });
         }
     }, [makeName]);
-
-    const handleSubmit = () => {
-        // Gather data from all tabs
-        const formData = {
-            serialNumber,
-            isNewModel,
-            modelName,
-            modelOption,
-            // ... (gather data from other tabs similarly)
-            isNewUnit,
-            unitName,
-            unitOption,
-        };
-
-        // Send the formData to your backend or perform necessary actions
-        // For example, you can use fetch or axios to make an API call
-
-        console.log(formData); // Just for demonstration
-    };
 
     return (
         <Box
@@ -302,98 +282,104 @@ export default function Home() {
                 </Box>
             )}
             {activeTab === 1 && (
-                <Box>
-                    <Typography variant='h6'>New Battery</Typography>
-                    <ToggleButtonGroup
-                        value={isNewBattery}
-                        exclusive
-                        onChange={() => setIsNewBattery(!isNewBattery)}
-                    >
-                        <ToggleButton value={true} variant='contained' color='primary'>
-                            Yes
-                        </ToggleButton>
-                        <ToggleButton value={false} variant='contained' color='primary'>
-                            No
-                        </ToggleButton>
-                    </ToggleButtonGroup>
+    <Box>
+        <Typography variant='h6'>New Battery</Typography>
+        <ToggleButtonGroup
+            value={isNewBattery}
+            exclusive
+            onChange={() => setIsNewBattery(!isNewBattery)}
+        >
+            <ToggleButton value={true} variant='contained' color='primary'>
+                Yes
+            </ToggleButton>
+            <ToggleButton value={false} variant='contained' color='primary'>
+                No
+            </ToggleButton>
+        </ToggleButtonGroup>
 
-                    {isNewBattery ? (
-                        <Box sx={{ mt: 2 }}>
-                            <TextField
-                                label='Battery Make Name'
-                                variant='outlined'
-                                fullWidth
-                                value={makeName}
-                                onChange={(e) => setMakeName(e.target.value)}
-                            />
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    mt: 2,
-                                }}
-                            >
-                                <Button
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={handlePreviousTab}
-                                    disabled={activeTab === 0}
-                                >
-                                    Previous
-                                </Button>
-                                <Button
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={handleNextTab}
-                                >
-                                    Next
-                                </Button>
-                            </Box>
-                        </Box>
-                    ) : (
-                        <Box sx={{ mt: 2 }}>
-                            <TextField
-                                select
-                                label='Select Battery Make'
-                                variant='outlined'
-                                fullWidth
-                                value={batteryOption}
-                                onChange={(e) => setBatteryOption(e.target.value)}
-                            >
-                                {makeOptions.map((option) => (
-                                    <MenuItem key={option.id} value={option.id}>
-                                        {option.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    mt: 2,
-                                }}
-                            >
-                                <Button
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={handlePreviousTab}
-                                    disabled={activeTab === 0}
-                                >
-                                    Previous
-                                </Button>
-                                <Button
-                                    variant='contained'
-                                    color='primary'
-                                    onClick={handleNextTab}
-                                    disabled={!batteryOption}
-                                >
-                                    Next
-                                </Button>
-                            </Box>
-                        </Box>
-                    )}
+        {isNewBattery ? (
+            <Box sx={{ mt: 2 }}>
+                <TextField
+                    label='Battery Make Name'
+                    variant='outlined'
+                    fullWidth
+                    value={makeName}
+                    onChange={(e) => setMakeName(e.target.value)}
+                />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        mt: 2,
+                    }}
+                >
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        onClick={handlePreviousTab}
+                        disabled={activeTab === 0}
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        onClick={handleNextTab}
+                    >
+                        Next
+                    </Button>
                 </Box>
-            )}
+            </Box>
+        ) : (
+            <Box sx={{ mt: 2 }}>
+                <TextField
+                    select
+                    label='Select Battery Make'
+                    variant='outlined'
+                    fullWidth
+                    value={batteryOption}
+                    onChange={(e) => {
+                        const selectedMakeOption = makeOptions.find(option => option.id === e.target.value);
+                        if (selectedMakeOption) {
+                            setMakeName(selectedMakeOption.name); // Update makeName based on selected option
+                            setBatteryOption(e.target.value);
+                        }
+                    }}
+                >
+                    {makeOptions.map((option) => (
+                        <MenuItem key={option.id} value={option.id}>
+                            {option.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        mt: 2,
+                    }}
+                >
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        onClick={handlePreviousTab}
+                        disabled={activeTab === 0}
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        onClick={handleNextTab}
+                        disabled={!batteryOption}
+                    >
+                        Next
+                    </Button>
+                </Box>
+            </Box>
+        )}
+    </Box>
+)}
             {/* Add content for other tabs here */}
             {activeTab === 2 && (
                 <Box
@@ -595,96 +581,6 @@ export default function Home() {
                                 alignItems: 'center',
                             }}
                         >
-                            <Typography variant='h6'>New Make</Typography>
-                            <ToggleButtonGroup
-                                value={isNewMake}
-                                exclusive
-                                onChange={() => setIsNewMake(!isNewMake)}
-                            >
-                                <ToggleButton value={true} variant='contained' color='primary'>
-                                    Yes
-                                </ToggleButton>
-                                <ToggleButton value={false} variant='contained' color='primary'>
-                                    No
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                        </Box>
-                        {isNewMake ? (
-                            <Box sx={{ mt: 2 }}>
-                                <TextField
-                                    label='Make Name'
-                                    variant='outlined'
-                                    fullWidth
-                                    value={makeName}
-                                    onChange={(e) => setMakeName(e.target.value)}
-                                />
-                            </Box>
-                        ) : (
-                            <Box sx={{ mt: 2 }}>
-                                <TextField
-                                    select
-                                    label='Select Make'
-                                    variant='outlined'
-                                    fullWidth
-                                    value={makeOption}
-                                    onChange={(e) => setMakeOption(e.target.value)}
-                                >
-                                    {/* Populate options from API */}
-                                    <MenuItem value='make1'>Make 1</MenuItem>
-                                    <MenuItem value='make2'>Make 2</MenuItem>
-                                    {/* Add more options */}
-                                </TextField>
-                            </Box>
-                        )}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                mt: 2,
-                            }}
-                        >
-                            <Button
-                                variant='contained'
-                                color='primary'
-                                onClick={handlePreviousTab}
-                                disabled={activeTab === 0}
-                            >
-                                Previous
-                            </Button>
-                            <Button
-                                variant='contained'
-                                color='primary'
-                                onClick={handleNextTab}
-                                disabled={
-                                    activeTab === 0 ||
-                                    (isNewMake && !makeName) ||
-                                    (!isNewMake && !makeOption)
-                                }
-                            >
-                                Next
-                            </Button>
-                        </Box>
-                    </Box>
-                </Box>
-            )}
-            {activeTab === 5 && (
-                <Box>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            padding: '2rem',
-                            width: '100%',
-                        }}
-                    >
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
-                        >
                             <Typography variant='h6'>Condition</Typography>
                             <ToggleButtonGroup
                                 value={isNewCondition}
@@ -757,7 +653,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 6 && (
+            {activeTab === 5 && (
                 <Box>
                     <Box
                         sx={{
@@ -823,7 +719,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 7 && (
+            {activeTab === 6 && (
                 <Box>
                     <Box
                         sx={{
@@ -966,7 +862,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 8 && (
+            {activeTab === 7 && (
                 <Box>
                     <Typography variant='h6'>New Unit</Typography>
                     <ToggleButtonGroup
@@ -1039,7 +935,7 @@ export default function Home() {
                     </Box>
                 </Box>
             )}
-            {activeTab === 9 && detailedBatteryInfo && (
+            {activeTab === 8 && detailedBatteryInfo && (
                 <Box>
                     <Typography variant='h6'>Review and Confirm</Typography>
 
@@ -1076,7 +972,7 @@ export default function Home() {
                             variant='contained'
                             color='primary'
                             className='btn-primary'
-                            onClick={handleSubmit}
+                            // onClick={handleSubmit}
                             // Add conditions to enable/disable Create based on inputs
                             // Disabled condition based on your requirements
                             disabled={!detailedBatteryInfo}
