@@ -232,7 +232,18 @@ export default function Home() {
 		axios
 			.get('http://localhost:7166/api/Customers')
 			.then((response) => {
-				setCustomerOptions(response.data);
+				// Add the "Create New Customer" option at the beginning
+				const optionsWithNewCustomer = [
+					{
+						id: -1,
+						firstName: '',
+						lastName: '',
+						phoneNumber: '',
+						email: '',
+					},
+					...response.data,
+				];
+				setCustomerOptions(optionsWithNewCustomer);
 			})
 			.catch((error) => {
 				console.error('Error fetching customers:', error);
@@ -339,7 +350,9 @@ export default function Home() {
 							name='customerId'
 							options={customerOptions}
 							getOptionLabel={(option) =>
-								`${option.firstName} ${option.lastName} | ${option.phoneNumber}`
+								option.id === -1
+									? 'Create New Customer'
+									: `${option.firstName} ${option.lastName} | ${option.phoneNumber}`
 							}
 							value={selectedCustomer}
 							onChange={(event, newValue) => {
@@ -380,12 +393,21 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.firstName : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										firstName: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.firstName
 											? true
 											: false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 							<TextField
@@ -395,12 +417,21 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.lastName : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										lastName: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.lastName
 											? true
 											: false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 						</Box>
@@ -420,10 +451,19 @@ export default function Home() {
 								variant='outlined'
 								type='email'
 								value={selectedCustomer ? selectedCustomer.email : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										email: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.email ? true : false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 							<TextField
@@ -434,12 +474,21 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.phoneNumber : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										phoneNumber: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.phoneNumber
 											? true
 											: false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 						</Box>
@@ -452,7 +501,7 @@ export default function Home() {
 							rows={6}
 							variant='outlined'
 							fullWidth
-							value = {notes}
+							value={notes}
 							onChange={(e) => setNotes(e.target.value)}
 							sx={{ mt: 2 }}
 						/>
