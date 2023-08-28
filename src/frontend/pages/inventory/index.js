@@ -122,7 +122,7 @@ export default function Home() {
 
 	// Send user to edit
 	const handleEdit = (batteryId) => {
-		router.push(`/inventory/edit?id=${batteryId}`);
+		router.push(`/inventory/editAlpha?id=${batteryId}`);
 	};
 
 	// Function to export customers
