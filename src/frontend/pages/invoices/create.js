@@ -152,6 +152,19 @@ export default function Home() {
 		return total.toFixed(2);
 	};
 
+	const isFormValid = () => {
+		const arePaymentDetailsValid = paymentLines.every(
+		  line => line.paymentType !== '' && line.amount !== ''
+		);
+	  
+		return (
+		  selectedCustomer !== null &&
+		  selectedLineItem !== null &&
+		  rows.every(row => row.item !== '' && row.price !== '') &&
+		  arePaymentDetailsValid
+		);
+	  };
+
 	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -589,7 +602,7 @@ export default function Home() {
 									</Grid>
 									{/* price */}
 									<Grid item>
-										<TextField
+										<Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}><TextField
 											disabled
 											id={`price-${index}`}
 											name={`price-${index}`}
@@ -604,25 +617,26 @@ export default function Home() {
 												width: '6rem',
 											}}
 										/>
-										<IconButton onClick={addRow}>
-											<AddCircleIcon
-												sx={{ fontSize: '1.25rem', color: '#000000' }}
-											/>
-										</IconButton>
-										{index > 0 && (
-											<IconButton onClick={() => removeRow(index)}>
-												<RemoveCircleOutlineIcon
+											<IconButton onClick={addRow}>
+												<AddCircleIcon
 													sx={{ fontSize: '1.25rem', color: '#000000' }}
 												/>
 											</IconButton>
-										)}
-										{index === 0 && (
-											<IconButton disabled>
-												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-												/>
-											</IconButton>
-										)}
+											{index > 0 && (
+												<IconButton onClick={() => removeRow(index)}>
+													<RemoveCircleOutlineIcon
+														sx={{ fontSize: '1.25rem', color: '#000000' }}
+													/>
+												</IconButton>
+											)}
+											{index === 0 && (
+												<IconButton disabled>
+													<RemoveCircleOutlineIcon
+														sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
+													/>
+												</IconButton>
+											)}
+										</Box>
 									</Grid>
 								</Grid>
 							</Box>
@@ -941,7 +955,7 @@ export default function Home() {
 						className='btn-primary'
 						variant='contained'
 						type='submit'
-						disabled={loading}
+						disabled={loading || !isFormValid()} // Disable if loading or form is invalid
 						color='primary'
 						sx={{
 							width: '20rem',
