@@ -18,8 +18,8 @@ export default function Home() {
 
     const router = useRouter();
     const handleNavigation = (path) => {
-		router.push(path);
-	};
+        router.push(path);
+    };
 
     const [isError, setIsError] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false);
@@ -311,292 +311,329 @@ export default function Home() {
                     </IconButton>
                 </Box>
             </Box>
-
-            {/* Serial Number Input */}
-            <TextField
-                label="Serial Number"
-                value={formState.stampedSerial}
-                onChange={(e) => handleInputChange('stampedSerial', e.target.value)}
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-            />
-
-            {/* Type Dropdown */}
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Type</InputLabel>
-                <Select
-                    value={showNewTypeField ? 'Enter New Type' : formState.typeName}
-                    onChange={handleTypeInputChange}
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                >
-                    {/* Input option for entering a new type */}
-                    <MenuItem value="Enter New Type">
-                        <em>Enter New Type</em>
-                    </MenuItem>
-                    {/* Existing type options */}
-                    {typeOptions.map((type) => (
-                        <MenuItem key={type.id} value={type.typeName}>
-                            {type.typeName}
-                        </MenuItem>
-                    ))}
-                </Select>
-                {/* Input field for manually entering new type */}
-                {showNewTypeField && (
-                    <TextField
-                        label="New Type"
-                        value={formState.typeName}
-                        onChange={(e) => handleInputChange('typeName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    />
-                )}
-            </FormControl>
-
-            {/* Model Dropdown */}
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Model</InputLabel>
-                <Select
-                    value={showNewModelField ? 'Enter New Model' : formState.modelName}
-                    onChange={handleModelInputChange}
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                >
-                    {/* Input option for entering a new model */}
-                    <MenuItem value="Enter New Model">
-                        <em>Enter New Model</em>
-                    </MenuItem>
-                    {/* Existing model options */}
-                    {modelOptions.map((model) => (
-                        <MenuItem key={model.id} value={model.modelName}>
-                            {model.modelName}
-                        </MenuItem>
-                    ))}
-                </Select>
-                {showNewModelField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Model"
-                        value={formState.modelName}
-                        onChange={(e) => handleInputChange('modelName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}
-            </FormControl>
-
-            {/* Make Dropdown */}
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Make</InputLabel>
-                <Select
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    value={showNewMakeField ? 'Enter New Make' : formState.makeName}
-                    onChange={handleMakeInputChange}
-                >
-                    {/* Input option for entering a new make */}
-                    <MenuItem value="Enter New Make">
-                        <em>Enter New Make</em>
-                    </MenuItem>
-                    {/* Existing make options */}
-                    {makeOptions.map((make) => (
-                        <MenuItem key={make.id} value={make.name}>
-                            {make.name}
-                        </MenuItem>
-                    ))}
-                </Select>
-                {/* Input field for manually entering new make */}
-                {showNewMakeField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Make"
-                        value={formState.makeName}
-                        onChange={(e) => handleInputChange('makeName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}
-            </FormControl>
-
-            {/* Condition Dropdown */}
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Condition</InputLabel>
-                <Select
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    value={formState.conditionName}
-                    onChange={(e) => handleInputChange('conditionName', e.target.value)}
-                >
-                    {/* Existing condition options */}
-                    {conditionOptions.map((condition) => (
-                        <MenuItem key={condition} value={condition}>
-                            {condition}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-
-            {/* Voltage, Capacity, and Price Text Fields */}
-            <Box
-                display="flex"
-                justifyContent="space-between"
-                sx={{ width: '90%', gap: '6rem' }}
-            >
-                <TextField
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    label="Voltage"
-                    type="number"
-                    value={formState.voltage}
-                    onChange={(e) => handleInputChange('voltage', e.target.value)}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                />
-                <TextField
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    label="Capacity"
-                    type="number"
-                    value={formState.capacity}
-                    onChange={(e) => handleInputChange('capacity', e.target.value)}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                />
-                <TextField
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    label="Price"
-                    type="number"
-                    value={formState.price}
-                    onChange={(e) => handleInputChange('price', e.target.value)}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                />
-            </Box>
-
-            {/* Group Name Dropdown */}
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Group Name</InputLabel>
-                <Select
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    value={showNewGroupField ? 'Enter New Group' : formState.groupName}
-                    onChange={handleGroupInputChange}
-                >
-
-                    <MenuItem value="Enter New Group">
-                        <em>Enter New Group</em>
-                    </MenuItem>
-
-                    {groupOptions.map((group) => (
-                        <MenuItem key={group.id} value={group.groupName}>
-                            {group.groupName}
-                        </MenuItem>
-                    ))}
-                </Select>
-
-
-
-                {showNewGroupField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Group"
-                        value={formState.groupName}
-                        onChange={(e) => handleInputChange('groupName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}</FormControl>
-
-            {/* Length, Width, and Height Text Fields */}
-            <Box
-                display="flex"
-                justifyContent="space-between"
-                sx={{ width: '90%', gap: '6rem' }}
-            >
-                <TextField
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    label="Length"
-                    type="number"
-                    value={formState.length}
-                    onChange={(e) => handleInputChange('length', e.target.value)}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                />
-                <TextField
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    label="Width"
-                    type="number"
-                    value={formState.width}
-                    onChange={(e) => handleInputChange('width', e.target.value)}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                />
-                <TextField
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    label="Height"
-                    type="number"
-                    value={formState.height}
-                    onChange={(e) => handleInputChange('height', e.target.value)}
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                />
-            </Box>
-
-            <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Unit Type</InputLabel>
-                <Select
-                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    value={showNewUnitTypeField ? 'Enter New Unit Type' : formState.unitType}
-                    onChange={handleUnitTypeInputChange}
-                >
-                    <MenuItem value="Enter New Unit Type">
-                        <em>Enter New Unit Type</em>
-                    </MenuItem>
-                    {unitTypeOptions.map((unitType) => (
-                        <MenuItem key={unitType.id} value={unitType.unitType}>
-                            {unitType.unitType}
-                        </MenuItem>
-                    ))}
-                </Select>
-                {showNewUnitTypeField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Unit Type"
-                        value={formState.unitType}
-                        onChange={(e) => handleInputChange('unitType', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}
-            </FormControl>
-
-            <Button
-                sx={{ margin: '.5rem auto 0 auto' }}
-                className='btn-primary'
-                onClick={handleFormSubmit}
-                variant="contained"
-                color="primary"
-                disabled={!isFormValid()}
-            >
-                Create
-            </Button>
-            <Snackbar
-				open={showSnackbar}
-				autoHideDuration={2000}
-				onClose={() => setShowSnackbar(false)} // Close on click away
+            <Box sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					width: '100%',
+					backgroundColor: '#fbfbfbf9',
+					borderRadius: '8px',
+					outline: '1px solid black',
+					padding: '1rem',
+					justifyContent: 'space-evenly',
+					alignItems: 'center',
+					margin: '1rem auto 0 auto',
+				}}
 			>
-				<SnackbarContent
-					message='Asset created successfully'
-					action={<CheckCircleOutline />}
-				/>
-			</Snackbar>
+                <Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'left',
+							margin: '0 auto',
+							width: '100%',
+							backgroundColor: '#fbfbfbf9',
+							borderRight: '1px solid lightgray',
+							borderLeft: '1px solid lightgray',
+							borderBottom: '1px solid #ecececf9',
+							borderTop: '1px solid #ecececf9',
+							padding: '10px',
+							borderRadius: '10px',
+							height: '36rem',
+						}}
+					>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                    <Box sx={{ flex: '1', margin: '0 2rem'}}>
+                        {/* Serial Number Input */}
+                        <TextField
+                            label="Serial Number"
+                            value={formState.stampedSerial}
+                            onChange={(e) => handleInputChange('stampedSerial', e.target.value)}
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                        />
+
+                        {/* Type Dropdown */}
+                        <FormControl fullWidth variant="outlined" margin="normal">
+                            <InputLabel>Type</InputLabel>
+                            <Select
+                                value={showNewTypeField ? 'Enter New Type' : formState.typeName}
+                                onChange={handleTypeInputChange}
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                            >
+                                {/* Input option for entering a new type */}
+                                <MenuItem value="Enter New Type">
+                                    <em>Enter New Type</em>
+                                </MenuItem>
+                                {/* Existing type options */}
+                                {typeOptions.map((type) => (
+                                    <MenuItem key={type.id} value={type.typeName}>
+                                        {type.typeName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            {/* Input field for manually entering new type */}
+                            {showNewTypeField && (
+                                <TextField
+                                    label="New Type"
+                                    value={formState.typeName}
+                                    onChange={(e) => handleInputChange('typeName', e.target.value)}
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                />
+                            )}
+                        </FormControl>
+
+                        {/* Model Dropdown */}
+                        <FormControl fullWidth variant="outlined" margin="normal">
+                            <InputLabel>Model</InputLabel>
+                            <Select
+                                value={showNewModelField ? 'Enter New Model' : formState.modelName}
+                                onChange={handleModelInputChange}
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                            >
+                                {/* Input option for entering a new model */}
+                                <MenuItem value="Enter New Model">
+                                    <em>Enter New Model</em>
+                                </MenuItem>
+                                {/* Existing model options */}
+                                {modelOptions.map((model) => (
+                                    <MenuItem key={model.id} value={model.modelName}>
+                                        {model.modelName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            {showNewModelField && (
+                                <TextField
+                                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                    label="New Model"
+                                    value={formState.modelName}
+                                    onChange={(e) => handleInputChange('modelName', e.target.value)}
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                />
+                            )}
+                        </FormControl>
+
+
+                        {/* Make Dropdown */}
+                        <FormControl fullWidth variant="outlined" margin="normal">
+                            <InputLabel>Make</InputLabel>
+                            <Select
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                value={showNewMakeField ? 'Enter New Make' : formState.makeName}
+                                onChange={handleMakeInputChange}
+                            >
+                                {/* Input option for entering a new make */}
+                                <MenuItem value="Enter New Make">
+                                    <em>Enter New Make</em>
+                                </MenuItem>
+                                {/* Existing make options */}
+                                {makeOptions.map((make) => (
+                                    <MenuItem key={make.id} value={make.name}>
+                                        {make.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            {/* Input field for manually entering new make */}
+                            {showNewMakeField && (
+                                <TextField
+                                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                    label="New Make"
+                                    value={formState.makeName}
+                                    onChange={(e) => handleInputChange('makeName', e.target.value)}
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                />
+                            )}
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ flex: '1', margin: '0 2rem'}}>
+                        {/* Condition Dropdown */}
+                        <FormControl fullWidth variant="outlined" margin="normal">
+                            <InputLabel>Condition</InputLabel>
+                            <Select
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                value={formState.conditionName}
+                                onChange={(e) => handleInputChange('conditionName', e.target.value)}
+                            >
+                                {/* Existing condition options */}
+                                {conditionOptions.map((condition) => (
+                                    <MenuItem key={condition} value={condition}>
+                                        {condition}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* Voltage, Capacity, and Price Text Fields */}
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            sx={{ width: '100%', gap: '3rem' }}
+                        >
+                            <TextField
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                label="Voltage"
+                                type="number"
+                                value={formState.voltage}
+                                onChange={(e) => handleInputChange('voltage', e.target.value)}
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                            />
+                            <TextField
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                label="Capacity"
+                                type="number"
+                                value={formState.capacity}
+                                onChange={(e) => handleInputChange('capacity', e.target.value)}
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                            />
+                            <TextField
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                label="Price"
+                                type="number"
+                                value={formState.price}
+                                onChange={(e) => handleInputChange('price', e.target.value)}
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                            />
+                        </Box>
+
+                        {/* Group Name Dropdown */}
+                        <FormControl fullWidth variant="outlined" margin="normal">
+                            <InputLabel>Group Name</InputLabel>
+                            <Select
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                value={showNewGroupField ? 'Enter New Group' : formState.groupName}
+                                onChange={handleGroupInputChange}
+                            >
+
+                                <MenuItem value="Enter New Group">
+                                    <em>Enter New Group</em>
+                                </MenuItem>
+
+                                {groupOptions.map((group) => (
+                                    <MenuItem key={group.id} value={group.groupName}>
+                                        {group.groupName}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+
+
+
+                            {showNewGroupField && (
+                                <TextField
+                                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                    label="New Group"
+                                    value={formState.groupName}
+                                    onChange={(e) => handleInputChange('groupName', e.target.value)}
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                />
+                            )}</FormControl>
+
+                        {/* Length, Width, and Height Text Fields */}
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            sx={{ width: '100%', gap: '3rem' }}
+                        >
+                            <TextField
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                label="Length"
+                                type="number"
+                                value={formState.length}
+                                onChange={(e) => handleInputChange('length', e.target.value)}
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                            />
+                            <TextField
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                label="Width"
+                                type="number"
+                                value={formState.width}
+                                onChange={(e) => handleInputChange('width', e.target.value)}
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                            />
+                            <TextField
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                label="Height"
+                                type="number"
+                                value={formState.height}
+                                onChange={(e) => handleInputChange('height', e.target.value)}
+                                variant="outlined"
+                                margin="normal"
+                                fullWidth
+                            />
+                        </Box>
+
+                        <FormControl fullWidth variant="outlined" margin="normal">
+                            <InputLabel>Unit Type</InputLabel>
+                            <Select
+                                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                value={showNewUnitTypeField ? 'Enter New Unit Type' : formState.unitType}
+                                onChange={handleUnitTypeInputChange}
+                            >
+                                <MenuItem value="Enter New Unit Type">
+                                    <em>Enter New Unit Type</em>
+                                </MenuItem>
+                                {unitTypeOptions.map((unitType) => (
+                                    <MenuItem key={unitType.id} value={unitType.unitType}>
+                                        {unitType.unitType}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            {showNewUnitTypeField && (
+                                <TextField
+                                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                                    label="New Unit Type"
+                                    value={formState.unitType}
+                                    onChange={(e) => handleInputChange('unitType', e.target.value)}
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                />
+                            )}
+                        </FormControl>
+                    </Box>
+                </Box>
+                </Box>
+
+                <Button
+                    sx={{ margin: '1rem auto 0 auto' }}
+                    className='btn-primary'
+                    onClick={handleFormSubmit}
+                    variant="contained"
+                    color="primary"
+                    disabled={!isFormValid()}
+                >
+                    Create
+                </Button>
+                <Snackbar
+                    open={showSnackbar}
+                    autoHideDuration={2000}
+                    onClose={() => setShowSnackbar(false)} // Close on click away
+                >
+                    <SnackbarContent
+                        message='Asset created successfully'
+                        action={<CheckCircleOutline />}
+                    />
+                </Snackbar>
+            </Box>
         </Box>
     );
 }
