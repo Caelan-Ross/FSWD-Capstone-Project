@@ -65,6 +65,7 @@ namespace Battery_Doctor.Controllers
                 .Include(b => b.BatteryModel)
                 .Include(b => b.BatteryMake)
                 .Include(b => b.BatteryGroup)
+                .Include(b => b.BatteryGroup.Unit)
                 .Include(b => b.BatteryCondition)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
