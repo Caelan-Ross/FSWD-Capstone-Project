@@ -542,16 +542,16 @@ export default function Home() {
 								alignItems: 'center',
 								justifyContent: 'space-between',
 								backgroundColor: '#fbfbfbf9',
-								width: '26rem',
-								mb: '0.5rem',
+								width: '21rem',
+								margin: '0 auto 0.5rem 6rem'
 							}}
 						>
 							<Typography variant='h6'>Line Items</Typography>
 							<Typography variant='h6'>Price</Typography>
 						</Box>
 						{assetData.map((asset, index) => (
-							<Grid container alignItems='space-between' gap='9rem'>
-								<Grid item mb='1rem'>
+							<Box sx={{display: 'flex', flexDirection: 'row'}}>
+								<Grid>
 									<TextField
 										label='Item'
 										variant='outlined'
@@ -585,7 +585,7 @@ export default function Home() {
 										}}
 									/>
 								</Grid>
-							</Grid>
+							</Box>
 						))}
 					</Box>
 					{/* Payment Section */}
