@@ -57,6 +57,7 @@ export default function Home() {
 	const [selectedLineItem, setSelectedLineItem] = useState([]);
 
 	// Amounts
+	const [taxRate, setTaxRate] = useState(0.05);
 	const [taxAmount, setTaxAmount] = useState(0);
 	const [subtotal, setSubtotal] = useState(0);
 	const [totalAmount, setTotalAmount] = useState(invoiceDetails.totalPrice);
@@ -108,6 +109,9 @@ export default function Home() {
 				lineItemOptions.find((item) => item.id === value.id)?.price || 0;
 			updatedRows[index]['price'] = selectedPrice;
 			handleInputChange(); // Recalculate based on new prices
+			setSubtotal(
+				updatedRows.reduce((total, row) => total + (row.price || 0), 0)
+			);
 		} else {
 			updatedRows[index][field] = value;
 		}
@@ -153,9 +157,6 @@ export default function Home() {
 
 	// Calculate totals of all types of payment
 	const handleInputChange = () => {
-		// const debitTotal = parseFloat(calculatePaymentTotal('debit'));
-		// const creditTotal = parseFloat(calculatePaymentTotal('credit'));
-		// const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
 			parseFloat(
 				1 * parseFloat(document.getElementById('customerCreditAmount').value)
@@ -208,13 +209,26 @@ export default function Home() {
 			await axios.put(`${API_BASE}/${invoiceId}`, updatedInvoice);
 			setIsSuccess(true);
 			setTimeout(() => {
-				setIsSuccess(false); // Hide success after delay
-				router.push('/invoices'); // Navigate back to the customer list page
+				setIsSuccess(false);
+				router.push('/invoices');
 			}, 1000);
 		} catch (error) {
 			console.error('Error updating invoice details:', error);
 			setIsError(true);
 		}
+	};
+
+	// Calculate the subtotal based on the line item's prices
+	const calculateSubtotal = () => {
+		const itemPrices = assetData.map((asset) => parseFloat(asset.price) || 0);
+		const subtotal = itemPrices.reduce((total, price) => total + price, 0);
+		return subtotal.toFixed(2);
+	};
+
+	// Calculate tax amount from subtotal
+	const calculateTaxTotal = () => {
+		const taxTotal = calculateSubtotal() * 0.05;
+		return taxTotal.toFixed(2);
 	};
 
 	useEffect(() => {
@@ -224,7 +238,6 @@ export default function Home() {
 			.then((response) => {
 				console.log(response);
 				setInvoiceDetails(response.data);
-				console.log('invoiceDetails:', JSON.stringify(invoiceDetails, null, 2)); // Log the invoiceDetails state as JSON
 
 				// Fetch customer details by customerId
 				fetchCustomer(response.data.customerId)
@@ -248,6 +261,7 @@ export default function Home() {
 							(assetResponse) => assetResponse.data
 						);
 						setAssetData(fetchedAssetData);
+						console.log(assetData);
 					})
 					.catch((error) => {
 						console.error('Error fetching asset data:', error);
@@ -258,7 +272,7 @@ export default function Home() {
 				const initialPaymentLines = paymentTypes.map((type) => {
 					return {
 						paymentType: type,
-						amount: response.data[type + 'Amount'], // Use the corresponding property in invoiceDetails
+						amount: response.data[type + 'Amount'],
 					};
 				});
 
@@ -317,7 +331,7 @@ export default function Home() {
 			>
 				{isError && <Alert severity='error'>{isError}</Alert>}
 				<Typography variant='h3' align='center' component='h2'>
-					Edit Invoice
+					Invoice #{invoiceId}
 				</Typography>
 
 				<Box display='flex' onClick={() => router.push('/invoices')}>
@@ -378,35 +392,20 @@ export default function Home() {
 					>
 						<Typography variant='h6'>Customer Details</Typography>
 						{/* Customer drop down */}
-						<Autocomplete
+						<TextField
 							id='customerId'
 							name='customerId'
-							options={customerOptions}
-							getOptionLabel={(option) =>
-								`${option.firstName} ${option.lastName} | ${option.phoneNumber}`
+							label='Customer'
+							variant='outlined'
+							fullWidth
+							value={
+								selectedCustomer
+									? `${selectedCustomer.firstName} ${selectedCustomer.lastName} | ${selectedCustomer.phoneNumber}`
+									: ''
 							}
-							value={selectedCustomer}
-							onChange={(event, newValue) => {
-								setSelectedCustomer(newValue);
-								handleFieldChange('customerId', newValue ? newValue.id : '');
+							InputProps={{
+								readOnly: true,
 							}}
-							filterOptions={(options, state) => {
-								const inputValue = state.inputValue.toLowerCase();
-								return options.filter(
-									(option) =>
-										option.firstName.toLowerCase().includes(inputValue) ||
-										option.lastName.toLowerCase().includes(inputValue) ||
-										option.phoneNumber.includes(inputValue)
-								);
-							}}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									label='Customer'
-									variant='outlined'
-									fullWidth
-								/>
-							)}
 							sx={{ mt: 1, backgroundColor: 'white' }}
 						/>
 
@@ -425,6 +424,9 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.firstName : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.firstName
@@ -441,6 +443,9 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.lastName : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.lastName
@@ -466,6 +471,9 @@ export default function Home() {
 								variant='outlined'
 								type='email'
 								value={selectedCustomer ? selectedCustomer.email : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.email ? true : false,
@@ -480,6 +488,9 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.phoneNumber : ''}
+								InputProps={{
+									readOnly: true,
+								}}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.phoneNumber
@@ -492,12 +503,16 @@ export default function Home() {
 						<TextField
 							id='notes'
 							name='notes'
-							label='Notes'
+							label='Invoice Notes'
 							type='text'
 							multiline
 							rows={7.3}
 							variant='outlined'
 							fullWidth
+							value={invoiceDetails.notes}
+							InputProps={{
+								readOnly: true,
+							}}
 							sx={{ mt: 2 }}
 						/>
 					</Box>
@@ -526,100 +541,51 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
-								margin: '0 auto 0.3rem 3.5rem',
 								backgroundColor: '#fbfbfbf9',
-								width: '20.85rem',
+								width: '26rem',
+								mb: '0.5rem',
 							}}
 						>
 							<Typography variant='h6'>Line Items</Typography>
 							<Typography variant='h6'>Price</Typography>
 						</Box>
-						{/* {rows.map((row, index) => ( */}
 						{assetData.map((asset, index) => (
-							<Box
-								key={index}
-								sx={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'center',
-									justifyContent: 'center',
-									margin: '0 auto',
-									backgroundColor: '#fbfbfbf9',
-								}}
-							>
-								<Grid container alignItems='center'>
-									<Grid item>
-										<Autocomplete
-											id={`item-${index}`}
-											name={`item-${index}`}
-											options={assetData}
-											getOptionLabel={(option) =>
-												`${option.batteryName} | $${option.price})}`
-											}
-											value={asset}
-											onChange={(event, newValue) => {
-												handleInputChangeLines(index, 'item', newValue);
-												handleInputChangeLines(index, 'price', newValue.price);
-											}}
-											renderInput={(params) => (
-												<TextField
-													{...params}
-													label='Item'
-													variant='outlined'
-													fullWidth
-													sx={{
-														backgroundColor: 'white',
-														width: '18rem',
-													}}
-												/>
-											)}
-											inputValue={asset ? asset.batteryName : ''}
-											sx={{
-												'& .MuiAutocomplete-clearIndicator': {
-													display: 'none',
-												},
-											}}
-										/>
-									</Grid>
-									{/* price */}
-									<Grid item>
-										<TextField
-											disabled
-											id={`price-${index}`}
-											name={`price-${index}`}
-											label='$'
-											type='text'
-											variant='outlined'
-											fullWidth
-											value={asset.price}
-											onChange={(e) => handlePriceChange(index, e.target.value)} // Call handlePriceChange
-											sx={{
-												backgroundColor: 'white',
-												width: '6rem',
-											}}
-										/>
-										<IconButton onClick={addRow}>
-											<AddCircleIcon
-												sx={{ fontSize: '1.25rem', color: '#000000' }}
-											/>
-										</IconButton>
-										{index > 0 && (
-											<IconButton onClick={() => removeRow(index)}>
-												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#000000' }}
-												/>
-											</IconButton>
-										)}
-										{index === 0 && (
-											<IconButton disabled>
-												<RemoveCircleOutlineIcon
-													sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-												/>
-											</IconButton>
-										)}
-									</Grid>
+							<Grid container alignItems='space-between' gap='9rem'>
+								<Grid item mb='1rem'>
+									<TextField
+										label='Item'
+										variant='outlined'
+										fullWidth
+										value={asset.batteryName}
+										InputProps={{
+											readOnly: true,
+										}}
+										sx={{
+											backgroundColor: 'white',
+											width: '18rem',
+										}}
+									/>
 								</Grid>
-							</Box>
+								{/* price */}
+								<Grid item>
+									<TextField
+										id={`price-${index}`}
+										name={`price-${index}`}
+										label='$'
+										type='text'
+										variant='outlined'
+										fullWidth
+										value={asset.price.toFixed(2)}
+										InputProps={{
+											readOnly: true,
+										}}
+										sx={{
+											backgroundColor: 'white',
+											width: '6rem',
+										}}
+									/>
+								</Grid>
+							</Grid>
 						))}
 					</Box>
 					{/* Payment Section */}
@@ -635,7 +601,6 @@ export default function Home() {
 							borderLeft: '1px solid lightgray',
 							borderBottom: '1px solid #ecececf9',
 							borderTop: '1px solid #ecececf9',
-							padding: '10px',
 							borderRadius: '10px',
 							overflow: 'auto',
 							height: '36rem',
@@ -652,137 +617,10 @@ export default function Home() {
 								width: '20.25rem',
 							}}
 						>
-							<Typography variant='h6'>Payment Type</Typography>
-							<Typography variant='h6'>Amount</Typography>
+							<Typography variant='h6' mt='8px'>
+								Payment Totals
+							</Typography>
 						</Box>
-						{/* User Select Payment Type */}
-						{paymentLines.map((row, index) => (
-							<Box
-								key={index}
-								sx={{
-									display: 'flex',
-									flexDirection: 'row',
-									alignItems: 'center',
-									justifyContent: 'center',
-									margin: '0 auto',
-									backgroundColor: '#fbfbfbf9',
-								}}
-							>
-								<Select
-									id={`paymentType-${index}`}
-									name={`paymentType-${index}`}
-									label='Type'
-									variant='outlined'
-									fullWidth
-									value={row.paymentType}
-									onChange={(e) =>
-										handleInputChangePayment(
-											index,
-											'paymentType',
-											e.target.value
-										)
-									}
-									sx={{ backgroundColor: 'white', width: '16rem' }}
-								>
-									<MenuItem value='debit'>Debit</MenuItem>
-									<MenuItem value='credit'>Credit</MenuItem>
-									<MenuItem value='cash'>Cash</MenuItem>
-								</Select>
-								<TextField
-									id={`amount-${index}`}
-									name={`amount-${index}`}
-									label='$'
-									type='text'
-									variant='outlined'
-									fullWidth
-									value={row.amount}
-									onChange={(e) =>
-										handleInputChangePayment(index, 'amount', e.target.value)
-									}
-									sx={{ backgroundColor: 'white', width: '6rem' }}
-								/>
-								<IconButton onClick={addPaymentLine}>
-									<AddCircleIcon
-										sx={{ fontSize: '1.25rem', color: '#000000' }}
-									/>
-								</IconButton>
-								{index > 0 && (
-									<IconButton onClick={() => removePaymentLine(index)}>
-										<RemoveCircleOutlineIcon
-											sx={{ fontSize: '1.25rem', color: '#000000' }}
-										/>
-									</IconButton>
-								)}
-								{index === 0 && (
-									<IconButton disabled>
-										<RemoveCircleOutlineIcon
-											sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-										/>
-									</IconButton>
-								)}
-							</Box>
-						))}
-						{/* Customer Credit */}
-						<Box
-							sx={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'center',
-								margin: '0 auto',
-								backgroundColor: '#fbfbfbf9',
-							}}
-						>
-							<TextField
-								id='customerCreditLabel'
-								name='customerCreditLabel'
-								type='text'
-								variant='outlined'
-								fullWidth
-								value='Customer Credit'
-								InputProps={{
-									readOnly: true,
-								}}
-								sx={{
-									marginTop: '.25rem',
-									backgroundColor: 'lightgreen',
-									width: '16rem',
-								}}
-							/>
-							<TextField
-								id={'customerCreditAmount'}
-								name={'customerCreditAmount'}
-								label='$'
-								type='text'
-								variant='outlined'
-								fullWidth
-								onChange={handleInputChange}
-								sx={{
-									marginTop: '.25rem',
-									backgroundColor: 'lightgreen',
-									width: '6rem',
-								}}
-							/>
-							<IconButton disabled>
-								<AddCircleIcon sx={{ fontSize: '1.25rem', color: '#d3d3d3' }} />
-							</IconButton>
-
-							<IconButton disabled>
-								<RemoveCircleOutlineIcon
-									sx={{ fontSize: '1.25rem', color: '#d3d3d3' }}
-								/>
-							</IconButton>
-						</Box>
-						<Typography
-							variant='h6'
-							sx={{
-								margin: '2rem auto 0 4.25rem',
-								width: '20.25rem',
-								backgroundColor: '#fbfbfbf9',
-							}}
-						>
-							Totals
-						</Typography>
 						{/* Totals Section */}
 						<Box
 							sx={{
@@ -790,7 +628,7 @@ export default function Home() {
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'center',
-								margin: '1rem auto 0 auto',
+								margin: '0.5rem auto 0 auto',
 								backgroundColor: '#fbfbfbf9',
 							}}
 						>
@@ -801,7 +639,7 @@ export default function Home() {
 								label='Debit'
 								variant='outlined'
 								type='text'
-								value={calculatePaymentTotal('debit')}
+								value={`${invoiceDetails.debitAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -814,7 +652,7 @@ export default function Home() {
 								label='Credit'
 								variant='outlined'
 								type='text'
-								value={calculatePaymentTotal('credit')}
+								value={`${invoiceDetails.creditAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -831,7 +669,7 @@ export default function Home() {
 								label='Cash'
 								variant='outlined'
 								type='text'
-								value={calculatePaymentTotal('cash')}
+								value={`${invoiceDetails.cashAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -848,7 +686,7 @@ export default function Home() {
 								label='CX Credit'
 								variant='outlined'
 								type='text'
-								value={customerCreditAmount}
+								value={`${invoiceDetails.customerCreditAmount.toFixed(2)}`}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -856,6 +694,32 @@ export default function Home() {
 									backgroundColor: 'lightgreen',
 									width: '6rem',
 									marginLeft: '1rem',
+								}}
+							/>
+						</Box>
+						<Box>
+							{/* Customer Payment Total */}
+							<TextField
+								id='customerTotal'
+								name='customerTotal'
+								label='Customer Total'
+								fullWidth
+								value={(
+									invoiceDetails.debitAmount +
+									invoiceDetails.creditAmount +
+									invoiceDetails.cashAmount +
+									invoiceDetails.customerCreditAmount
+								).toFixed(2)}
+								InputProps={{
+									readOnly: true,
+								}}
+								variant='outlined'
+								type='text'
+								sx={{
+									marginTop: '.75rem',
+									backgroundColor: '#f3eced',
+									borderRadius: '8px',
+									width: '28rem',
 								}}
 							/>
 						</Box>
@@ -876,7 +740,7 @@ export default function Home() {
 								name='taxAmount'
 								label='Tax Total'
 								fullWidth
-								value={taxAmount.toFixed(2)}
+								value={calculateTaxTotal()}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -897,7 +761,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={subtotal}
+								value={calculateSubtotal()}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -915,7 +779,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={totalAmount}
+								value={totalAmount.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -927,19 +791,6 @@ export default function Home() {
 							/>
 						</Box>
 					</Box>
-				</Box>
-				<Box>
-					{/* Edit Button */}
-					<Button
-						className='btn-primary'
-						variant='contained'
-						type='submit'
-						disabled={loading}
-						color='primary'
-						sx={{ width: '20rem', textAlign: 'center', margin: '1rem auto' }}
-					>
-						Save
-					</Button>
 				</Box>
 				{/* Success Message */}
 				{isSuccess && (

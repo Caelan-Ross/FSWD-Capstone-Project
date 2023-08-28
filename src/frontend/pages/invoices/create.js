@@ -26,6 +26,7 @@ export default function Home() {
 	};
 	const API_BASE = 'http://localhost:7166/api/Invoices/';
 
+	// Alerts
 	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
@@ -33,6 +34,9 @@ export default function Home() {
 	// Customer Drop Down
 	const [customerOptions, setCustomerOptions] = useState([]);
 	const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+	// Invoice Notes
+	const [notes, setNotes] = useState('');
 
 	// LineItems Drop Down
 	const [lineItemOptions, setLineItemOptions] = useState([]);
@@ -105,9 +109,9 @@ export default function Home() {
 
 	// Calculate totals of all types of payment
 	const handleInputChange = () => {
-		const debitTotal = parseFloat(calculatePaymentTotal('debit'));
-		const creditTotal = parseFloat(calculatePaymentTotal('credit'));
-		const cashTotal = parseFloat(calculatePaymentTotal('cash'));
+		// const debitTotal = parseFloat(calculatePaymentTotal('debit'));
+		// const creditTotal = parseFloat(calculatePaymentTotal('credit'));
+		// const cashTotal = parseFloat(calculatePaymentTotal('cash'));
 		const customerCreditTotal =
 			parseFloat(
 				1 * parseFloat(document.getElementById('customerCreditAmount').value)
@@ -151,7 +155,6 @@ export default function Home() {
 	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		const form = event.target;
 		const url = `http://localhost:7166/api/Invoices`;
 		try {
 			setLoading(true);
@@ -175,7 +178,8 @@ export default function Home() {
 				paymentMethod.push('Customer Credit');
 			}
 
-			console.log(paymentMethod);
+			// Calculate line items data
+			const assetsData = rows.map((row) => row.item.id);
 
 			const requestData = {
 				id: 0,
@@ -188,11 +192,13 @@ export default function Home() {
 				debitAmount: calculatePaymentTotal('debit'),
 				creditAmount: calculatePaymentTotal('credit'),
 				customerCreditAmount: customerCreditAmount,
-				taxRate: 0.05, // You might need to adjust this based on your requirements
-				notes: '', // Add notes value
-				totalPrice: totalAmount, // Use the calculated total amount
-				assetIds: selectedLineItem ? [selectedLineItem.id] : [], // Use selectedLineItem's id
+				taxRate: 0.05,
+				notes: notes,
+				totalPrice: totalAmount,
+				assetIds: assetsData,
 			};
+
+			console.log(requestData);
 
 			const response = await axios.post(url, requestData, {
 				headers: {
@@ -226,7 +232,18 @@ export default function Home() {
 		axios
 			.get('http://localhost:7166/api/Customers')
 			.then((response) => {
-				setCustomerOptions(response.data);
+				// Add the "Create New Customer" option at the beginning
+				const optionsWithNewCustomer = [
+					{
+						id: -1,
+						firstName: '',
+						lastName: '',
+						phoneNumber: '',
+						email: '',
+					},
+					...response.data,
+				];
+				setCustomerOptions(optionsWithNewCustomer);
 			})
 			.catch((error) => {
 				console.error('Error fetching customers:', error);
@@ -308,6 +325,7 @@ export default function Home() {
 						borderRadius: '8px',
 					}}
 				>
+					{/* Customer Section */}
 					<Box
 						sx={{
 							display: 'flex',
@@ -325,14 +343,16 @@ export default function Home() {
 							height: '36rem',
 						}}
 					>
-						{/* Customer Section */}
 						<Typography variant='h6'>Customer Details</Typography>
+						{/* Customer Dropdown */}
 						<Autocomplete
 							id='customerId'
 							name='customerId'
 							options={customerOptions}
 							getOptionLabel={(option) =>
-								`${option.firstName} ${option.lastName} | ${option.phoneNumber}`
+								option.id === -1
+									? 'Create New Customer'
+									: `${option.firstName} ${option.lastName} | ${option.phoneNumber}`
 							}
 							value={selectedCustomer}
 							onChange={(event, newValue) => {
@@ -373,12 +393,21 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.firstName : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										firstName: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.firstName
 											? true
 											: false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 							<TextField
@@ -388,12 +417,21 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.lastName : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										lastName: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.lastName
 											? true
 											: false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 						</Box>
@@ -413,10 +451,19 @@ export default function Home() {
 								variant='outlined'
 								type='email'
 								value={selectedCustomer ? selectedCustomer.email : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										email: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.email ? true : false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 							<TextField
@@ -427,24 +474,35 @@ export default function Home() {
 								variant='outlined'
 								type='text'
 								value={selectedCustomer ? selectedCustomer.phoneNumber : ''}
+								onChange={(e) =>
+									setSelectedCustomer({
+										...selectedCustomer,
+										phoneNumber: e.target.value,
+									})
+								}
 								InputLabelProps={{
 									shrink:
 										selectedCustomer && selectedCustomer.phoneNumber
 											? true
 											: false,
 								}}
+								disabled={
+									selectedCustomer && selectedCustomer.id === -1 ? false : true
+								}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 						</Box>
 						<TextField
 							id='notes'
 							name='notes'
-							label='Notes'
+							label='Invoice Notes'
 							type='text'
 							multiline
 							rows={6}
 							variant='outlined'
 							fullWidth
+							value={notes}
+							onChange={(e) => setNotes(e.target.value)}
 							sx={{ mt: 2 }}
 						/>
 					</Box>
@@ -846,7 +904,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={subtotal}
+								value={subtotal.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}
@@ -864,7 +922,7 @@ export default function Home() {
 								fullWidth
 								variant='outlined'
 								type='text'
-								value={totalAmount}
+								value={totalAmount.toFixed(2)}
 								InputProps={{
 									readOnly: true,
 								}}

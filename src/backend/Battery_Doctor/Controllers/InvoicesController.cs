@@ -41,8 +41,8 @@ namespace Battery_Doctor.Controllers
                 CreditAmount = i.CreditAmount,
                 CustomerCreditAmount = i.CustomerCreditAmount,
                 TaxRate = i.TaxRate,
-                Notes = i.Notes
-
+                Notes = i.Notes,
+                AssetIds = i.InvoiceDetails.Select(d => d.AssetId).ToList()
             }).ToList();
 
             return invoiceReadDtos;
@@ -76,7 +76,8 @@ namespace Battery_Doctor.Controllers
                 CreditAmount = invoice.CreditAmount,
                 TaxRate = invoice.TaxRate,
                 CustomerCreditAmount = invoice.CustomerCreditAmount,
-                Notes = invoice.Notes
+                Notes = invoice.Notes,
+                AssetIds = invoice.InvoiceDetails.Select(d => d.AssetId).ToList()
             };
 
             return invoiceReadDto;
@@ -165,7 +166,7 @@ namespace Battery_Doctor.Controllers
                 CreditAmount = invoice.CreditAmount,
                 CustomerCreditAmount = invoice.CustomerCreditAmount,
                 TaxRate = invoice.TaxRate,
-                AssetNames = invoice.InvoiceDetails.Select(x => _context.Battery_Makes.FirstOrDefault(m => m.Id == _context.Batteries.FirstOrDefault(b => b.Id == _context.Assets.FirstOrDefault(d => d.Id == x.AssetId).BatteryId).MakeId).Name).ToList()
+                AssetIds = invoice.InvoiceDetails.Select(d => d.AssetId).ToList(),
             };
 
 
