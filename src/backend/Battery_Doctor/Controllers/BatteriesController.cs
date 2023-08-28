@@ -83,7 +83,7 @@ namespace Battery_Doctor.Controllers
                 Voltage = battery.Voltage,
                 Capacity = battery.Capacity,
                 Price = battery.Price,
-                QuantityOnHand = battery.QuantityOnHand,
+                //QuantityOnHand = battery.QuantityOnHand,
                 GroupName = battery.BatteryGroup.GroupName,
                 Length = battery.BatteryGroup.Length,
                 Height = battery.BatteryGroup.Height,
