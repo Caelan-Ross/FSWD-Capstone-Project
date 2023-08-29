@@ -296,7 +296,7 @@ export default function Home() {
 				}}
 			>
 				{error && <Alert severity='error'>{error}</Alert>}
-				<Typography variant='h3' align='center' component='h2'>
+				<Typography variant='h3' align='center' component='h2' className='header-text'>
 					Create Invoice
 				</Typography>
 
