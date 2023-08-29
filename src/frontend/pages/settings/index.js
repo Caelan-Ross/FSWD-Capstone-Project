@@ -30,7 +30,7 @@ export default function Setting() {
 					width: '100%'
 				}}
 			>
-				<Typography variant='h3' align='center' component='h2'>
+				<Typography variant='h3' align='center' component='h2' className='header-text'>
 					Settings
 				</Typography>
 
