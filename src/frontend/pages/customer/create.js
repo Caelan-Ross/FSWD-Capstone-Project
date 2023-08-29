@@ -78,7 +78,7 @@ export default function Home() {
 				}}
 			>
 				{isError && <Alert severity='error'>{isError}</Alert>}
-				<Typography variant='h3' align='center' component='h2'>
+				<Typography variant='h3' align='center' component='h2' className='header-text'>
 					Create Customer
 				</Typography>
 				<Box display='flex' onClick={() => handleNavigation('/customer')}>

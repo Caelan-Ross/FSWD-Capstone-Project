@@ -191,6 +191,7 @@ export default function Customer() {
 			>
 				<Box>
 					<Typography
+						className='header-text'
 						variant='h3'
 						align='center'
 						component='h2'

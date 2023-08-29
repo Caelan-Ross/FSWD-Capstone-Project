@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { CssBaseline, Box, Button, Typography, Avatar } from '@mui/material';
+import { CssBaseline, Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -63,12 +63,11 @@ export default function App({ Component, pageProps }) {
                 flexGrow: 1,
               }}
             >
-              {/* <Avatar src='/path/to/avatar-image.jpg' alt='User Avatar' /> */}
               <Box sx={{ marginLeft: '0.625rem' }}>
-                <Typography variant='body1'>
+                <Typography variant='body1' className='body-text'>
                   The Battery Doctor - Welcome {user}!
                 </Typography>
-                <Typography variant='caption' color='textSecondary'>
+                <Typography variant='caption' color='textSecondary' className='body-text'>
                   2023-08-04
                 </Typography>
               </Box>

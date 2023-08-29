@@ -4,18 +4,12 @@ import {
 	Box,
 	IconButton,
 	TextField,
-	Button,
 	Alert,
-	Select,
-	MenuItem,
 	Grid,
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import Autocomplete from '@mui/material/Autocomplete';
 
 export default function Home() {
 	const router = useRouter();
@@ -54,14 +48,9 @@ export default function Home() {
 
 	// LineItems Drop Down
 	const [lineItemOptions, setLineItemOptions] = useState([]);
-	const [selectedLineItem, setSelectedLineItem] = useState([]);
 
 	// Amounts
-	const [taxRate, setTaxRate] = useState(0.05);
-	const [taxAmount, setTaxAmount] = useState(0);
-	const [subtotal, setSubtotal] = useState(0);
 	const [totalAmount, setTotalAmount] = useState(invoiceDetails.totalPrice);
-	const [customerCreditAmount, setCustomerCreditAmount] = useState(0);
 
 	// Get customer details by ID
 	const fetchCustomer = async (customerId) => {
@@ -330,7 +319,7 @@ export default function Home() {
 				}}
 			>
 				{isError && <Alert severity='error'>{isError}</Alert>}
-				<Typography variant='h3' align='center' component='h2'>
+				<Typography variant='h3' align='center' component='h2' className='header-text'>
 					Invoice #{invoiceId}
 				</Typography>
 

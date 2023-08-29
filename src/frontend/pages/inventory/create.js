@@ -300,7 +300,7 @@ export default function Home() {
                     width: '100%',
                 }}
             >
-                <Typography variant='h3' align='center' component='h2'>
+                <Typography variant='h3' align='center' component='h2' className='header-text'>
                     Create Asset
                 </Typography>
                 <Box display='flex' onClick={() => handleNavigation('/inventory')}>

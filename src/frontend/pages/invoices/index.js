@@ -15,7 +15,6 @@ import {
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Snackbar, SnackbarContent } from '@mui/material';
@@ -243,6 +242,7 @@ export default function Invoices() {
 			>
 				<Box>
 					<Typography
+						className='header-text'
 						variant='h3'
 						align='center'
 						component='h2'

@@ -192,6 +192,7 @@ export default function Home() {
 			>
 				<Box>
 					<Typography
+						className='header-text'
 						variant='h3'
 						align='center'
 						component='h2'

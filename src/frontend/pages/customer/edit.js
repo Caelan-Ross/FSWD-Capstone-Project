@@ -92,7 +92,7 @@ export default function EditCustomer() {
 					width: '100%',
 				}}
 			>
-				<Typography variant='h3' align='center' component='h2'>
+				<Typography variant='h3' align='center' component='h2' className='header-text'>
 					Edit Customer
 				</Typography>
 				<Box display='flex' onClick={() => router.push('/customer')}>

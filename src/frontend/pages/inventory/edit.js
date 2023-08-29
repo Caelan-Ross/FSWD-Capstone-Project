@@ -6,8 +6,7 @@ import {
     IconButton,
     TextField,
     Button,
-    Alert,
-    MenuItem, Tab, Tabs, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select
+    MenuItem, FormControl, InputLabel, Select
 } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import { Snackbar, SnackbarContent } from '@mui/material';
@@ -80,15 +79,12 @@ export default function Home() {
 
     // Types
     const [typeOptions, setTypeOptions] = useState([]);
-    const [showNewTypeField, setShowNewTypeField] = useState(false);
 
     // Models
     const [modelOptions, setModelOptions] = useState([]);
-    const [showNewModelField, setShowNewModelField] = useState(false);
 
     // Makes
     const [makeOptions, setMakeOptions] = useState([]);
-    const [showNewMakeField, setShowNewMakeField] = useState(false);
 
     // Conditions
     const [conditionOptions, setConditionOptions] = useState([
@@ -99,11 +95,9 @@ export default function Home() {
 
     // Groups
     const [groupOptions, setGroupOptions] = useState([]);
-    const [showNewGroupField, setShowNewGroupField] = useState(false);
 
     // Unit Types
     const [unitTypeOptions, setUnitTypeOptions] = useState([]);
-    const [showNewUnitTypeField, setShowNewUnitTypeField] = useState(false);
 
     // Input change functions for tracking state across form entries
     const handleInputChange = (field, value) => {
@@ -250,8 +244,8 @@ export default function Home() {
                     width: '100%',
                 }}
             >
-                <Typography variant='h3' align='center' component='h2'>
-                    Create Asset
+                <Typography variant='h3' align='center' component='h2' className='header-text'>
+                    Edit Asset
                 </Typography>
                 <Box display='flex' onClick={() => handleNavigation('/inventory')}>
                     <IconButton>
