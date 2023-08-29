@@ -273,6 +273,8 @@ namespace Battery_Doctor.Controllers
 
             Unit? unit = (Unit?)_context.Units.FirstOrDefault(n => n.UnitType == batteryUpdateDto.UnitType);
 
+            Asset? asset = (Asset?)_context.Assets.FirstOrDefault(n => n.StampedSerial == batteryUpdateDto.StampedSerial);
+
             if(unit == null)
             {
                 unit = new Unit
@@ -356,6 +358,8 @@ namespace Battery_Doctor.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            
+
             battery.TypeId = type.Id;
             battery.ModelId = model.Id;
             battery.MakeId = make.Id;
@@ -367,6 +371,21 @@ namespace Battery_Doctor.Controllers
             battery.UpdatedAt = DateTime.UtcNow;
 
             _context.Entry(battery).State = EntityState.Modified;
+
+            if(asset == null)
+            {
+                asset = new Asset
+                {
+                    BatteryId = battery.Id,
+                    WarrantyDate = batteryUpdateDto.WarrantyDate,
+                    QRCode = "",
+                    UpdatedAt = DateTime.Now,
+                    CreatedAt = DateTime.Now,
+                };
+                _context.Assets.Add(asset);
+                await _context.SaveChangesAsync();
+            }
+
 
             try
             {

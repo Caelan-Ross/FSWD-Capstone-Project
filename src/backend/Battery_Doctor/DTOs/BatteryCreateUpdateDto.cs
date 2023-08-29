@@ -28,6 +28,9 @@ namespace Battery_Doctor.DTOs
         public string UnitType { get; set; }
 
         public string StampedSerial { get; set; }
+
+        public DateTime WarrantyDate { get; set; }
+
     }
 }
 
