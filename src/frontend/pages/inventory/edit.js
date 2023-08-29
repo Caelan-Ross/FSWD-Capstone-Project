@@ -23,20 +23,21 @@ export default function Home() {
     const [isError, setIsError] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false);
 
-    // Load existing battery data when component mounts
+    // Load existing asset data when component mounts
     useEffect(() => {
         if (id) {
             axios
-                .get(`http://localhost:7166/api/Batteries/${id}`)
+                .get(`http://localhost:7166/api/Assets/${id}`)  // Use the correct endpoint for asset data
                 .then((response) => {
                     // Update formState with existing data
                     setFormState(response.data);
                 })
                 .catch((error) => {
-                    console.error('Error fetching battery data:', error);
+                    console.error('Error fetching asset data:', error);
                 });
         }
     }, [id]);
+
 
     // Const variables
     const [formState, setFormState] = useState({
@@ -202,25 +203,44 @@ export default function Home() {
                 console.error('Error fetching unit type options:', error);
             });
 
-        // Fetch serial number
-        axios
-            .get('http://localhost:7166/api/assets')
-            .then((response) => {
-                // Find the matching serial number using id
-                const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
-                if (batterySerial) {
-                    setFormState(prevState => ({
-                        ...prevState,
-                        stampedSerial: batterySerial
-                    }));
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching serial number:', error);
-            });
+        // // Fetch serial number
+        // axios
+        //     .get('http://localhost:7166/api/assets')
+        //     .then((response) => {
+        //         // Find the matching serial number using id
+        //         const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
+        //         if (batterySerial) {
+        //             setFormState(prevState => ({
+        //                 ...prevState,
+        //                 stampedSerial: batterySerial
+        //             }));
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching serial number:', error);
+        //     });
     }, []);
 
-
+    useEffect(() => {
+        if (id) {
+            // Fetch serial number
+            axios
+                .get('http://localhost:7166/api/assets')
+                .then((response) => {
+                    // Find the matching serial number using id
+                    const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
+                    if (batterySerial) {
+                        setFormState(prevState => ({
+                            ...prevState,
+                            stampedSerial: batterySerial
+                        }));
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching serial number:', error);
+                });
+        }
+    }, [id]);
 
 
     return (
