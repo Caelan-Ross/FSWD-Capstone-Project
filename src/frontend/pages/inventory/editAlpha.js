@@ -462,7 +462,7 @@ export default function Home() {
             <Snackbar
                 open={showSnackbar}
                 autoHideDuration={2000}
-                onClose={() => setShowSnackbar(false)} // Close on click away
+                onClose={() => setShowSnackbar(false)}
             >
                 <SnackbarContent
                     message='Asset created successfully'

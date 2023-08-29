@@ -1,370 +1,474 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
-	Typography,
-	Box,
-	IconButton,
-	TextField,
-	Button,
-	Alert,
-	MenuItem,
+    Typography,
+    Box,
+    IconButton,
+    TextField,
+    Button,
+    Alert,
+    MenuItem, Tab, Tabs, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select
 } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import { Snackbar, SnackbarContent } from '@mui/material';
+import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 
 export default function Home() {
-	const router = useRouter();
-	const batteryId = router.query.id; // Get the batteryId from the URL query parameter
-	const API_BASE = 'http://localhost:7166/api'; // Update the API endpoint
+    const router = useRouter();
+    const { id } = router.query;
+    const handleNavigation = (path) => {
+        router.push(path);
+    };
 
-	const [batteryDetails, setBatteryDetails] = useState({
-		typeName: '',
-		modelName: '',
-		makeName: '',
-		voltage: '',
-		capacity: '',
-		price: '',
-		quantityOnHand: '',
-		groupName: '',
-	});
+    const [isError, setIsError] = useState(null);
+    const [showSnackbar, setShowSnackbar] = useState(false);
 
-	const [isError, setIsError] = useState(null);
-	const [isSuccess, setIsSuccess] = useState(false);
-	const [typeOptions, setTypeOptions] = useState([]);
-	const [modelOptions, setModelOptions] = useState([]);
-	const [makeOptions, setMakeOptions] = useState([]);
-	const [groupOptions, setGroupOptions] = useState([]);
+    // Load existing battery data when component mounts
+    useEffect(() => {
+        if (id) {
+            axios
+                .get(`http://localhost:7166/api/Batteries/${id}`)
+                .then((response) => {
+                    // Update formState with existing data
+                    setFormState(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching battery data:', error);
+                });
+        }
+    }, [id]);
 
-	useEffect(() => {
-		// Fetch the battery to edit
-		axios
-			.get(`${API_BASE}/Batteries/${batteryId}`, {
-				headers: {
-					accept: 'text/plain',
-				},
-			})
-			.then((response) => {
-				console.log(response);
-				const batteryData = response.data;
-				setBatteryDetails(response.data);
-				setBatteryDetails((prevDetails) => ({
-					...prevDetails,
-					typeName: batteryData.typeName,
-					modelName: batteryData.modelName,
-					modelName: batteryData.modelName,
-					groupName: batteryData.groupName,
-				}));
-			})
-			.catch((error) => {
-				console.error('Error fetching battery details:', error);
-			});
+    // Const variables
+    const [formState, setFormState] = useState({
+        typeName: '',
+        modelName: '',
+        makeName: '',
+        conditionName: '',
+        voltage: 0,
+        capacity: 0,
+        price: 0,
+        groupName: '',
+        length: 0,
+        width: 0,
+        height: 0,
+        unitType: '',
+        stampedSerial: ''
+    });
 
-		// Fetch battery type options
-		axios
-			.get(`${API_BASE}/BatteryTypes`)
-			.then((response) => {
-				setTypeOptions(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching type options:', error);
-			});
+    const isFormValid = () => {
+        // Checks if all required fields are filled
+        return (
+            formState.typeName &&
+            formState.modelName &&
+            formState.makeName &&
+            formState.conditionName &&
+            formState.voltage &&
+            formState.capacity &&
+            formState.price &&
+            formState.groupName &&
+            formState.length &&
+            formState.width &&
+            formState.height &&
+            formState.unitType &&
+            formState.stampedSerial
+        );
+    };
 
-		// Fetch battery model options
-		axios
-			.get(`${API_BASE}/BatteryModels`)
-			.then((response) => {
-				setModelOptions(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching model options:', error);
-			});
 
-		// Fetch battery make options
-		axios
-			.get(`${API_BASE}/BatteryMakes`)
-			.then((response) => {
-				setMakeOptions(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching make options:', error);
-			});
+    // Dropdown options consts
 
-		// Fetch battery group options
-		axios
-			.get(`${API_BASE}/BatteryGroups`)
-			.then((response) => {
-				setGroupOptions(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching group options:', error);
-			});
-	}, [batteryId]);
+    // Types
+    const [typeOptions, setTypeOptions] = useState([]);
+    const [showNewTypeField, setShowNewTypeField] = useState(false);
 
-	// Handle the user selection or edits
-	const handleFieldChange = (field, value) => {
-		setBatteryDetails((prevDetails) => ({
-			...prevDetails,
-			[field]: value,
-		}));
-	};
+    // Models
+    const [modelOptions, setModelOptions] = useState([]);
+    const [showNewModelField, setShowNewModelField] = useState(false);
 
-	const handleSubmit = async (event) => {
-		event.preventDefault();
-		const updatedBattery = {
-			typeName: batteryDetails.typeName,
-			modelName: batteryDetails.modelName,
-			makeName: batteryDetails.makeName,
-			groupName: batteryDetails.groupName,
-			capacity: parseFloat(batteryDetails.capacity),
-			voltage: parseFloat(batteryDetails.voltage),
-			quantityOnHand: parseFloat(batteryDetails.quantityOnHand),
-			price: parseFloat(batteryDetails.price),
-		};
+    // Makes
+    const [makeOptions, setMakeOptions] = useState([]);
+    const [showNewMakeField, setShowNewMakeField] = useState(false);
 
-		try {
-			// Send updated battery details to API
-			await axios.put(`${API_BASE}/Batteries/${batteryId}`, updatedBattery);
+    // Conditions
+    const [conditionOptions, setConditionOptions] = useState([
+        'New',
+        'Used',
+        'Refurbished',
+    ]);
 
-			setIsSuccess(true);
-			setTimeout(() => {
-				setIsSuccess(false);
-				router.push('/inventory'); // Navigate back to the inventory list page
-			}, 1000);
-		} catch (error) {
-			console.error('Error updating battery details:', error);
-		}
-	};
+    // Groups
+    const [groupOptions, setGroupOptions] = useState([]);
+    const [showNewGroupField, setShowNewGroupField] = useState(false);
 
-	return (
-		<Box
-			display='flex'
-			flexDirection='column'
-			alignItems='center'
-			sx={{
-				backgroundColor: '#E6E8E7',
-				borderRadius: '8px',
-				margin: '.5rem auto',
-				padding: '.5rem 1rem',
-				height: '80vh',
-				overflow: 'auto',
-			}}
-		>
-			{/* Page Heading & Back Button */}
-			<Box
-				sx={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					width: '100%',
-				}}
-			>
-				{isError && <Alert severity='error'>{error}</Alert>}
-				<Typography variant='h3' align='center' component='h2'>
-					Edit Battery
-				</Typography>
+    // Unit Types
+    const [unitTypeOptions, setUnitTypeOptions] = useState([]);
+    const [showNewUnitTypeField, setShowNewUnitTypeField] = useState(false);
 
-				<Box display='flex' onClick={() => router.push('/inventory')}>
-					<IconButton>
-						<ArrowCircleLeftIcon
-							sx={{ fontSize: '2.5rem', color: '#000000' }}
-						/>
-					</IconButton>
-				</Box>
-			</Box>
+    // Input change functions for tracking state across form entries
+    const handleInputChange = (field, value) => {
+        setFormState(prevState => ({
+            ...prevState,
+            [field]: value
+        }));
+    };
 
-			{/* Edit Form */}
-			<Box
-				component='form'
-				onSubmit={handleSubmit}
-				mt={8}
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					width: '80%',
-					backgroundColor: '#fbfbfbf9',
-					borderRadius: '8px',
-					outline: '1px solid black',
-					padding: '2rem',
-				}}
-			>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						padding: '2rem',
-						width: '100%',
-						justifyContent: 'space-between',
-						margin: '0 auto',
-						borderRight: '1px solid lightgray',
-						borderLeft: '1px solid lightgray',
-						borderBottom: '1px solid #ecececf9',
-						borderTop: '1px solid #ecececf9',
-						padding: '10px',
-						borderRadius: '10px',
-					}}
-				>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-							width: '48%',
-						}}
-					>
-						{/* Dropdown for Battery Type */}
-						<TextField
-							select
-							id='typeName'
-							name='typeName'
-							label='Type'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.typeName}
-							onChange={(e) => handleFieldChange('typeName', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						>
-							{typeOptions.map((option) => (
-								<MenuItem key={option.id} value={option.typeName}>
-									{option.typeName}
-								</MenuItem>
-							))}
-						</TextField>
-						{/* Dropdown for Battery Model */}
-						<TextField
-							select
-							id='modelName'
-							name='modelName'
-							label='Model'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.modelName}
-							onChange={(e) => handleFieldChange('modelName', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						>
-							{modelOptions.map((option) => (
-								<MenuItem key={option.id} value={option.modelName}>
-									{option.modelName}
-								</MenuItem>
-							))}
-						</TextField>
-						{/* Dropdown for Battery Make */}
-						<TextField
-							select
-							id='makeName'
-							name='makeName'
-							label='Make'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.makeName}
-							onChange={(e) => handleFieldChange('makeName', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						>
-							{makeOptions.map((option) => (
-								<MenuItem key={option.id} value={option.name}>
-									{option.name}
-								</MenuItem>
-							))}
-						</TextField>
-						{/* Dropdown for Battery Group */}
-						<TextField
-							select
-							id='groupName'
-							name='groupName'
-							label='Group'
-							type='text'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.groupName}
-							onChange={(e) => handleFieldChange('groupName', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						>
-							{groupOptions.map((option) => (
-								<MenuItem key={option.id} value={option.groupName}>
-									{option.groupName}
-								</MenuItem>
-							))}
-						</TextField>
-					</Box>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-							width: '48%',
-						}}
-					>
-						<TextField
-							id='capacity'
-							name='capacity'
-							label='Capacity'
-							type='text'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.capacity}
-							onChange={(e) => handleFieldChange('capacity', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						/>
-						<TextField
-							id='voltage'
-							name='voltage'
-							label='Voltage'
-							type='text'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.voltage}
-							onChange={(e) => handleFieldChange('voltage', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						/>
-						<TextField
-							id='price'
-							name='price'
-							label='Price'
-							type='text'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.price}
-							onChange={(e) => handleFieldChange('price', e.target.value)}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						/>
-						<TextField
-							id='qtyOnHand'
-							name='qtyOnHand'
-							label='Qty On Hand'
-							type='text'
-							variant='outlined'
-							fullWidth
-							value={batteryDetails.quantityOnHand}
-							onChange={(e) =>
-								handleFieldChange('quantityOnHand', e.target.value)
-							}
-							sx={{ mt: 2, backgroundColor: 'white' }}
-						/>
-					</Box>
-				</Box>
-				{/* Edit Button */}
-				<Button
-					className='btn-primary'
-					variant='contained'
-					type='submit'
-					color='primary'
-					sx={{ mt: 3, width: '50%', textAlign: 'center', margin: '1rem auto' }}
-				>
-					Save
-				</Button>
-				{/* Success Message */}
-				{isSuccess && (
-					<Alert severity='success' sx={{ mt: 2 }}>
-						Edit successful!
-					</Alert>
-				)}
-				{/* Error Message */}
-				{isError && (
-					<Alert severity='error' sx={{ mt: 2 }}>
-						Error updating invoice details. Please try again later.
-					</Alert>
-				)}
-			</Box>
-		</Box>
-	);
+    // Form submit function
+    // Update an existing battery using a PUT request
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+
+        if (!isFormValid()) {
+            return; // Don't proceed if the form is not valid
+        }
+
+        try {
+            setIsError(null);
+
+            // Validate and transform data if necessary
+            const requestData = formState;
+
+            await axios.put(`http://localhost:7166/api/Batteries/${id}`, requestData)
+                .then((response) => {
+                    setShowSnackbar(true);
+                    setTimeout(() => {
+                        setShowSnackbar(false);
+                        router.push('/inventory');
+                    }, 2000);
+                    console.log('Successfully updated:', response.data);
+                })
+                .catch((error) => {
+                    setIsError('Failed to update asset');
+                    console.error('Error updating battery:', error);
+                });
+        } finally {
+            console.log('Update attempt completed');
+        }
+    };
+
+    // API Calls
+    useEffect(() => {
+        // // Fetch data for battery dropdown
+        // axios
+        //     .get('http://localhost:7166/api/Batteries')
+        //     .then((response) => {
+        //         setBatteryOption(response.data);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching type options:', error);
+        //     });
+        // Fetch data for battery type dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryTypes')
+            .then((response) => {
+                setTypeOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching type options:', error);
+            });
+
+        // Fetch data for battery model dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryModels')
+            .then((response) => {
+                setModelOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching model options:', error);
+            });
+
+        // Fetch data for battery make dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryMakes')
+            .then((response) => {
+                console.log('API Response:', response.data);
+                setMakeOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching make options:', error);
+            });
+
+        // Fetch data for battery group dropdown
+        axios
+            .get('http://localhost:7166/api/BatteryGroups')
+            .then((response) => {
+                setGroupOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching group options:', error);
+            });
+
+        // Fetch data for unit type dropdown
+        axios
+            .get('http://localhost:7166/api/Units')
+            .then((response) => {
+                setUnitTypeOptions(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching unit type options:', error);
+            });
+
+        // Fetch serial number
+        axios
+            .get('http://localhost:7166/api/assets')
+            .then((response) => {
+                // Find the matching serial number using id
+                const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
+                if (batterySerial) {
+                    setFormState(prevState => ({
+                        ...prevState,
+                        stampedSerial: batterySerial
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching serial number:', error);
+            });
+    }, []);
+
+
+
+
+    return (
+        <Box
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            sx={{
+                backgroundColor: '#E6E8E7',
+                borderRadius: '8px',
+                margin: '.25rem auto',
+                padding: '.5rem 1rem',
+                height: '82vh',
+                overflow: 'auto',
+            }}
+        >
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                }}
+            >
+                <Typography variant='h3' align='center' component='h2'>
+                    Create Asset
+                </Typography>
+                <Box display='flex' onClick={() => handleNavigation('/inventory')}>
+                    <IconButton>
+                        <ArrowCircleLeftIcon
+                            sx={{ fontSize: '2.5rem', color: '#000000' }}
+                        />
+                    </IconButton>
+                </Box>
+            </Box>
+
+            {/* Serial Number Input */}
+            <TextField
+                label="Serial Number"
+                value={formState.stampedSerial}
+                onChange={(e) => handleInputChange('stampedSerial', e.target.value)}
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+            />
+
+            {/* Type Dropdown */}
+            <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Type</InputLabel>
+                <Select
+                    value={formState.typeName}
+                    onChange={(e) => handleInputChange('typeName', e.target.value)}
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                >
+                    {/* Existing type options */}
+                    {typeOptions.map((type) => (
+                        <MenuItem key={type.id} value={type.typeName}>
+                            {type.typeName}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            {/* Model Dropdown */}
+            <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Model</InputLabel>
+                <Select
+                    value={formState.modelName}
+                    onChange={(e) => handleInputChange('modelName', e.target.value)}
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                >
+                    {/* Existing model options */}
+                    {modelOptions.map((model) => (
+                        <MenuItem key={model.id} value={model.modelName}>
+                            {model.modelName}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            {/* Make Dropdown */}
+            <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Make</InputLabel>
+                <Select
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    value={formState.makeName}
+                    onChange={(e) => handleInputChange('makeName', e.target.value)}
+                >
+                    {/* Existing make options */}
+                    {makeOptions.map((make) => (
+                        <MenuItem key={make.id} value={make.name}>
+                            {make.name}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            {/* Condition Dropdown */}
+            <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Condition</InputLabel>
+                <Select
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    value={formState.conditionName}
+                    onChange={(e) => handleInputChange('conditionName', e.target.value)}
+                >
+                    {/* Existing condition options */}
+                    {conditionOptions.map((condition) => (
+                        <MenuItem key={condition} value={condition}>
+                            {condition}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            {/* Voltage, Capacity, and Price Text Fields */}
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                sx={{ width: '90%', gap: '6rem' }}
+            >
+                <TextField
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    label="Voltage"
+                    type="number"
+                    value={formState.voltage}
+                    onChange={(e) => handleInputChange('voltage', e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                />
+                <TextField
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    label="Capacity"
+                    type="number"
+                    value={formState.capacity}
+                    onChange={(e) => handleInputChange('capacity', e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                />
+                <TextField
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    label="Price"
+                    type="number"
+                    value={formState.price}
+                    onChange={(e) => handleInputChange('price', e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                />
+            </Box>
+
+            {/* Group Name Dropdown */}
+            <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Group Name</InputLabel>
+                <Select
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    value={formState.groupName}
+                    onChange={(e) => handleInputChange('groupName', e.target.value)}
+                >
+                    {groupOptions.map((group) => (
+                        <MenuItem key={group.id} value={group.groupName}>
+                            {group.groupName}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            {/* Length, Width, and Height Text Fields */}
+            <Box
+                display="flex"
+                justifyContent="space-between"
+                sx={{ width: '90%', gap: '6rem' }}
+            >
+                <TextField
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    label="Length"
+                    type="number"
+                    value={formState.length}
+                    onChange={(e) => handleInputChange('length', e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                />
+                <TextField
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    label="Width"
+                    type="number"
+                    value={formState.width}
+                    onChange={(e) => handleInputChange('width', e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                />
+                <TextField
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    label="Height"
+                    type="number"
+                    value={formState.height}
+                    onChange={(e) => handleInputChange('height', e.target.value)}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                />
+            </Box>
+
+            {/* Unit Type Dropdown */}
+            <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Unit Type</InputLabel>
+                <Select
+                    sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+                    value={formState.unitType}
+                    onChange={(e) => handleInputChange('unitType', e.target.value)}
+                >
+                    {unitTypeOptions.map((unitType) => (
+                        <MenuItem key={unitType.id} value={unitType.unitType}>
+                            {unitType.unitType}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            <Button
+                sx={{ margin: '.5rem auto 0 auto' }}
+                className='btn-primary'
+                onClick={handleFormSubmit}
+                variant="contained"
+                color="primary"
+                disabled={!isFormValid()}
+            >
+                Create
+            </Button>
+            <Snackbar
+                open={showSnackbar}
+                autoHideDuration={2000}
+                onClose={() => setShowSnackbar(false)}
+            >
+                <SnackbarContent
+                    message='Asset edited successfully'
+                    action={<CheckCircleOutline />}
+                />
+            </Snackbar>
+        </Box>
+    );
 }
