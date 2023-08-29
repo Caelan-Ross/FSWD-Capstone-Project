@@ -113,103 +113,22 @@ export default function Home() {
         }));
     };
 
-    const handleTypeInputChange = (event) => {
-        const value = event.target.value;
-
-        if (value === 'Enter New Type') {
-            setFormState((prevState) => ({
-                ...prevState,
-                typeName: '',
-            }));
-            setShowNewTypeField(true);
-        } else {
-            setFormState((prevState) => ({
-                ...prevState,
-                typeName: value,
-            }));
-            setShowNewTypeField(false);
-        }
-    };
-
-    const handleModelInputChange = (event) => {
-        const value = event.target.value;
-        if (value === 'Enter New Model') {
-            setFormState((prevState) => ({
-                ...prevState,
-                modelName: '',
-            }));
-            setShowNewModelField(true);
-        } else {
-            setFormState((prevState) => ({
-                ...prevState,
-                modelName: value,
-            }));
-            setShowNewModelField(false);
-        }
-    };
-
-    const handleMakeInputChange = (event) => {
-        const value = event.target.value;
-
-        if (value === 'Enter New Make') {
-            setFormState((prevState) => ({
-                ...prevState,
-                makeName: '',
-            }));
-            setShowNewMakeField(true);
-        } else {
-            setFormState((prevState) => ({
-                ...prevState,
-                makeName: value,
-            }));
-            setShowNewMakeField(false);
-        }
-    };
-
-    const handleGroupInputChange = (event) => {
-        const value = event.target.value;
-
-        if (value === 'Enter New Group') {
-            setFormState((prevState) => ({
-                ...prevState,
-                groupName: '',
-            }));
-            setShowNewGroupField(true);
-        } else {
-            setFormState((prevState) => ({
-                ...prevState,
-                groupName: value,
-            }));
-            setShowNewGroupField(false);
-        }
-    };
-
-    const handleUnitTypeInputChange = (event) => {
-        const value = event.target.value;
-
-        if (value === 'Enter New Unit Type') {
-            setFormState((prevState) => ({
-                ...prevState,
-                unitType: '',
-            }));
-            setShowNewUnitTypeField(true);
-        } else {
-            setFormState((prevState) => ({
-                ...prevState,
-                unitType: value,
-            }));
-            setShowNewUnitTypeField(false);
-        }
-    };
-
-
     // Form submit function
     // Update an existing battery using a PUT request
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+
+        if (!isFormValid()) {
+            return; // Don't proceed if the form is not valid
+        }
+
         try {
             setIsError(null);
-            await axios.put(`http://localhost:7166/api/Batteries/${id}`, formState)
+
+            // Validate and transform data if necessary
+            const requestData = formState;
+
+            await axios.put(`http://localhost:7166/api/Batteries/${id}`, requestData)
                 .then((response) => {
                     setShowSnackbar(true);
                     setTimeout(() => {
@@ -223,7 +142,7 @@ export default function Home() {
                     console.error('Error updating battery:', error);
                 });
         } finally {
-            console.log('Successfully updated');
+            console.log('Update attempt completed');
         }
     };
 
@@ -290,21 +209,21 @@ export default function Home() {
             });
 
         // Fetch serial number
-            axios
-                .get('http://localhost:7166/api/assets')
-                .then((response) => {
-                    // Find the matching serial number using id
-                    const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
-                    if (batterySerial) {
-                        setFormState(prevState => ({
-                            ...prevState,
-                            stampedSerial: batterySerial
-                        }));
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error fetching serial number:', error);
-                });
+        axios
+            .get('http://localhost:7166/api/assets')
+            .then((response) => {
+                // Find the matching serial number using id
+                const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
+                if (batterySerial) {
+                    setFormState(prevState => ({
+                        ...prevState,
+                        stampedSerial: batterySerial
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching serial number:', error);
+            });
     }, []);
 
 
@@ -358,14 +277,10 @@ export default function Home() {
             <FormControl fullWidth variant="outlined" margin="normal">
                 <InputLabel>Type</InputLabel>
                 <Select
-                    value={showNewTypeField ? 'Enter New Type' : formState.typeName}
-                    onChange={handleTypeInputChange}
+                    value={formState.typeName}
+                    onChange={(e) => handleInputChange('typeName', e.target.value)}
                     sx={{ backgroundColor: 'white', borderRadius: '8px' }}
                 >
-                    {/* Input option for entering a new type */}
-                    <MenuItem value="Enter New Type">
-                        <em>Enter New Type</em>
-                    </MenuItem>
                     {/* Existing type options */}
                     {typeOptions.map((type) => (
                         <MenuItem key={type.id} value={type.typeName}>
@@ -373,32 +288,16 @@ export default function Home() {
                         </MenuItem>
                     ))}
                 </Select>
-                {/* Input field for manually entering new type */}
-                {showNewTypeField && (
-                    <TextField
-                        label="New Type"
-                        value={formState.typeName}
-                        onChange={(e) => handleInputChange('typeName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    />
-                )}
             </FormControl>
 
             {/* Model Dropdown */}
             <FormControl fullWidth variant="outlined" margin="normal">
                 <InputLabel>Model</InputLabel>
                 <Select
-                    value={showNewModelField ? 'Enter New Model' : formState.modelName}
-                    onChange={handleModelInputChange}
+                    value={formState.modelName}
+                    onChange={(e) => handleInputChange('modelName', e.target.value)}
                     sx={{ backgroundColor: 'white', borderRadius: '8px' }}
                 >
-                    {/* Input option for entering a new model */}
-                    <MenuItem value="Enter New Model">
-                        <em>Enter New Model</em>
-                    </MenuItem>
                     {/* Existing model options */}
                     {modelOptions.map((model) => (
                         <MenuItem key={model.id} value={model.modelName}>
@@ -406,17 +305,6 @@ export default function Home() {
                         </MenuItem>
                     ))}
                 </Select>
-                {showNewModelField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Model"
-                        value={formState.modelName}
-                        onChange={(e) => handleInputChange('modelName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}
             </FormControl>
 
             {/* Make Dropdown */}
@@ -424,13 +312,9 @@ export default function Home() {
                 <InputLabel>Make</InputLabel>
                 <Select
                     sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    value={showNewMakeField ? 'Enter New Make' : formState.makeName}
-                    onChange={handleMakeInputChange}
+                    value={formState.makeName}
+                    onChange={(e) => handleInputChange('makeName', e.target.value)}
                 >
-                    {/* Input option for entering a new make */}
-                    <MenuItem value="Enter New Make">
-                        <em>Enter New Make</em>
-                    </MenuItem>
                     {/* Existing make options */}
                     {makeOptions.map((make) => (
                         <MenuItem key={make.id} value={make.name}>
@@ -438,18 +322,6 @@ export default function Home() {
                         </MenuItem>
                     ))}
                 </Select>
-                {/* Input field for manually entering new make */}
-                {showNewMakeField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Make"
-                        value={formState.makeName}
-                        onChange={(e) => handleInputChange('makeName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}
             </FormControl>
 
             {/* Condition Dropdown */}
@@ -512,34 +384,16 @@ export default function Home() {
                 <InputLabel>Group Name</InputLabel>
                 <Select
                     sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    value={showNewGroupField ? 'Enter New Group' : formState.groupName}
-                    onChange={handleGroupInputChange}
+                    value={formState.groupName}
+                    onChange={(e) => handleInputChange('groupName', e.target.value)}
                 >
-
-                    <MenuItem value="Enter New Group">
-                        <em>Enter New Group</em>
-                    </MenuItem>
-
                     {groupOptions.map((group) => (
                         <MenuItem key={group.id} value={group.groupName}>
                             {group.groupName}
                         </MenuItem>
                     ))}
                 </Select>
-
-
-
-                {showNewGroupField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Group"
-                        value={formState.groupName}
-                        onChange={(e) => handleInputChange('groupName', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}</FormControl>
+            </FormControl>
 
             {/* Length, Width, and Height Text Fields */}
             <Box
@@ -579,33 +433,20 @@ export default function Home() {
                 />
             </Box>
 
+            {/* Unit Type Dropdown */}
             <FormControl fullWidth variant="outlined" margin="normal">
                 <InputLabel>Unit Type</InputLabel>
                 <Select
                     sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                    value={showNewUnitTypeField ? 'Enter New Unit Type' : formState.unitType}
-                    onChange={handleUnitTypeInputChange}
+                    value={formState.unitType}
+                    onChange={(e) => handleInputChange('unitType', e.target.value)}
                 >
-                    <MenuItem value="Enter New Unit Type">
-                        <em>Enter New Unit Type</em>
-                    </MenuItem>
                     {unitTypeOptions.map((unitType) => (
                         <MenuItem key={unitType.id} value={unitType.unitType}>
                             {unitType.unitType}
                         </MenuItem>
                     ))}
                 </Select>
-                {showNewUnitTypeField && (
-                    <TextField
-                        sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-                        label="New Unit Type"
-                        value={formState.unitType}
-                        onChange={(e) => handleInputChange('unitType', e.target.value)}
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                    />
-                )}
             </FormControl>
 
             <Button
