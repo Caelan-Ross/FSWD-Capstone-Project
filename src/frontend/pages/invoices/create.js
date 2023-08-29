@@ -154,16 +154,16 @@ export default function Home() {
 
 	const isFormValid = () => {
 		const arePaymentDetailsValid = paymentLines.every(
-		  line => line.paymentType !== '' && line.amount !== ''
+			line => line.paymentType !== '' && line.amount !== ''
 		);
-	  
+
 		return (
-		  selectedCustomer !== null &&
-		  selectedLineItem !== null &&
-		  rows.every(row => row.item !== '' && row.price !== '') &&
-		  arePaymentDetailsValid
+			selectedCustomer !== null &&
+			selectedLineItem !== null &&
+			rows.every(row => row.item !== '' && row.price !== '') &&
+			arePaymentDetailsValid
 		);
-	  };
+	};
 
 	// Submit Button
 	const handleSubmit = async (event) => {
@@ -296,7 +296,7 @@ export default function Home() {
 				}}
 			>
 				{error && <Alert severity='error'>{error}</Alert>}
-				<Typography variant='h3' align='center' component='h2' className='header-text'>
+				<Typography variant='h3' align='center' component='h2'>
 					Create Invoice
 				</Typography>
 
@@ -373,12 +373,16 @@ export default function Home() {
 							}}
 							filterOptions={(options, state) => {
 								const inputValue = state.inputValue.toLowerCase();
-								return options.filter(
-									(option) =>
-										option.firstName.toLowerCase().includes(inputValue) ||
-										option.lastName.toLowerCase().includes(inputValue) ||
-										option.phoneNumber.includes(inputValue)
-								);
+								return options.filter((option) => {
+									const firstName = option.firstName?.toLowerCase() || '';
+									const lastName = option.lastName?.toLowerCase() || '';
+									const phoneNumber = option.phoneNumber || '';
+									return (
+										firstName.includes(inputValue) ||
+										lastName.includes(inputValue) ||
+										phoneNumber.includes(inputValue)
+									);
+								});
 							}}
 							renderInput={(params) => (
 								<TextField
@@ -413,14 +417,9 @@ export default function Home() {
 									})
 								}
 								InputLabelProps={{
-									shrink:
-										selectedCustomer && selectedCustomer.firstName
-											? true
-											: false,
+									shrink: selectedCustomer && selectedCustomer.firstName ? true : false,
 								}}
-								disabled={
-									selectedCustomer && selectedCustomer.id === -1 ? false : true
-								}
+								disabled={!selectedCustomer || selectedCustomer.id !== -1}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 							<TextField
@@ -437,14 +436,9 @@ export default function Home() {
 									})
 								}
 								InputLabelProps={{
-									shrink:
-										selectedCustomer && selectedCustomer.lastName
-											? true
-											: false,
+									shrink: selectedCustomer && selectedCustomer.lastName ? true : false,
 								}}
-								disabled={
-									selectedCustomer && selectedCustomer.id === -1 ? false : true
-								}
+								disabled={!selectedCustomer || selectedCustomer.id !== -1}
 								sx={{ mt: 2, backgroundColor: 'white', width: '48%' }}
 							/>
 						</Box>
@@ -570,16 +564,16 @@ export default function Home() {
 											id={`item-${index}`}
 											name={`item-${index}`}
 											options={lineItemOptions}
-											getOptionLabel={(option) => option.batteryName}
-											value={row.item}
+											getOptionLabel={(option) => option.typeName}
+											value={row.item || null}
 											onChange={(event, newValue) => {
-												setSelectedLineItem(newValue);
 												handleInputChangeLines(index, 'item', newValue);
-												const selectedPrice = newValue
-													? newValue.price.toFixed(2)
-													: '';
-												handleInputChangeLines(index, 'price', selectedPrice);
+												if (newValue) {
+													const selectedPrice = newValue.price.toFixed(2);
+													handleInputChangeLines(index, 'price', selectedPrice);
+												}
 											}}
+											inputValue={row.item ? row.item.typeName : ''}
 											renderInput={(params) => (
 												<TextField
 													{...params}
@@ -592,7 +586,6 @@ export default function Home() {
 													}}
 												/>
 											)}
-											inputValue={row.item ? row.item.batteryName : ''}
 											sx={{
 												'& .MuiAutocomplete-clearIndicator': {
 													display: 'none',

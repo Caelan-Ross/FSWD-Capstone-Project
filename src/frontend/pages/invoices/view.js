@@ -330,7 +330,7 @@ export default function Home() {
 				}}
 			>
 				{isError && <Alert severity='error'>{isError}</Alert>}
-				<Typography variant='h3' align='center' component='h2' className='header-text'>
+				<Typography variant='h3' align='center' component='h2'>
 					Invoice #{invoiceId}
 				</Typography>
 
@@ -556,7 +556,7 @@ export default function Home() {
 										label='Item'
 										variant='outlined'
 										fullWidth
-										value={asset.batteryName}
+										value={asset.typeName}
 										InputProps={{
 											readOnly: true,
 										}}
