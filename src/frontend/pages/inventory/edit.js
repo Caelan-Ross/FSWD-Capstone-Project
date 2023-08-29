@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
     Typography,
@@ -6,14 +6,17 @@ import {
     IconButton,
     TextField,
     Button,
-    MenuItem, FormControl, InputLabel, Select
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Select,
 } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 
-export default function Home() {
+export default function BatteryEdit() {
     const router = useRouter();
     const { id } = router.query;
     const handleNavigation = (path) => {
@@ -24,22 +27,6 @@ export default function Home() {
     const [showSnackbar, setShowSnackbar] = useState(false);
 
     // Load existing asset data when component mounts
-    useEffect(() => {
-        if (id) {
-            axios
-                .get(`http://localhost:7166/api/Assets/${id}`)  // Use the correct endpoint for asset data
-                .then((response) => {
-                    // Update formState with existing data
-                    setFormState(response.data);
-                })
-                .catch((error) => {
-                    console.error('Error fetching asset data:', error);
-                });
-        }
-    }, [id]);
-
-
-    // Const variables
     const [formState, setFormState] = useState({
         typeName: '',
         modelName: '',
@@ -53,8 +40,36 @@ export default function Home() {
         width: 0,
         height: 0,
         unitType: '',
-        stampedSerial: ''
     });
+
+    useEffect(() => {
+        if (id) {
+            axios
+                .get(`http://localhost:7166/api/Batteries/${id}`)
+                .then((response) => {
+                    // Map API response keys to formState keys
+                    const mappedData = {
+                        typeName: response.data.typeName,
+                        modelName: response.data.modelName,
+                        makeName: response.data.makeName,
+                        conditionName: response.data.conditionName,
+                        voltage: response.data.voltage,
+                        capacity: response.data.capacity,
+                        price: response.data.price,
+                        groupName: response.data.groupName,
+                        length: response.data.length,
+                        width: response.data.width,
+                        height: response.data.height,
+                        unitType: response.data.unitType,
+                        typeId: response.data.typeId, // Add this line
+                    };
+                    setFormState(mappedData);
+                })
+                .catch((error) => {
+                    console.error('Error fetching asset data:', error);
+                });
+        }
+    }, [id]);
 
     const isFormValid = () => {
         // Checks if all required fields are filled
@@ -70,8 +85,7 @@ export default function Home() {
             formState.length &&
             formState.width &&
             formState.height &&
-            formState.unitType &&
-            formState.stampedSerial
+            formState.unitType
         );
     };
 
@@ -221,26 +235,26 @@ export default function Home() {
         //     });
     }, []);
 
-    useEffect(() => {
-        if (id) {
-            // Fetch serial number
-            axios
-                .get('http://localhost:7166/api/assets')
-                .then((response) => {
-                    // Find the matching serial number using id
-                    const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
-                    if (batterySerial) {
-                        setFormState(prevState => ({
-                            ...prevState,
-                            stampedSerial: batterySerial
-                        }));
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error fetching serial number:', error);
-                });
-        }
-    }, [id]);
+    // useEffect(() => {
+    //     if (id) {
+    //         // Fetch serial number
+    //         axios
+    //             .get('http://localhost:7166/api/assets')
+    //             .then((response) => {
+    //                 // Find the matching serial number using id
+    //                 const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
+    //                 if (batterySerial) {
+    //                     setFormState(prevState => ({
+    //                         ...prevState,
+    //                         stampedSerial: batterySerial
+    //                     }));
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error fetching serial number:', error);
+    //             });
+    //     }
+    // }, [id]);
 
 
     return (
@@ -265,7 +279,7 @@ export default function Home() {
                 }}
             >
                 <Typography variant='h3' align='center' component='h2' className='header-text'>
-                    Edit Asset
+                    Edit Battery
                 </Typography>
                 <Box display='flex' onClick={() => handleNavigation('/inventory')}>
                     <IconButton>
@@ -276,28 +290,17 @@ export default function Home() {
                 </Box>
             </Box>
 
-            {/* Serial Number Input */}
-            <TextField
-                label="Serial Number"
-                value={formState.stampedSerial}
-                onChange={(e) => handleInputChange('stampedSerial', e.target.value)}
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
-            />
-
             {/* Type Dropdown */}
             <FormControl fullWidth variant="outlined" margin="normal">
                 <InputLabel>Type</InputLabel>
                 <Select
-                    value={formState.typeName}
-                    onChange={(e) => handleInputChange('typeName', e.target.value)}
+                    value={formState.typeId}
+                    onChange={(e) => handleInputChange('typeId', e.target.value)}
                     sx={{ backgroundColor: 'white', borderRadius: '8px' }}
                 >
                     {/* Existing type options */}
                     {typeOptions.map((type) => (
-                        <MenuItem key={type.id} value={type.typeName}>
+                        <MenuItem key={type.id} value={type.id}>
                             {type.typeName}
                         </MenuItem>
                     ))}
@@ -471,7 +474,7 @@ export default function Home() {
                 color="primary"
                 disabled={!isFormValid()}
             >
-                Create
+                Submit
             </Button>
             <Snackbar
                 open={showSnackbar}
