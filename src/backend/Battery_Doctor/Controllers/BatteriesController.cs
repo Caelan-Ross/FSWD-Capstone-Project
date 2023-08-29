@@ -36,6 +36,7 @@ namespace Battery_Doctor.Controllers
             var batteryReadDtos = batteries.Select(b => new BatteryReadDto
             {
                 Id = b.Id,
+
                 TypeName = b.BatteryType.TypeName,
                 ModelName = b.BatteryModel.ModelName,
                 MakeName = b.BatteryMake.Name,

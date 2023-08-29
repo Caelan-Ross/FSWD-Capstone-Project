@@ -22,17 +22,32 @@ namespace Battery_Doctor.Controllers
         public async Task<ActionResult<IEnumerable<AssetR_DTO>>> GetAssets()
         {
             List<Asset> assets = _context.Assets
-                .Include(a => a.Battery)
-                .Include(a => a.Battery.BatteryMake)
+                .Include(b => b.Battery.BatteryType)
+                .Include(b => b.Battery.BatteryModel)
+                .Include(b => b.Battery.BatteryMake)
+                .Include(b => b.Battery.BatteryGroup)
+                .Include(b => b.Battery.BatteryGroup.Unit)
+                .Include(b => b.Battery.BatteryCondition)
                 .ToList();
             List<AssetR_DTO> assetR_DTOs = assets.Select(a => new AssetR_DTO
             {
                 Id = a.Id,
                 QRCode = a.QRCode,
-                BatteryName = a.Battery.BatteryMake.Name,
                 StampedSerial = a.StampedSerial,
+                WarrantyDate = a.WarrantyDate,
+                BatteryId = a.Battery.Id,
+                TypeName = a.Battery.BatteryType.TypeName,
+                ModelName = a.Battery.BatteryModel.ModelName,
+                MakeName = a.Battery.BatteryMake.Name,
+                ConditionName = a.Battery.BatteryCondition.ConditionName,
+                Voltage = a.Battery.Voltage,
+                Capacity = a.Battery.Capacity,
                 Price = a.Battery.Price,
-                WarrantyDate = a.WarrantyDate
+                GroupName = a.Battery.BatteryGroup.GroupName,
+                Length = a.Battery.BatteryGroup.Length,
+                Height = a.Battery.BatteryGroup.Height,
+                Width = a.Battery.BatteryGroup.Width,
+                UnitType = a.Battery.BatteryGroup.Unit.UnitType,
 
             }).ToList();
 
@@ -44,9 +59,13 @@ namespace Battery_Doctor.Controllers
         public async Task<ActionResult<AssetR_DTO>> GetAsset(int id)
         {
             var asset = await _context.Assets
-                .Include(a => a.Battery)
-                .Include(a => a.Battery.BatteryMake)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .Include(b => b.Battery.BatteryType)
+                .Include(b => b.Battery.BatteryModel)
+                .Include(b => b.Battery.BatteryMake)
+                .Include(b => b.Battery.BatteryGroup)
+                .Include(b => b.Battery.BatteryGroup.Unit)
+                .Include(b => b.Battery.BatteryCondition)
+                .FirstOrDefaultAsync(b => b.Id == id);
 
             if (asset == null)
             {
@@ -55,11 +74,23 @@ namespace Battery_Doctor.Controllers
 
             var assetR_DTO = new AssetR_DTO
             {
+                Id = asset.Id,
                 QRCode = asset.QRCode,
-                BatteryName = asset.Battery.BatteryMake.Name,
                 StampedSerial = asset.StampedSerial,
+                WarrantyDate = asset.WarrantyDate,
+                BatteryId = asset.Battery.Id,
+                TypeName = asset.Battery.BatteryType.TypeName,
+                ModelName = asset.Battery.BatteryModel.ModelName,
+                MakeName = asset.Battery.BatteryMake.Name,
+                ConditionName = asset.Battery.BatteryCondition.ConditionName,
+                Voltage = asset.Battery.Voltage,
+                Capacity = asset.Battery.Capacity,
                 Price = asset.Battery.Price,
-                WarrantyDate = asset.WarrantyDate
+                GroupName = asset.Battery.BatteryGroup.GroupName,
+                Length = asset.Battery.BatteryGroup.Length,
+                Height = asset.Battery.BatteryGroup.Height,
+                Width = asset.Battery.BatteryGroup.Width,
+                UnitType = asset.Battery.BatteryGroup.Unit.UnitType,
             };
 
             return assetR_DTO;
