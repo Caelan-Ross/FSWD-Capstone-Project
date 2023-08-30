@@ -64,7 +64,7 @@ export default function Home() {
 		{
 			field: 'stampedSerial',
 			headerName: 'Serial',
-			width: 150,
+			width: 100,
 		  },
 		// {
 		// 	field: 'edit',
