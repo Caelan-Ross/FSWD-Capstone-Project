@@ -55,7 +55,15 @@ export default function Home() {
 		},
 		{ field: 'voltage', headerName: 'Voltage', width: 100 },
 		{ field: 'capacity', headerName: 'Capacity', width: 100 },
-		{ field: 'price', headerName: 'Price', width: 100 },
+		{
+			field: 'price',
+			headerName: 'Price',
+			width: 100,
+			valueFormatter: (params) => {
+				const price = params.value;
+				return `$${price.toFixed(2)}`;
+			}
+		},
 		{
 			field: 'quantityOnHand',
 			headerName: 'Qty on Hand',
@@ -146,7 +154,7 @@ export default function Home() {
 	const filteredInventoryData = inventoryData.filter((battery) => {
 		const lowerCaseSearchQuery =
 		  typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
-	
+
 		return (
 		  typeof battery.typeName === 'string' &&
 		  (battery.typeName.toLowerCase().includes(lowerCaseSearchQuery) ||
