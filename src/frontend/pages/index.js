@@ -1,20 +1,9 @@
-import { Typography, Box, useTheme } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import BatterySaverIcon from '@mui/icons-material/BatterySaver';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-
-function Home() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const formattedTime = currentTime.toLocaleTimeString('en-US', {
+function Home({ serverTime }) {
+  const formattedTime = new Date(serverTime).toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: 'numeric',
     second: 'numeric',
@@ -96,12 +85,19 @@ function Home() {
           <Typography variant="h4" gutterBottom>
             {formattedTime}
           </Typography>
-
-          
         </Box>
       </Box>
     </Box>
   );
+}
+
+export async function getServerSideProps() {
+  const serverTime = new Date().getTime(); // Get the current server time as a timestamp
+  return {
+    props: {
+      serverTime,
+    },
+  };
 }
 
 export default Home;
