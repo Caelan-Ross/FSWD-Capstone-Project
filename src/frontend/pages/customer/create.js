@@ -19,7 +19,7 @@ export default function Home() {
 		router.push(path);
 	};
 
-	const [error, setError] = useState(null);
+	const [isError, setIsError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
 	const API_BASE = 'http://localhost:3000/api/customer/create';
@@ -38,10 +38,9 @@ export default function Home() {
 		try {
 			setLoading(true);
 			// Perform any additional validation or processing here if needed
-			setError(null);
+			setIsError(null);
 
 			await axios.post(url);
-			// Display success message
 			setShowSnackbar(true);
 			setTimeout(() => {
 				setShowSnackbar(false);
@@ -50,7 +49,7 @@ export default function Home() {
 			// Reset form fields
 			form.reset();
 		} catch (error) {
-			setError('Failed to create customer');
+			setIsError('Failed to create customer');
 		} finally {
 			setLoading(false);
 		}
@@ -64,9 +63,9 @@ export default function Home() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '1rem',
-				padding: '2rem',
-				height: '92%',
+				margin: '.5rem auto',
+				padding: '.5rem 1rem',
+				height: '80vh',
 				overflow: 'auto',
 			}}
 		>
@@ -78,11 +77,10 @@ export default function Home() {
 					width: '100%',
 				}}
 			>
-				{error && <Alert severity='error'>{error}</Alert>}
-				<Typography variant='h3' align='center' component='h2'>
+				{isError && <Alert severity='error'>{isError}</Alert>}
+				<Typography variant='h3' align='center' component='h2' className='header-text'>
 					Create Customer
 				</Typography>
-
 				<Box display='flex' onClick={() => handleNavigation('/customer')}>
 					<IconButton>
 						<ArrowCircleLeftIcon

@@ -10,10 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import HomeIcon from '@mui/icons-material/Home';
-import ReceiptIcon from '@mui/icons-material/Receipt';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import InventoryIcon from '@mui/icons-material/Inventory';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -40,7 +38,7 @@ const Navbar = () => {
     ];
 
     return (
-        <Box>
+        <Box sx={{backgroundColor: 'lavenderblush', borderRight: '1px solid black'}}>
             <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'center', alignItems: 'center', borderRight: '1px solid #c1c1c1', height: '100%' }}>
                 <IconButton onClick={toggleDrawer} sx={{ margin: '10px auto' }}>
                     {open ? <CloseIcon /> : <MenuIcon sx={{ fontSize: '2rem' }} />}
@@ -62,7 +60,7 @@ const Navbar = () => {
             </Box>
 
             <Drawer anchor="left" open={open} onClose={toggleDrawer}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: '100%', justifyContent: 'space-between', backgroundColor: 'lavenderblush', borderRight: '2px solid black' }}>
                     <Box>
                         <List><ListItem button onClick={closeDrawer}>
                             <ListItemIcon><CloseIcon sx={{ fontSize: '2rem', color: 'red' }} /></ListItemIcon>

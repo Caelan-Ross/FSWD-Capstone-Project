@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Battery_Doctor.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,6 +71,23 @@ namespace Battery_Doctor.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Battery_Makes", x => x.make_id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Battery_Models",
+                columns: table => new
+                {
+                    model_id = table.Column<int>(type: "int(10)", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    first_name = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Battery_Models", x => x.model_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -183,34 +200,10 @@ namespace Battery_Doctor.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Battery_Models",
-                columns: table => new
-                {
-                    model_id = table.Column<int>(type: "int(10)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    first_name = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    make_id = table.Column<int>(type: "int(10)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Battery_Models", x => x.model_id);
-                    table.ForeignKey(
-                        name: "FK_Battery_Models_Battery_Makes_make_id",
-                        column: x => x.make_id,
-                        principalTable: "Battery_Makes",
-                        principalColumn: "make_id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Battery_Groups",
                 columns: table => new
                 {
-                    groupd_id = table.Column<int>(type: "int(10)", nullable: false)
+                    group_id = table.Column<int>(type: "int(10)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     group_name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -223,7 +216,7 @@ namespace Battery_Doctor.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Battery_Groups", x => x.groupd_id);
+                    table.PrimaryKey("PK_Battery_Groups", x => x.group_id);
                     table.ForeignKey(
                         name: "FK_Battery_Groups_Units_unit_id",
                         column: x => x.unit_id,
@@ -241,8 +234,15 @@ namespace Battery_Doctor.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     customer_id = table.Column<int>(type: "int(10)", nullable: false),
                     payment_method_id = table.Column<int>(type: "int(10)", nullable: false),
+                    notes = table.Column<string>(type: "varchar(500)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     date_of_sale = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    cash_amount = table.Column<float>(type: "float", nullable: false),
+                    debit_amount = table.Column<float>(type: "float", nullable: false),
+                    credit_amount = table.Column<float>(type: "float", nullable: false),
+                    customer_credit_amount = table.Column<float>(type: "float", nullable: false),
                     total_price = table.Column<float>(type: "float", nullable: false),
+                    tax_rate = table.Column<float>(type: "float", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -297,11 +297,11 @@ namespace Battery_Doctor.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     type_id = table.Column<int>(type: "int(10)", nullable: false),
                     model_id = table.Column<int>(type: "int(10)", nullable: false),
+                    condition_id = table.Column<int>(type: "int(10)", nullable: false),
                     make_id = table.Column<int>(type: "int(10)", nullable: false),
                     voltage = table.Column<float>(type: "float", nullable: false),
                     capacity = table.Column<float>(type: "float", nullable: false),
                     price = table.Column<float>(type: "float", nullable: false),
-                    quantity_on_hand = table.Column<int>(type: "int", nullable: false),
                     groupd_id = table.Column<int>(type: "int(10)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -310,10 +310,16 @@ namespace Battery_Doctor.Migrations
                 {
                     table.PrimaryKey("PK_Batteries", x => x.battery_id);
                     table.ForeignKey(
+                        name: "FK_Batteries_Battery_Conditions_condition_id",
+                        column: x => x.condition_id,
+                        principalTable: "Battery_Conditions",
+                        principalColumn: "condition_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Batteries_Battery_Groups_groupd_id",
                         column: x => x.groupd_id,
                         principalTable: "Battery_Groups",
-                        principalColumn: "groupd_id",
+                        principalColumn: "group_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Batteries_Battery_Makes_make_id",
@@ -346,9 +352,8 @@ namespace Battery_Doctor.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     battery_id = table.Column<int>(type: "int(10)", nullable: false),
                     warranty_date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    status = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    stamped_serial = table.Column<string>(type: "varchar(7)", maxLength: 7, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    customer_id = table.Column<int>(type: "int(10)", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -361,11 +366,6 @@ namespace Battery_Doctor.Migrations
                         principalTable: "Batteries",
                         principalColumn: "battery_id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Assets_Customers_customer_id",
-                        column: x => x.customer_id,
-                        principalTable: "Customers",
-                        principalColumn: "customer_id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -406,7 +406,7 @@ namespace Battery_Doctor.Migrations
                 {
                     invoice_details_id = table.Column<int>(type: "int(10)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    InvoiceId = table.Column<int>(type: "int(10)", nullable: false),
+                    invoice_id = table.Column<int>(type: "int(10)", nullable: false),
                     asset_id = table.Column<int>(type: "int(10)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -421,8 +421,8 @@ namespace Battery_Doctor.Migrations
                         principalColumn: "asset_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Invoice_Details_Invoices_InvoiceId",
-                        column: x => x.InvoiceId,
+                        name: "FK_Invoice_Details_Invoices_invoice_id",
+                        column: x => x.invoice_id,
                         principalTable: "Invoices",
                         principalColumn: "invoice_id",
                         onDelete: ReferentialAction.Cascade);
@@ -435,9 +435,9 @@ namespace Battery_Doctor.Migrations
                 column: "battery_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Assets_customer_id",
-                table: "Assets",
-                column: "customer_id");
+                name: "IX_Batteries_condition_id",
+                table: "Batteries",
+                column: "condition_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Batteries_groupd_id",
@@ -465,11 +465,6 @@ namespace Battery_Doctor.Migrations
                 column: "unit_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Battery_Models_make_id",
-                table: "Battery_Models",
-                column: "make_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Customers_address_id",
                 table: "Customers",
                 column: "address_id");
@@ -480,9 +475,9 @@ namespace Battery_Doctor.Migrations
                 column: "asset_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoice_Details_InvoiceId",
+                name: "IX_Invoice_Details_invoice_id",
                 table: "Invoice_Details",
-                column: "InvoiceId");
+                column: "invoice_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Invoices_customer_id",
@@ -519,9 +514,6 @@ namespace Battery_Doctor.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Battery_Conditions");
-
-            migrationBuilder.DropTable(
                 name: "Invoice_Details");
 
             migrationBuilder.DropTable(
@@ -549,7 +541,13 @@ namespace Battery_Doctor.Migrations
                 name: "Suppliers");
 
             migrationBuilder.DropTable(
+                name: "Battery_Conditions");
+
+            migrationBuilder.DropTable(
                 name: "Battery_Groups");
+
+            migrationBuilder.DropTable(
+                name: "Battery_Makes");
 
             migrationBuilder.DropTable(
                 name: "Battery_Models");
@@ -562,9 +560,6 @@ namespace Battery_Doctor.Migrations
 
             migrationBuilder.DropTable(
                 name: "Units");
-
-            migrationBuilder.DropTable(
-                name: "Battery_Makes");
         }
     }
 }

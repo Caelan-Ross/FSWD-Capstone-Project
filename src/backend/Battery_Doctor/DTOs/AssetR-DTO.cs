@@ -1,9 +1,14 @@
-﻿using System;
-namespace Battery_Doctor.DTOs
+﻿namespace Battery_Doctor.DTOs
 {
-    public class BatteryReadDto
+    public class AssetR_DTO
     {
         public int Id { get; set; }
+
+        public string QRCode { get; set; }
+
+        public string StampedSerial { get; set; }
+
+        public int BatteryId { get; set; }
 
         public string TypeName { get; set; }
 
@@ -31,10 +36,7 @@ namespace Battery_Doctor.DTOs
 
         public string UnitType { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime WarrantyDate { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
     }
-
 }
-

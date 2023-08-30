@@ -13,6 +13,7 @@ namespace Battery_Doctor.Models
 
         [Required]
         [ForeignKey("Invoice")]
+        [Column("invoice_id", TypeName = "int(10)")]
         public int InvoiceId { get; set; }
 
         [Required]

@@ -10,6 +10,7 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
+	TextField
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -30,27 +31,31 @@ export default function Customer() {
 
 	const API_BASE = 'http://localhost:7166/api/Customers';
 	const [customerData, setCustomerData] = useState([]);
+	const [searchQuery, setSearchQuery] = useState('');
+
+	// State for alerts
+	const [showSnackbar, setShowSnackbar] = useState(false);
+	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
 		open: false,
 		customerId: null,
 	});
-	const [showSnackbar, setShowSnackbar] = useState(false);
-	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
+
 
 	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: <strong>Customer ID</strong>, width: 100 },
-		{ field: 'firstName', headerName: <strong>First Name</strong>, width: 300 },
-		{ field: 'lastName', headerName: <strong>Last Name</strong>, width: 300 },
+		{ field: 'id', headerName: 'Customer ID', width: 100 },
+		{ field: 'firstName', headerName: 'First Name', width: 300 },
+		{ field: 'lastName', headerName: 'Last Name', width: 300 },
 		{
 			field: 'phoneNumber',
-			headerName: <strong>Phone No.</strong>,
+			headerName: 'Phone No.',
 			width: 300,
 		},
-		{ field: 'email', headerName: <strong>Email</strong>, width: 300 },
+		{ field: 'email', headerName: 'Email', width: 300 },
 		{
 			field: 'edit',
-			headerName: <strong>Edit</strong>,
+			headerName: 'Edit',
 			width: 100,
 			renderCell: (params) => (
 				<IconButton onClick={() => handleEdit(params.row.id)}>
@@ -60,41 +65,24 @@ export default function Customer() {
 		},
 		{
 			field: 'delete',
-			headerName: <strong>Delete</strong>,
+			headerName: 'Delete',
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
-					<DeleteIcon />
-				</IconButton>
+			  <IconButton onClick={() => openDeleteConfirmation(params.row.id, params.row.firstName)}>
+				<DeleteIcon />
+			  </IconButton>
 			),
-		},
+		  },
 	];
 
-	// Fetch Customer Data
-	useEffect(() => {
-		axios
-			.get(API_BASE, {
-				headers: {
-					accept: 'text/plain',
-				},
-			})
-			.then((response) => {
-				console.log(response);
-				// Update customerData state with fetched data
-				setCustomerData(response.data);
-			})
-			.catch((error) => {
-				console.error('Error fetching customer data:', error);
-			});
-	}, []);
-
 	// Function to open the delete confirmation dialog
-	const openDeleteConfirmation = (customerId) => {
+	const openDeleteConfirmation = (customerId, firstName) => {
 		setDeleteConfirmation({
-			open: true,
-			customerId: customerId,
+		  open: true,
+		  customerId: customerId,
+		  expectedFirstName: firstName,
 		});
-	};
+	  };
 
 	// Function to close the delete confirmation dialog
 	const closeDeleteConfirmation = () => {
@@ -110,19 +98,26 @@ export default function Customer() {
 			.delete(`${API_BASE}/${customerId}`)
 			.then((response) => {
 				console.log('Customer deleted:', response.data);
-				// Remove the deleted customer from customerData state
 				setCustomerData((prevData) =>
 					prevData.filter((customer) => customer.id !== customerId)
 				);
 				closeDeleteConfirmation();
-				setShowSnackbar(true); // Show the success Snackbar
+				setShowSnackbar(true);
 				setTimeout(() => {
-					setShowSnackbar(false); // Hide the Snackbar after 1 second
+					setShowSnackbar(false);
 				}, 2000);
 			})
 			.catch((error) => {
 				console.error('Error deleting customer:', error);
 			});
+	};
+
+	const [enteredFirstName, setEnteredFirstName] = useState('');
+	const expectedFirstName = '';
+
+
+	const handleDeleteConfirm = (event) => {
+		setEnteredFirstName(event.target.value);
 	};
 
 	// Send user to editCustomer.js
@@ -143,6 +138,34 @@ export default function Customer() {
 		}
 	};
 
+	// Filter customer data based on search query
+	const filteredCustomerData = customerData.filter((customer) => {
+		const lowerCaseSearchQuery = searchQuery.toLowerCase();
+		return (
+			customer.firstName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			customer.lastName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			customer.phoneNumber.includes(searchQuery)
+		);
+	});
+
+	// Fetch Customer Data
+	useEffect(() => {
+		axios
+			.get(API_BASE, {
+				headers: {
+					accept: 'text/plain',
+				},
+			})
+			.then((response) => {
+				console.log(response);
+				// Update customerData state with fetched data
+				setCustomerData(response.data);
+			})
+			.catch((error) => {
+				console.error('Error fetching customer data:', error);
+			});
+	}, []);
+
 	return (
 		<Box
 			display='flex'
@@ -151,9 +174,9 @@ export default function Customer() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '1rem',
-				padding: '2rem',
-				height: '90%',
+				margin: '.5rem auto',
+				padding: '.5rem 1rem',
+				height: '80vh',
 				overflow: 'none',
 			}}
 		>
@@ -168,6 +191,7 @@ export default function Customer() {
 			>
 				<Box>
 					<Typography
+						className='header-text'
 						variant='h3'
 						align='center'
 						component='h2'
@@ -192,7 +216,7 @@ export default function Customer() {
 			{/* Delete Snackbar message */}
 			<Snackbar
 				open={showSnackbar}
-				autoHideDuration={2000} // 1 second
+				autoHideDuration={2000}
 				onClose={() => setShowSnackbar(false)}
 			>
 				<SnackbarContent
@@ -212,7 +236,6 @@ export default function Customer() {
 				/>
 			</Snackbar>
 
-			{/* Customer DataGrid */}
 			<div
 				style={{
 					height: '90%',
@@ -222,11 +245,23 @@ export default function Customer() {
 					borderRadius: '10px',
 				}}
 			>
+				{/* Searchbar */}
+				<TextField
+					type='text'
+					label='Search by name or phone number'
+					variant='outlined'
+					fullWidth
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
+					sx={{ marginBottom: theme.spacing(2) }}
+				/>
+				{/* Customer DataGrid */}
 				<DataGrid
-					rows={customerData}
+					rows={filteredCustomerData}
 					columns={columns}
 					pageSize={5}
-					sx={{ alignItems: 'center', margin: 'auto' }}
+					autoPageSize
+					sx={{ height: '37rem' }}
 				/>
 			</div>
 
@@ -235,14 +270,25 @@ export default function Customer() {
 				<DialogTitle>Delete Customer</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Are you sure you want to delete this customer?
+						Are you sure you want to delete this customer? This customer may have invoices associated with their information and these will be deleted in the process. Please enter the customer's first name as it appears and press delete to confirm.
 					</DialogContentText>
+					{/* Controlled input field for delete confirmation */}
+					<TextField
+						label="Enter First Name"
+						value={enteredFirstName}
+						onChange={handleDeleteConfirm}
+						sx={{
+							margin: '2rem auto 0 auto'
+						}}
+					/>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
 					<Button
 						onClick={() => handleDelete(deleteConfirmation.customerId)}
 						color='primary'
+						// Disable the Delete button if the entered first name doesn't match
+						disabled={enteredFirstName !== deleteConfirmation.expectedFirstName}
 					>
 						Delete
 					</Button>
@@ -250,4 +296,4 @@ export default function Customer() {
 			</Dialog>
 		</Box>
 	);
-}
+}	

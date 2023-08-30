@@ -1,17 +1,19 @@
 ﻿
 namespace Battery_Doctor.DTOs
 {
-    public class InvoiceR_DTO
+    public class InvoiceC_DTO
     {
         public int Id { get; set; }
 
-        public int CustomerId { get; set; }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public string Email { get; set; }
 
         public string PaymentMethodR { get; set; }
-
-        public DateTime DateOfSale { get; set; }
-
-        public float TotalPrice { get; set; }
 
         public float CashAmount { get; set; }
 
@@ -24,6 +26,8 @@ namespace Battery_Doctor.DTOs
         public float TaxRate { get; set; }
 
         public string Notes { get; set; }
+
+        public float TotalPrice { get; set; }
 
         public List<int> AssetIds { get; set; }
     }

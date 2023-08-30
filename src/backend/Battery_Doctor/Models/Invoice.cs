@@ -23,13 +23,37 @@ namespace Battery_Doctor.Models
         [Column("payment_method_id", TypeName = "int(10)")]
         public int PaymentMethodId { get; set; }
 
+        [AllowNull]
+        [Column("notes", TypeName = "varchar(500)")]
+        public string? Notes { get; set; }
+
         [Required]
         [Column("date_of_sale")]
         public DateTime DateOfSale { get; set; }
 
+        [AllowNull]
+        [Column("cash_amount")]
+        public float CashAmount { get; set; }
+
+        [AllowNull]
+        [Column("debit_amount")]
+        public float DebitAmount { get; set; }
+
+        [AllowNull]
+        [Column("credit_amount")]
+        public float CreditAmount { get; set; }
+
+        [AllowNull]
+        [Column("customer_credit_amount")]
+        public float CustomerCreditAmount { get; set; }
+
         [Required]
         [Column("total_price")]
         public float TotalPrice { get; set; }
+
+        [Required]
+        [Column("tax_rate")]
+        public float TaxRate { get; set; }
 
         [Required]
         [Column("created_at")]
@@ -43,8 +67,7 @@ namespace Battery_Doctor.Models
 
         public virtual PaymentMethod PaymentMethod { get; set; }
 
-        [AllowNull]
         [InverseProperty(nameof(Models.InvoiceDetails.Invoice))]
-        public ICollection<InvoiceDetails> InvoiceDetails { get; set; }
+        public virtual ICollection<InvoiceDetails> InvoiceDetails { get; set; }
     }
 }

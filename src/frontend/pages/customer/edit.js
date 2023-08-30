@@ -24,7 +24,8 @@ export default function EditCustomer() {
 		email: '',
 	});
 
-	const [isSuccess, setIsSuccess] = useState(false); // State for showing success message
+	const [isError, setIsError] = useState(null);
+	const [isSuccess, setIsSuccess] = useState(false);
 
 	useEffect(() => {
 		// Fetch customer details by customerId
@@ -36,7 +37,6 @@ export default function EditCustomer() {
 			})
 			.then((response) => {
 				console.log(response);
-				// Update customerDetails state with fetched data
 				setCustomerDetails(response.data);
 			})
 			.catch((error) => {
@@ -78,9 +78,9 @@ export default function EditCustomer() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '1rem',
-				padding: '2rem',
-				height: '92%',
+				margin: '.5rem auto',
+				padding: '.5rem 1rem',
+				height: '80vh',
 				overflow: 'auto',
 			}}
 		>
@@ -92,7 +92,7 @@ export default function EditCustomer() {
 					width: '100%',
 				}}
 			>
-				<Typography variant='h3' align='center' component='h2'>
+				<Typography variant='h3' align='center' component='h2' className='header-text'>
 					Edit Customer
 				</Typography>
 				<Box display='flex' onClick={() => router.push('/customer')}>
@@ -174,6 +174,12 @@ export default function EditCustomer() {
 				{isSuccess && (
 					<Alert severity='success' sx={{ mt: 2 }}>
 						Edit successful!
+					</Alert>
+				)}
+				{/* Error Message */}
+				{isError && (
+					<Alert severity='error' sx={{ mt: 2 }}>
+						Error updating invoice details. Please try again later.
 					</Alert>
 				)}
 			</Box>

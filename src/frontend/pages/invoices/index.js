@@ -10,11 +10,12 @@ import {
 	DialogContentText,
 	DialogActions,
 	Button,
+	TextField,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import InfoIcon from '@mui/icons-material/Info';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
@@ -35,9 +36,12 @@ export default function Invoices() {
 
 	const API_BASE = 'http://localhost:7166/api/Invoices';
 	const [invoiceData, setInvoiceData] = useState([]);
+	const [searchQuery, setSearchQuery] = useState([]);
+
+	// State for alerts
 	const [deleteConfirmation, setDeleteConfirmation] = useState({
 		open: false,
-		customerId: null,
+		invoiceId: null,
 	});
 	const [showSnackbar, setShowSnackbar] = useState(false);
 	const [showExportSnackbar, setShowExportSnackbar] = useState(false);
@@ -56,9 +60,14 @@ export default function Invoices() {
 	};
 
 	// Send user to edit
-	const handleEdit = (invoiceId) => {
-		router.push(`/invoices/edit?id=${invoiceId}`);
+	 const handleEdit = (invoiceId) => {
+		 router.push(`/invoices/edit?id=${invoiceId}`);
+	 };
+
+	const handleView = (invoiceId) => {
+		router.push(`/invoices/view?id=${invoiceId}`);
 	};
+
 
 	// Display Headings
 	const columns = [
@@ -92,15 +101,19 @@ export default function Invoices() {
 			field: 'totalPrice',
 			headerName: 'Total Price',
 			width: 200,
+			valueFormatter: (params) => {
+				const price = params.value;
+				return `$${price.toFixed(2)}`;
+			}
 		},
 		// Delete and Edit Icons
 		{
-			field: 'edit',
-			headerName: 'Edit',
+			field: 'view',
+			headerName: 'View',
 			width: 100,
 			renderCell: (params) => (
-				<IconButton onClick={() => handleEdit(params.row.id)}>
-					<EditIcon />
+				<IconButton onClick={() => handleView(params.row.id)}>
+					<InfoIcon />
 				</IconButton>
 			),
 		},
@@ -115,31 +128,6 @@ export default function Invoices() {
 			),
 		},
 	];
-
-	useEffect(() => {
-		axios
-			.get(API_BASE)
-			.then(async (response) => {
-				const invoices = response.data;
-
-				// Fetch customer names for each invoice
-				const invoicesWithCustomerNames = await Promise.all(
-					invoices.map(async (invoice) => {
-						const customer = await fetchCustomer(invoice.customerId);
-						return {
-							...invoice,
-							customerFirstName: customer.firstName,
-							customerLastName: customer.lastName,
-						};
-					})
-				);
-
-				setInvoiceData(invoicesWithCustomerNames);
-			})
-			.catch((error) => {
-				console.error('Error fetching invoice data:', error);
-			});
-	}, []);
 
 	// Function to open the delete confirmation dialog
 	const openDeleteConfirmation = (invoiceId) => {
@@ -170,7 +158,7 @@ export default function Invoices() {
 				closeDeleteConfirmation();
 				setShowSnackbar(true); // Show the success Snackbar
 				setTimeout(() => {
-					setShowSnackbar(false); 
+					setShowSnackbar(false);
 				}, 2000);
 			})
 			.catch((error) => {
@@ -191,6 +179,44 @@ export default function Invoices() {
 		}
 	};
 
+	// Filter invoice data based on search query
+	const filteredInvoiceData = invoiceData.filter((invoice) => {
+		const lowerCaseSearchQuery =
+			typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
+
+		return (
+			typeof invoice.customerFirstName === 'string' &&
+			invoice.customerFirstName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			invoice.customerLastName.toLowerCase().includes(lowerCaseSearchQuery)
+		);
+	});
+
+	// Fetch invoice and customer data
+	useEffect(() => {
+		axios
+			.get(API_BASE)
+			.then(async (response) => {
+				const invoices = response.data;
+
+				// Fetch customer names for each invoice
+				const invoicesWithCustomerNames = await Promise.all(
+					invoices.map(async (invoice) => {
+						const customer = await fetchCustomer(invoice.customerId);
+						return {
+							...invoice,
+							customerFirstName: customer.firstName,
+							customerLastName: customer.lastName,
+						};
+					})
+				);
+
+				setInvoiceData(invoicesWithCustomerNames);
+			})
+			.catch((error) => {
+				console.error('Error fetching invoice data:', error);
+			});
+	}, []);
+
 	return (
 		<Box
 			display='flex'
@@ -199,9 +225,9 @@ export default function Invoices() {
 			sx={{
 				backgroundColor: '#E6E8E7',
 				borderRadius: '8px',
-				margin: '1rem',
-				padding: '2rem',
-				height: '90%',
+				margin: '.5rem auto',
+				padding: '.5rem 1rem',
+				height: '80vh',
 				overflow: 'none',
 			}}
 		>
@@ -216,6 +242,7 @@ export default function Invoices() {
 			>
 				<Box>
 					<Typography
+						className='header-text'
 						variant='h3'
 						align='center'
 						component='h2'
@@ -259,7 +286,6 @@ export default function Invoices() {
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
-			{/* Invoice DataGrid */}
 			<div
 				style={{
 					height: '90%',
@@ -269,11 +295,22 @@ export default function Invoices() {
 					borderRadius: '10px',
 				}}
 			>
+				{/* Searchbar */}
+				<TextField
+					type='text'
+					label='Search by name'
+					variant='outlined'
+					fullWidth
+					value={searchQuery}
+					onChange={(e) => setSearchQuery(e.target.value)}
+					sx={{ marginBottom: theme.spacing(2) }}
+				/>
+				{/* Invoice DataGrid */}
 				<DataGrid
-					rows={invoiceData}
+					rows={filteredInvoiceData}
 					columns={columns}
-					pageSize={5}
-					sx={{ alignItems: 'center', margin: 'auto' }}
+					autoPageSize
+					sx={{ height: '37rem' }}
 				/>
 			</div>
 			{/* Delete Confirmation Dialog */}

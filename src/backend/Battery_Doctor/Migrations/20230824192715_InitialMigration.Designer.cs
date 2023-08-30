@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Battery_Doctor.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230818013431_initialCreate")]
-    partial class initialCreate
+    [Migration("20230824192715_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace Battery_Doctor.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10)")
-                        .HasColumnName("groupd_id");
+                        .HasColumnName("group_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -131,21 +131,17 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int(10)")
-                        .HasColumnName("customer_id");
-
                     b.Property<string>("QRCode")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("qr_code");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("StampedSerial")
                         .IsRequired()
-                        .HasMaxLength(50)
+                        .HasMaxLength(7)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("status");
+                        .HasColumnName("stamped_serial");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)")
@@ -158,8 +154,6 @@ namespace Battery_Doctor.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BatteryId");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("Assets");
                 });
@@ -174,6 +168,10 @@ namespace Battery_Doctor.Migrations
                     b.Property<float>("Capacity")
                         .HasColumnType("float")
                         .HasColumnName("capacity");
+
+                    b.Property<int>("ConditionId")
+                        .HasColumnType("int(10)")
+                        .HasColumnName("condition_id");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
@@ -195,10 +193,6 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("float")
                         .HasColumnName("price");
 
-                    b.Property<int>("QuantityOnHand")
-                        .HasColumnType("int")
-                        .HasColumnName("quantity_on_hand");
-
                     b.Property<int>("TypeId")
                         .HasColumnType("int(10)")
                         .HasColumnName("type_id");
@@ -212,6 +206,8 @@ namespace Battery_Doctor.Migrations
                         .HasColumnName("voltage");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ConditionId");
 
                     b.HasIndex("GroupId");
 
@@ -281,10 +277,6 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("int(10)")
                         .HasColumnName("model_id");
 
-                    b.Property<int>("BatteryMakeId")
-                        .HasColumnType("int(10)")
-                        .HasColumnName("make_id");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at");
@@ -299,8 +291,6 @@ namespace Battery_Doctor.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BatteryMakeId");
 
                     b.ToTable("Battery_Models");
                 });
@@ -384,9 +374,21 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("int(10)")
                         .HasColumnName("invoice_id");
 
+                    b.Property<float>("CashAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("cash_amount");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("created_at");
+
+                    b.Property<float>("CreditAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("credit_amount");
+
+                    b.Property<float>("CustomerCreditAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("customer_credit_amount");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int(10)")
@@ -396,9 +398,21 @@ namespace Battery_Doctor.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_of_sale");
 
+                    b.Property<float>("DebitAmount")
+                        .HasColumnType("float")
+                        .HasColumnName("debit_amount");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("varchar(500)")
+                        .HasColumnName("notes");
+
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int(10)")
                         .HasColumnName("payment_method_id");
+
+                    b.Property<float>("TaxRate")
+                        .HasColumnType("float")
+                        .HasColumnName("tax_rate");
 
                     b.Property<float>("TotalPrice")
                         .HasColumnType("float")
@@ -433,7 +447,8 @@ namespace Battery_Doctor.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<int>("InvoiceId")
-                        .HasColumnType("int(10)");
+                        .HasColumnType("int(10)")
+                        .HasColumnName("invoice_id");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)")
@@ -630,17 +645,17 @@ namespace Battery_Doctor.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Battery_Doctor.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
                     b.Navigation("Battery");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.Battery", b =>
                 {
+                    b.HasOne("Battery_Doctor.Models.BatteryCondition", "BatteryCondition")
+                        .WithMany()
+                        .HasForeignKey("ConditionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BatteryGroup", "BatteryGroup")
                         .WithMany()
                         .HasForeignKey("GroupId")
@@ -665,6 +680,8 @@ namespace Battery_Doctor.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("BatteryCondition");
+
                     b.Navigation("BatteryGroup");
 
                     b.Navigation("BatteryMake");
@@ -672,17 +689,6 @@ namespace Battery_Doctor.Migrations
                     b.Navigation("BatteryModel");
 
                     b.Navigation("BatteryType");
-                });
-
-            modelBuilder.Entity("Battery_Doctor.Models.BatteryModel", b =>
-                {
-                    b.HasOne("Battery_Doctor.Models.BatteryMake", "BatteryMake")
-                        .WithMany("BatteryModels")
-                        .HasForeignKey("BatteryMakeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BatteryMake");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.Customer", b =>
@@ -771,11 +777,6 @@ namespace Battery_Doctor.Migrations
                         .IsRequired();
 
                     b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("Battery_Doctor.Models.BatteryMake", b =>
-                {
-                    b.Navigation("BatteryModels");
                 });
 
             modelBuilder.Entity("Battery_Doctor.Models.Invoice", b =>

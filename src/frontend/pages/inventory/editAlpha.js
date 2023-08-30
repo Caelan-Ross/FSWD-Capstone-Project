@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
     Typography,
@@ -6,17 +6,15 @@ import {
     IconButton,
     TextField,
     Button,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Select,
+    Alert,
+    MenuItem, Tab, Tabs, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select
 } from '@mui/material';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
 
-export default function BatteryEdit() {
+export default function Home() {
     const router = useRouter();
     const { id } = router.query;
     const handleNavigation = (path) => {
@@ -26,7 +24,22 @@ export default function BatteryEdit() {
     const [isError, setIsError] = useState(null);
     const [showSnackbar, setShowSnackbar] = useState(false);
 
-    // Load existing asset data when component mounts
+    // Load existing battery data when component mounts
+    useEffect(() => {
+        if (id) {
+            axios
+                .get(`http://localhost:7166/api/Batteries/${id}`)
+                .then((response) => {
+                    // Update formState with existing data
+                    setFormState(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching battery data:', error);
+                });
+        }
+    }, [id]);
+
+    // Const variables
     const [formState, setFormState] = useState({
         typeName: '',
         modelName: '',
@@ -40,36 +53,8 @@ export default function BatteryEdit() {
         width: 0,
         height: 0,
         unitType: '',
+        stampedSerial: ''
     });
-
-    useEffect(() => {
-        if (id) {
-            axios
-                .get(`http://localhost:7166/api/Batteries/${id}`)
-                .then((response) => {
-                    // Map API response keys to formState keys
-                    const mappedData = {
-                        typeName: response.data.typeName,
-                        modelName: response.data.modelName,
-                        makeName: response.data.makeName,
-                        conditionName: response.data.conditionName,
-                        voltage: response.data.voltage,
-                        capacity: response.data.capacity,
-                        price: response.data.price,
-                        groupName: response.data.groupName,
-                        length: response.data.length,
-                        width: response.data.width,
-                        height: response.data.height,
-                        unitType: response.data.unitType,
-                        typeId: response.data.typeId, // Add this line
-                    };
-                    setFormState(mappedData);
-                })
-                .catch((error) => {
-                    console.error('Error fetching asset data:', error);
-                });
-        }
-    }, [id]);
 
     const isFormValid = () => {
         // Checks if all required fields are filled
@@ -85,7 +70,8 @@ export default function BatteryEdit() {
             formState.length &&
             formState.width &&
             formState.height &&
-            formState.unitType
+            formState.unitType &&
+            formState.stampedSerial
         );
     };
 
@@ -94,12 +80,15 @@ export default function BatteryEdit() {
 
     // Types
     const [typeOptions, setTypeOptions] = useState([]);
+    const [showNewTypeField, setShowNewTypeField] = useState(false);
 
     // Models
     const [modelOptions, setModelOptions] = useState([]);
+    const [showNewModelField, setShowNewModelField] = useState(false);
 
     // Makes
     const [makeOptions, setMakeOptions] = useState([]);
+    const [showNewMakeField, setShowNewMakeField] = useState(false);
 
     // Conditions
     const [conditionOptions, setConditionOptions] = useState([
@@ -110,9 +99,11 @@ export default function BatteryEdit() {
 
     // Groups
     const [groupOptions, setGroupOptions] = useState([]);
+    const [showNewGroupField, setShowNewGroupField] = useState(false);
 
     // Unit Types
     const [unitTypeOptions, setUnitTypeOptions] = useState([]);
+    const [showNewUnitTypeField, setShowNewUnitTypeField] = useState(false);
 
     // Input change functions for tracking state across form entries
     const handleInputChange = (field, value) => {
@@ -217,44 +208,25 @@ export default function BatteryEdit() {
                 console.error('Error fetching unit type options:', error);
             });
 
-        // // Fetch serial number
-        // axios
-        //     .get('http://localhost:7166/api/assets')
-        //     .then((response) => {
-        //         // Find the matching serial number using id
-        //         const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
-        //         if (batterySerial) {
-        //             setFormState(prevState => ({
-        //                 ...prevState,
-        //                 stampedSerial: batterySerial
-        //             }));
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error fetching serial number:', error);
-        //     });
+        // Fetch serial number
+        axios
+            .get('http://localhost:7166/api/assets')
+            .then((response) => {
+                // Find the matching serial number using id
+                const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
+                if (batterySerial) {
+                    setFormState(prevState => ({
+                        ...prevState,
+                        stampedSerial: batterySerial
+                    }));
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching serial number:', error);
+            });
     }, []);
 
-    // useEffect(() => {
-    //     if (id) {
-    //         // Fetch serial number
-    //         axios
-    //             .get('http://localhost:7166/api/assets')
-    //             .then((response) => {
-    //                 // Find the matching serial number using id
-    //                 const batterySerial = response.data.find(asset => asset.id === id)?.stampedSerial;
-    //                 if (batterySerial) {
-    //                     setFormState(prevState => ({
-    //                         ...prevState,
-    //                         stampedSerial: batterySerial
-    //                     }));
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 console.error('Error fetching serial number:', error);
-    //             });
-    //     }
-    // }, [id]);
+
 
 
     return (
@@ -278,8 +250,8 @@ export default function BatteryEdit() {
                     width: '100%',
                 }}
             >
-                <Typography variant='h3' align='center' component='h2' className='header-text'>
-                    Edit Battery
+                <Typography variant='h3' align='center' component='h2'>
+                    Create Asset
                 </Typography>
                 <Box display='flex' onClick={() => handleNavigation('/inventory')}>
                     <IconButton>
@@ -290,17 +262,28 @@ export default function BatteryEdit() {
                 </Box>
             </Box>
 
+            {/* Serial Number Input */}
+            <TextField
+                label="Serial Number"
+                value={formState.stampedSerial}
+                onChange={(e) => handleInputChange('stampedSerial', e.target.value)}
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                sx={{ backgroundColor: 'white', borderRadius: '8px' }}
+            />
+
             {/* Type Dropdown */}
             <FormControl fullWidth variant="outlined" margin="normal">
                 <InputLabel>Type</InputLabel>
                 <Select
-                    value={formState.typeId}
-                    onChange={(e) => handleInputChange('typeId', e.target.value)}
+                    value={formState.typeName}
+                    onChange={(e) => handleInputChange('typeName', e.target.value)}
                     sx={{ backgroundColor: 'white', borderRadius: '8px' }}
                 >
                     {/* Existing type options */}
                     {typeOptions.map((type) => (
-                        <MenuItem key={type.id} value={type.id}>
+                        <MenuItem key={type.id} value={type.typeName}>
                             {type.typeName}
                         </MenuItem>
                     ))}
@@ -474,7 +457,7 @@ export default function BatteryEdit() {
                 color="primary"
                 disabled={!isFormValid()}
             >
-                Submit
+                Create
             </Button>
             <Snackbar
                 open={showSnackbar}
@@ -482,7 +465,7 @@ export default function BatteryEdit() {
                 onClose={() => setShowSnackbar(false)}
             >
                 <SnackbarContent
-                    message='Asset edited successfully'
+                    message='Asset created successfully'
                     action={<CheckCircleOutline />}
                 />
             </Snackbar>
