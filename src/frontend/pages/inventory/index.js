@@ -29,7 +29,7 @@ export default function Home() {
 		router.push(path);
 	};
 
-	const API_BASE = 'http://localhost:7166/api/Batteries';
+	const API_BASE = 'http://localhost:7166/api/Assets';
 	const [inventoryData, setInventoryData] = useState([]);
 	const [searchQuery, setSearchQuery] = useState([]);
 
@@ -43,38 +43,51 @@ export default function Home() {
 
 	// Data Fields
 	const columns = [
-		{ field: 'id', headerName: 'Battery ID', width: 100 },
-		{ field: 'typeName', headerName: 'Type', width: 100 },
-		{ field: 'modelName', headerName: 'Model', width: 100 },
-		{ field: 'makeName', headerName: 'Make', width: 100 },
-		{ field: 'groupName', headerName: 'Group', width: 100 },
+		{ field: 'id', headerName: 'Battery ID', width: 100},
+		{ field: 'typeName', headerName: 'Type', width: 75},
+		{ field: 'modelName', headerName: 'Model', width: 75},
+		{ field: 'makeName', headerName: 'Make', width: 75},
+		{ field: 'groupName', headerName: 'Group', width: 75},
 		{
 			field: 'conditionName',
 			headerName: 'Condition',
 			width: 100,
 		},
-		{ field: 'voltage', headerName: 'Voltage', width: 100 },
-		{ field: 'capacity', headerName: 'Capacity', width: 100 },
-		{ field: 'price', headerName: 'Price', width: 100 },
+		{ field: 'voltage', headerName: 'Voltage', width: 75},
+		{ field: 'capacity', headerName: 'Capacity', width: 75},
+		{
+			field: 'price',
+			headerName: 'Price',
+			width: 100,
+			valueFormatter: (params) => {
+				const price = params.value;
+				return `$${price.toFixed(2)}`;
+			}
+		},
 		{
 			field: 'quantityOnHand',
 			headerName: 'Qty on Hand',
 			width: 100,
 		},
 		{
-			field: 'edit',
-			headerName: 'Edit',
+			field: 'stampedSerial',
+			headerName: 'Serial',
 			width: 100,
-			renderCell: (params) => (
-				<IconButton onClick={() => handleEdit(params.row.id)}>
-					<EditIcon />
-				</IconButton>
-			),
-		},
+		  },
+		// {
+		// 	field: 'edit',
+		// 	headerName: 'Edit',
+		// 	width: 50,
+		// 	renderCell: (params) => (
+		// 		<IconButton onClick={() => handleEdit(params.row.id)}>
+		// 			<EditIcon />
+		// 		</IconButton>
+		// 	),
+		// },
 		{
 			field: 'delete',
 			headerName: 'Delete',
-			width: 100,
+			width: 75,
 			renderCell: (params) => (
 				<IconButton onClick={() => openDeleteConfirmation(params.row.id)}>
 					<DeleteIcon />
@@ -83,11 +96,10 @@ export default function Home() {
 		},
 	];
 
-	// Function to open the delete confirmation dialog
-	const openDeleteConfirmation = (batteryId) => {
+	const openDeleteConfirmation = (assetId) => {
 		setDeleteConfirmation({
 			open: true,
-			batteryId: batteryId,
+			assetId: assetId, // Update the property name
 		});
 	};
 
@@ -99,15 +111,15 @@ export default function Home() {
 		});
 	};
 
-	// Function to delete a battery
-	const handleDelete = (batteryId) => {
+	// Function to delete an asset
+	const handleDelete = (assetId) => {
 		axios
-			.delete(`${API_BASE}/${batteryId}`)
+			.delete(`${API_BASE}/${assetId}`)
 			.then((response) => {
-				console.log('Battery deleted:', response.data);
-				// Remove the deleted battery from inventoryData state
+				console.log('Asset deleted:', response.data);
+				// Remove the deleted asset from inventoryData state
 				setInventoryData((prevData) =>
-					prevData.filter((battery) => battery.id !== batteryId)
+					prevData.filter((asset) => asset.id !== assetId)
 				);
 				closeDeleteConfirmation();
 				setShowSnackbar(true);
@@ -116,14 +128,14 @@ export default function Home() {
 				}, 2000);
 			})
 			.catch((error) => {
-				console.error('Error deleting battery:', error);
+				console.error('Error deleting asset:', error);
 			});
 	};
 
-	// Send user to edit
-	const handleEdit = (batteryId) => {
-		router.push(`/inventory/edit?id=${batteryId}`);
-	};
+	// // Send user to edit
+	// const handleEdit = (batteryId) => {
+	// 	router.push(`/inventory/edit?id=${batteryId}`);
+	// };
 
 	// Function to export customers
 	const handleExport = async () => {
@@ -141,24 +153,22 @@ export default function Home() {
 	// Filter battery data based on search query
 	const filteredInventoryData = inventoryData.filter((battery) => {
 		const lowerCaseSearchQuery =
-			typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
+		  typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
 
 		return (
-			typeof battery.makeName === 'string' &&
-			battery.makeName.toLowerCase().includes(lowerCaseSearchQuery)
+		  typeof battery.typeName === 'string' &&
+		  (battery.typeName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			battery.makeName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			battery.stampedSerial.toLowerCase().includes(lowerCaseSearchQuery))
 		);
-	});
+	  });
 
 	// Fetch Inventory Data
 	useEffect(() => {
 		axios
-			.get(API_BASE, {
-				headers: {
-					accept: 'text/plain',
-				},
-			})
+			.get('http://localhost:7166/api/Assets')
 			.then((response) => {
-				console.log(response);
+				console.log('API Response:', response.data);
 				// Update inventoryData state with fetched data
 				setInventoryData(response.data);
 			})
@@ -192,6 +202,7 @@ export default function Home() {
 			>
 				<Box>
 					<Typography
+						className='header-text'
 						variant='h3'
 						align='center'
 						component='h2'
@@ -221,7 +232,7 @@ export default function Home() {
 				onClose={() => setShowSnackbar(false)}
 			>
 				<SnackbarContent
-					message='Battery deleted successfully'
+					message='Asset deleted successfully'
 					action={<CheckCircleOutline />}
 				/>
 			</Snackbar>
@@ -249,7 +260,7 @@ export default function Home() {
 				{/* Searchbar */}
 				<TextField
 					type='text'
-					label='Search by make'
+					label='Search by make or serial'
 					variant='outlined'
 					fullWidth
 					value={searchQuery}
@@ -264,18 +275,17 @@ export default function Home() {
 				/>
 			</div>
 
-			{/* Delete Confirmation Dialog */}
 			<Dialog open={deleteConfirmation.open} onClose={closeDeleteConfirmation}>
-				<DialogTitle>Delete Battery</DialogTitle>
+				<DialogTitle>Delete Asset</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Are you sure you want to delete this battery?
+						Are you sure you want to delete this asset?
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={closeDeleteConfirmation}>Cancel</Button>
 					<Button
-						onClick={() => handleDelete(deleteConfirmation.batteryId)}
+						onClick={() => handleDelete(deleteConfirmation.assetId)}
 						color='primary'
 					>
 						Delete
