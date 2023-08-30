@@ -61,6 +61,11 @@ export default function Home() {
 			headerName: 'Qty on Hand',
 			width: 100,
 		},
+		{
+			field: 'stampedSerial',
+			headerName: 'Serial',
+			width: 150,
+		  },
 		// {
 		// 	field: 'edit',
 		// 	headerName: 'Edit',
@@ -140,13 +145,15 @@ export default function Home() {
 	// Filter battery data based on search query
 	const filteredInventoryData = inventoryData.filter((battery) => {
 		const lowerCaseSearchQuery =
-			typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
-
+		  typeof searchQuery === 'string' ? searchQuery.toLowerCase() : '';
+	
 		return (
-			typeof battery.typeName === 'string' &&
-			battery.typeName.toLowerCase().includes(lowerCaseSearchQuery)
+		  typeof battery.typeName === 'string' &&
+		  (battery.typeName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			battery.makeName.toLowerCase().includes(lowerCaseSearchQuery) ||
+			battery.stampedSerial.toLowerCase().includes(lowerCaseSearchQuery))
 		);
-	});
+	  });
 
 	// Fetch Inventory Data
 	useEffect(() => {
@@ -245,7 +252,7 @@ export default function Home() {
 				{/* Searchbar */}
 				<TextField
 					type='text'
-					label='Search by make'
+					label='Search by make or serial'
 					variant='outlined'
 					fullWidth
 					value={searchQuery}
