@@ -26,7 +26,7 @@ To start using the Battery Doctor Inventory Management System, follow these step
 
 2. **Customer Management**: To create a new customer, navigate to the "Customers" section and click on "Add Customer." Fill in the required details and save. You can edit or delete customers as needed.
 
-3. **Battery Management**: In the "Batteries" section, you can add new battery models, delete unnecessary ones, and keep track of stock levels. Each battery entry includes important information like model, capacity, and price.
+3. **Asset Management**: In the "Inventory" section, you can add new battery models, delete unnecessary ones, and keep track of stock levels. Each battery entry includes important information like model, capacity, and price.
 
 4. **Invoice Generation**: When a customer makes a purchase, you can generate an invoice in the "Invoices" section. Link the invoice to the relevant customer and battery, and the system will handle the rest, providing you with an accurate invoice.
 
@@ -77,4 +77,6 @@ To get started with the Battery Doctor Inventory Management System, follow these
 - [Minh Hoang](https://github.com/mintiefresh) (CCID: minhtuan)
 - [Kevin Larner](https://github.com/Larnerk) (CCID: larnerk)
 - [Caelan Ross](https://github.com/Caelan-Ross) (CCID: cjross1)
+
+
 - [Andrew Potter](https://github.com/SaskatchewanPython) (CCID: rapotter)

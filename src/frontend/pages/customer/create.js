@@ -22,25 +22,27 @@ export default function Home() {
 	const [isError, setIsError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [showSnackbar, setShowSnackbar] = useState(false);
-	const API_BASE = 'http://localhost:3000/api/customer/create';
+	const API_BASE = 'http://localhost:7166/api/customers';
 
 	// Submit Button
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const form = event.target;
 
-		const queryParams = new URLSearchParams();
-		queryParams.append('firstName', form.firstName.value);
-		queryParams.append('lastName', form.lastName.value);
-		queryParams.append('phoneNumber', form.phoneNumber.value);
-		queryParams.append('email', form.email.value);
-		const url = `${API_BASE}?${queryParams.toString()}`;
+		const customer = {
+			firstName: form.firstName.value,
+			lastName: form.lastName.value,
+			phoneNumber: form.phoneNumber.value,
+			email: form.email.value,
+		};
+		
 		try {
 			setLoading(true);
 			// Perform any additional validation or processing here if needed
 			setIsError(null);
 
-			await axios.post(url);
+			await axios
+				.post(`${API_BASE}`, customer)
 			setShowSnackbar(true);
 			setTimeout(() => {
 				setShowSnackbar(false);

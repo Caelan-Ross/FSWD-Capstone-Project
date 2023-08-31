@@ -37,8 +37,7 @@ if(app.Environment.IsDevelopment())
 // This should be before other middlewares that depend on routing.
 app.UseRouting();
 
-app.UseCors("AllowAll");
-
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 // If you're using authentication, it should go here:
 // app.UseAuthentication();
 
