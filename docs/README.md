@@ -73,10 +73,9 @@ To get started with the Battery Doctor Inventory Management System, follow these
 
 ## 📝 Notes
 
+This was a project done for the University of Alberta Faculty of Extension: Full-Stack Web Development Capstone. Meant to represent all the learning we have done throughout the course in a cumulative manner.
+
 ## ✍️ Author(s)
 - [Minh Hoang](https://github.com/mintiefresh) (CCID: minhtuan)
 - [Kevin Larner](https://github.com/Larnerk) (CCID: larnerk)
 - [Caelan Ross](https://github.com/Caelan-Ross) (CCID: cjross1)
-
-
-- [Andrew Potter](https://github.com/SaskatchewanPython) (CCID: rapotter)
