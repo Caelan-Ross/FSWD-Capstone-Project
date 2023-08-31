@@ -77,4 +77,3 @@ To get started with the Battery Doctor Inventory Management System, follow these
 - [Minh Hoang](https://github.com/mintiefresh) (CCID: minhtuan)
 - [Kevin Larner](https://github.com/Larnerk) (CCID: larnerk)
 - [Caelan Ross](https://github.com/Caelan-Ross) (CCID: cjross1)
-- [Andrew Potter](https://github.com/SaskatchewanPython) (CCID: rapotter)
