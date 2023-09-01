@@ -67,9 +67,6 @@ export default function App({ Component, pageProps }) {
                 <Typography variant='body1' className='body-text'>
                   The Battery Doctor - Welcome {user}!
                 </Typography>
-                <Typography variant='caption' color='textSecondary' className='body-text'>
-                  2023-08-04
-                </Typography>
               </Box>
             </Box>
             <Box>
